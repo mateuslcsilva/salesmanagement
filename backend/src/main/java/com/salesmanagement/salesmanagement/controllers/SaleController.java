@@ -1,5 +1,6 @@
 package com.salesmanagement.salesmanagement.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,8 @@ public class SaleController {
 	}
 	
 	@GetMapping("/salebydate/{date}")
-	public Sale findSaleByDate (Long Date) {
-		return service.getSaleById(Date);
+	public Sale findSaleByDate (LocalDate Date) {
+		return service.getSaleByDate(Date);
 	}
 	
 	@PostMapping("/updatesale")
