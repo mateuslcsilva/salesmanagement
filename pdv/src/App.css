@@ -1,0 +1,40 @@
+body{
+  height: 150vh;
+  background-color: #273050;
+}
+
+input:disabled{
+  border: 1px solid rgba(128, 128, 128, 0.363) !important;
+}
+
+.hidden{
+  opacity: 0;
+}
+
+.visible{
+  opacity: 1;
+}
+
+.section{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button{
+
+  font-weight: 600;
+}
+
+.divContainer{
+  border-radius: 5px;
+  width: 113.5vh;
+  padding: 3vh;
+  box-shadow: 5px 5px 45px #2a2b316e;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  min-height: fit-content;
+}

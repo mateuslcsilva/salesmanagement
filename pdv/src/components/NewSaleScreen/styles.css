@@ -1,0 +1,25 @@
+.div{
+    margin-top: 7vh;
+    width:80%;
+    /* background-color: red; */
+}
+
+#mesa{
+    width: 7.59vh;
+    justify-content: end;
+}
+
+#visualizacao{
+    white-space: pre-line;
+}
+
+.btn-limpar-centered{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.confirmation-text{
+    display: flex;
+    justify-content: end;
+}
