@@ -5,7 +5,7 @@ import Button from '../../components/Button/Button'
 
 const NavBarButtons = () => {
 
-    const [isOutlined, setIsOutlined] = useState(1)
+    const [isOutlined, setIsOutlined] = useState(0)
 
     return ( 
    <>
