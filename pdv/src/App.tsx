@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import React from 'react'
+import {Outlet} from 'react-router-dom'
 import './App.css'
-import NavBarButtons from '../src/components/NavBarButtons/NavBarButtons'
-import NewSaleScreen from '../src/components/NewSaleScreen/NewSaleScreen'
+
+import NavBarButtons from '../src/Routes/NavBarButtons/NavBarButtons'
 
 function App() {
 
@@ -11,7 +12,7 @@ function App() {
       <section className='section'>
         <div className='divContainer'>
           <NavBarButtons />
-          <NewSaleScreen />
+          <Outlet /> 
         </div>
       </section>
     </>

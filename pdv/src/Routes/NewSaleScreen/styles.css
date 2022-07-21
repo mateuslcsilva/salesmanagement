@@ -1,12 +1,13 @@
 .div{
     margin-top: 7vh;
     width:80%;
-    /* background-color: red; */
+    height: auto;
+    overflow-y: hidden;
+    animation: growin-up .1s ease-in-out;
 }
 
-#mesa{
-    width: 7.59vh;
-    justify-content: end;
+.div > *{
+    opacity: inherit;
 }
 
 #visualizacao{
@@ -22,4 +23,13 @@
 .confirmation-text{
     display: flex;
     justify-content: end;
+}
+
+@keyframes growin-up {
+    from{
+        height: 0;
+    }
+    to{
+        height: auto;
+    }
 }
