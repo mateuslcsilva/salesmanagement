@@ -1,8 +1,5 @@
 package com.salesmanagement.salesmanagement.entities;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,8 +17,8 @@ public class Sale {
 	private Long id;
 	private int numSale;
 	private int numTable;
-	private String items;
-	private LocalDate date;
+	private String[] items;
+	private String date;
 	private String time;
 	
 	
@@ -59,22 +56,22 @@ public class Sale {
 	}
 
 
-	public String getItems() {
+	public String[] getItems() {
 		return items;
 	}
 
 
-	public void setItems(String items) {
+	public void setItems(String[] items) {
 		this.items = items;
 	}
 
 
-	public LocalDate getDate() {
+	public String getDate() {
 		return date;
 	}
 
 
-	public void setDate(LocalDate date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
