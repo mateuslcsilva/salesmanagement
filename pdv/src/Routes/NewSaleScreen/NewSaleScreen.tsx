@@ -141,10 +141,10 @@ const NewSaleScreen = () => {
                 {
                     saleNumber > 0 &&
                     <div className='saleInfo mb-3'>
-                        <p>
+                        <p className='title is-5'>
                         {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
                         {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
-                        {sale.numSale ? 'Comanda ' + sale.numSale + ':\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
+                        {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
                        {sale.orders.map(item => <p>{item}</p>)}
                     </div>
