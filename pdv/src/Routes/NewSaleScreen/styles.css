@@ -10,11 +10,11 @@
     opacity: inherit;
 }
 
-#outlined-basic:nth-of-type(odd){
+#outlined-basic{
     text-align: end !important;
 }
 
-#visualizacao{
+.saleInfo{
     white-space: pre-line;
 }
 

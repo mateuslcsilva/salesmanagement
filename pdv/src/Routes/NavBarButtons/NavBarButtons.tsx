@@ -10,13 +10,13 @@ const NavBarButtons = () => {
     return ( 
    <>
         <div className='btns'>
-            <Link to="/newsalescreen"><Button text='NOVA MESA' className={(isOutlined == 1? '' : 'is-outlined') + ' btnselect is-info'} onClick={() => setIsOutlined(1)}/></Link>
-            <Link to="/addsalescreen"><Button text='ACRESCENTAR ITEM' className={(isOutlined == 2? '' : 'is-outlined') + ' btnselect is-info'} onClick={() => setIsOutlined(2)}/></Link>
-            <Link to="/updatesalescreen"><Button text='ALTERAR PEDIDO' className={(isOutlined == 3? '' : 'is-outlined') + ' btnselect is-info'} onClick={() => setIsOutlined(3)}/></Link>
-            <Link to="/checkoutscreen"><Button text='FECHAR COMANDA' className={(isOutlined == 4? '' : 'is-outlined') + ' btnselect is-info'} onClick={() => setIsOutlined(4)}/></Link>
+            <Link to="/newsalescreen"><button className={(isOutlined != 1? '' : 'active ') + (isOutlined -1 == 1? 'rounded-left' : '') + ' btnselect '} onClick={() => setIsOutlined(1)}> NOVA MESA</button></Link>
+            <Link to="/addsalescreen"><button  className={(isOutlined != 2? '' : 'active ') + (isOutlined + 1 == 2? 'rounded-right' : '') + (isOutlined -1 == 2? 'rounded-left' : '') + ' btnselect '} onClick={() => setIsOutlined(2)}>ACRESCENTAR ITEM</button></Link>
+            <Link to="/updatesalescreen"><button className={(isOutlined != 3? '' : 'active ') + (isOutlined + 1 == 3? 'rounded-right' : '') + (isOutlined -1 == 3? 'rounded-left' : '') + ' btnselect '} onClick={() => setIsOutlined(3)}>ALTERAR PEDIDO</button></Link>
+            <Link to="/checkoutscreen"><button  className={(isOutlined != 4? '' : 'active ') + (isOutlined + 1 == 4? 'rounded-right' : '') + ' btnselect '} onClick={() => setIsOutlined(4)}>FECHAR COMANDA</button></Link>
         </div>
     </>
-    )
+    ) 
 }
 
 export default NavBarButtons

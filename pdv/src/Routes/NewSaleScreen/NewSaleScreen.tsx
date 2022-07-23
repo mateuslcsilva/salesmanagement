@@ -79,7 +79,7 @@ const NewSaleScreen = () => {
     return (
         <>
             <div className='div' id='div1'>
-                <h3 className='title is-3'>ABRIR COMANDA</h3>
+                <h3 className='title is-3 mt-3'>ABRIR COMANDA</h3>
                 <TextField
                     id="outlined-basic"
                     label="Mesa"
@@ -111,7 +111,7 @@ const NewSaleScreen = () => {
                     value={saleNumber < 1 ? '' : saleNumber}
                     style={{ 'width': '105px' }}
                     className='mr-2'
-                    autoFocus 
+                    autoFocus
                 />
 
                 <Button
@@ -132,21 +132,23 @@ const NewSaleScreen = () => {
 
                 <Button
                     onClick={setOrder}
-                    className='is-info'
+                    className='is-info mb-5'
                     text='Acrescentar item'
                     disabled={sale.numSale == 0 ? true : false}
-                /><br /><br />
-
-                    {saleNumber > 0 && <p id='visualizacao'>
-                        {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''}
-                        {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''}
-                        {sale.numSale ? 'Comanda ' + sale.numSale + ':\n' : ''}
-                        {sale.orders.map(item => item + '\n')}
-                    </p>
-                    }
+                />
+                {
+                    saleNumber > 0 &&
+                    <div className='saleInfo'>
+                        <p>
+                        {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
+                        {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
+                        {sale.numSale ? 'Comanda ' + sale.numSale + ':\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
+                        </p>
+                       {sale.orders.map(item => <p>{item}</p>)}
+                    </div>
+                }
 
                 <p className={'confirmation-text ' + (sale.orders.length > 0 ? 'visible' : 'hidden')} >Pedido registrado!!!</p>
-
                 <div className='btn-limpar-centered'>
                     <Button onClick={clear} disabled={sale.numSale == 0 ? true : false} text='Limpar' />
                 </div>

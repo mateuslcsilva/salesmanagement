@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './styles.css'
 import Button from '../../components/Button/Button'
-import InputNumTable from '../../components/InputNumTable/InputNumTable'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
 import { TextField } from '@mui/material'
 import {toast} from 'react-toastify'
@@ -135,7 +134,7 @@ const AddSaleScreen = () => {
     return (
         <>
             <div className='div' id='div1'>
-                <h3 className='title is-3'>ACRESCENTAR ITEM</h3>
+                <h3 className='title is-3 mt-3'>ACRESCENTAR ITEM</h3>
 
 
                 <TextField
@@ -146,7 +145,7 @@ const AddSaleScreen = () => {
                     onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : e.target.value)}
                     value={tableNumber < 1 ? '' : tableNumber}
                     style={{ 'width': '105px' }}
-                    className='mr-2 align-right-sla'
+                    className='mr-2'
                 />
 
                 <TextField
@@ -176,7 +175,7 @@ const AddSaleScreen = () => {
                     className='is-info ml-2'
                     disabled={sale.numTable != 0 ? true : false}
                     onClick={saleNumber ? findSale : (tableNumber? findTable : findCostumer)}
-                    text='Selecionar Mesa'
+                    text='Buscar'
                 /><br /><br />
 
                 <ItemsListInput
