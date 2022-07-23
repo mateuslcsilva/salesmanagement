@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './styles.css'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
-import { TextField } from '@mui/material'
+import { Alert, TextField } from '@mui/material'
 import {toast} from 'react-toastify'
 
 const AddSaleScreen = () => {
@@ -28,6 +28,7 @@ const AddSaleScreen = () => {
     const [costumerName, setCostumerName] = useState('')
     const [currentOrder, setCurrentOrder] = useState('')
     const [sale, setSale] = useState({ ...initialSale })
+    const [alert, setAlert] = useState(<p></p>)
     const [sales, setSales] = useState([
         {
             "id": 1,
@@ -115,7 +116,7 @@ const AddSaleScreen = () => {
 
         setSale((sale: any) => ({ ...sale, ...updatedSale }))
         setCurrentOrder('')
-        toast.info('Pedido registrado!!')
+        setAlert(<Alert severity="success" >Pedido registrado!</Alert>)
     }
 
     const clear = () => {
@@ -176,26 +177,25 @@ const AddSaleScreen = () => {
                     disabled={sale.numTable != 0 ? true : false}
                     onClick={saleNumber ? findSale : (tableNumber? findTable : findCostumer)}
                     text='Buscar'
-                /><br /><br />
+                />
 
                 <ItemsListInput
-                    className='is-info'
+                    className='is-info mt-5'
                     placeholder="00 - Nome do Pedido"
                     onChange={(e: any) => setCurrentOrder(e.target.value)}
                     value={currentOrder}
                     disabled={sale.numTable == 0 ? true : false}
-                /><br /><br />
+                />
 
                 <Button
                     onClick={setOrder}
-                    className='is-info'
+                    className='is-info mt-5 mb-5'
                     text='Acrescentar item'
                     disabled={sale.numTable == 0 ? true : false}
-                /><br /><br />
-
+                />
 {
                     (saleNumber > 0 || costumerName != '' || tableNumber > 0) &&
-                    <div className='saleInfo'>
+                    <div className='saleInfo mb-3'>
                         <p className='title is-5'>
                         {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
                         {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
@@ -205,9 +205,9 @@ const AddSaleScreen = () => {
                     </div>
                 }
 
-                <p className={'confirmation-text ' + (sale.orders.length > 0 ? 'visible' : 'hidden')} >Pedido registrado!!!</p>
+                {alert}
 
-                <div className='btn-limpar-centered'>
+                <div className='btn-limpar-centered mt-5'>
                     <Button onClick={clear} disabled={sale.numTable == 0 ? true : false} text='Limpar' />
                 </div>
             </div>

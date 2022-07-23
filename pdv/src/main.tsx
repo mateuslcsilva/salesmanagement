@@ -29,20 +29,3 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     </BrowserRouter>
   </React.StrictMode>
 )
-
-
-{/* <BrowserRouter>
-<Routes>
-      <Route path="/" element={<App />} ><Route>
-      <Route path="expenses" element={<Expenses />} />
-<Routes>
-      <Route path="invoices" element={<Invoices />} />
-      <Route path="/" element={<App />} >
-      </Route>
-      <Route path="expenses" element={<Expenses />} />
-    </Routes>
-      <Route path="invoices" element={<Invoices />} />
-</Route>
-      </Route>
-    </Routes>
-</BrowserRouter> */}

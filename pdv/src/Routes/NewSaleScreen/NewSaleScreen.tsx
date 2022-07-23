@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './styles.css'
-import { TextField } from '@mui/material'
+import { Alert, TextField } from '@mui/material'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
 
@@ -29,6 +29,7 @@ const NewSaleScreen = () => {
     const [saleNumber, setSaleNumber] = useState(0)
     const [costumerName, setCostumerName] = useState('')
     const [currentOrder, setCurrentOrder] = useState('')
+    const [alert, setAlert] = useState(<p></p>)
     const [sale, setSale] = useState({ ...initialSale })
 
     const setTable = () => {
@@ -59,6 +60,7 @@ const NewSaleScreen = () => {
         }
 
         setSale(sale => ({ ...sale, ...updatedSale }))
+        setAlert(<Alert severity="success" >Pedido registrado!</Alert>)
         setCurrentOrder('')
     }
 
@@ -138,7 +140,7 @@ const NewSaleScreen = () => {
                 />
                 {
                     saleNumber > 0 &&
-                    <div className='saleInfo'>
+                    <div className='saleInfo mb-3'>
                         <p>
                         {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
                         {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
@@ -148,8 +150,8 @@ const NewSaleScreen = () => {
                     </div>
                 }
 
-                <p className={'confirmation-text ' + (sale.orders.length > 0 ? 'visible' : 'hidden')} >Pedido registrado!!!</p>
-                <div className='btn-limpar-centered'>
+                {alert}
+                <div className='btn-limpar-centered mt-5'>
                     <Button onClick={clear} disabled={sale.numSale == 0 ? true : false} text='Limpar' />
                 </div>
             </div>
