@@ -8,8 +8,15 @@ function App() {
 
   const [theme, setTheme] = useState('lightThemed')
 
+
+    const localStorageManagement = () => {    
+      let storagedTheme = localStorage.getItem('theme') 
+    setTheme(storagedTheme? storagedTheme : 'lightThemed')
+  }
+
   useEffect(() => {
-    setTheme(localStorage.getItem('theme') ? )
+    let storagedTheme = localStorage.getItem('theme') 
+    setTheme(storagedTheme? storagedTheme : 'lightThemed')
   }, [])
 
 
@@ -19,9 +26,9 @@ function App() {
       aria-label="add" 
       className='mt-2 ml-2' 
       onClick={theme == 'lightThemed' ? 
-      () => {setTheme('darkThemed'); localStorage.setItem('theme', theme)} 
+      () => {setTheme('darkThemed'); localStorage.setItem('theme', 'darkThemed')} 
       : 
-      () => {setTheme('lightThemed'); localStorage.setItem('theme', theme)} }
+      () => {setTheme('lightThemed'); localStorage.setItem('theme', 'lightThemed')} }
       >
       {
       theme != 'lightThemed' ? 
