@@ -5,7 +5,7 @@ import Button from '../../components/Button/Button'
 
 const NavBarButtons = () => {
 
-    const [isActive, setIsActive] = useState(0)
+    const [isActive, setIsActive] = useState(1)
 
     return ( 
    <>

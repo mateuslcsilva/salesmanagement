@@ -4,6 +4,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  Navigate,
 } from "react-router-dom";
 import NewSaleScreen from './Routes/NewSaleScreen/NewSaleScreen'
 import AddSaleScreen from './Routes/AddSaleScreen/AddSaleScreen';
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter >
       <Routes>
+        <Route path='/' element={<Navigate to='/newsalescreen' replace={true}/>}></Route>
         <Route path='/' element={<App />}>
           <Route path='/newsalescreen' element={<NewSaleScreen />}></Route>
           <Route path='/addsalescreen' element={<AddSaleScreen />}></Route>
