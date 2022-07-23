@@ -4,11 +4,6 @@ import './styles.css'
 
 const ItemsListInput = (props :any) => {
     
-
-    useEffect(() => {
-        console.log(ItemsList)
-    })
-
     return(
         <>
             <data>
@@ -25,13 +20,11 @@ const ItemsListInput = (props :any) => {
 
             <datalist id='itemList'>
                 {ItemsList.map((item :any, index: number) :any=> {
- 
-                    console.log((item.numItem < 10? '0' + item.numItem  : item.numItem.toString()) + ' - ' + item.item + ' R$' + item.itemValue)
                     return(
                         <option key={index}>{(item.numItem < 10? '0' + item.numItem  : item.numItem.toString()) + ' - ' + item.item + ' R$' + item.itemValue}</option>
                     )
                 })}
-                        </datalist>
+            </datalist>
         </>
     )
 }

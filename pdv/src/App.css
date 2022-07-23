@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Fahkwang:wght@400;500;600;700&family=Mitr:wght@200;300;400;500;600;700&family=Prompt:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap');
+
+*{
+  font-family: 'DM Sans', sans-serif;
+}
+
 body{
   height: 150vh;
   background-color: #273050;
@@ -28,7 +34,7 @@ input:disabled{
 
 .divContainer{
   border-radius: 5px;
-  width: 113.5vh;
+  width: 75vw;
   padding: 3vh;
   box-shadow: 5px 5px 45px #2a2b316e;
   display: flex;
