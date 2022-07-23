@@ -4,7 +4,7 @@ import './styles.css'
 const CheckOutScreen = () => {
     return(
         <>
-             <p>teste checkoutscreen</p>
+             <p className=" is-3 mt-5">teste checkoutscreen</p>
         </>
        
     )

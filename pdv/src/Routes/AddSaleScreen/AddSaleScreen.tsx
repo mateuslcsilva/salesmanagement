@@ -193,13 +193,17 @@ const AddSaleScreen = () => {
                     disabled={sale.numTable == 0 ? true : false}
                 /><br /><br />
 
-                <p id='visualizacao'>
-                    {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''}
-                    {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''}
-                    {sale.numSale ? 'Comanda ' + sale.numSale : ''}
-                    {'\n'}
-                    {sale.orders.map((item: String) => item + '\n')}
-                </p>
+{
+                    (saleNumber > 0 || costumerName != '' || tableNumber > 0) &&
+                    <div className='saleInfo'>
+                        <p className='title is-5'>
+                        {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
+                        {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
+                        {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
+                        </p>
+                       {sale.orders.map((item :String) => <p>{item}</p>)}
+                    </div>
+                }
 
                 <p className={'confirmation-text ' + (sale.orders.length > 0 ? 'visible' : 'hidden')} >Pedido registrado!!!</p>
 

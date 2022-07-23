@@ -4,7 +4,7 @@ import './styles.css'
 const UpdateSaleScreen = () => {
     return(
         <>
-            <p>teste updatesalescreen</p>
+            <p className=" is-3 mt-5">teste updatesalescreen</p>
         </>
     )
 }
