@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react'
 import './styles.css'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
-import { Alert, TextField } from '@mui/material'
-import {toast} from 'react-toastify'
+import {Accordion, Alert, TextField } from '@mui/material'
+import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 
 const AddSaleScreen = () => {
 
     interface sale {
         numTable: Number,
         numSale: Number,
+        costumerName: '',
         orders: String[],
         date: String,
         time: String
@@ -48,7 +49,7 @@ const AddSaleScreen = () => {
             "id": 2,
             "numSale": 13,
             "numTable": 2,
-            "costumerName": "jose",
+            "costumerName": "Carlos",
             "orders": [
                 "05 - Porção Alcatra R$49.90",
                 "06 - Devassa 600ml R$9.90",
@@ -75,14 +76,13 @@ const AddSaleScreen = () => {
     ])
 
     const findTable = () => {
-        let currentSale: any
+        let currentSale: any = []
         sales.forEach((sale) => {
             if (sale.numTable == tableNumber) {
-                currentSale = sale
+                currentSale.push(sale)
             }
         })
-        setSale((sale: sale) => ({ ...sale, ...currentSale }))
-
+        setSale(currentSale.length == 1 ? (sale: sale) => ({ ...sale, ...currentSale[0] }): currentSale)
     }
 
     const findSale = () => {
@@ -96,13 +96,13 @@ const AddSaleScreen = () => {
     }
 
     const findCostumer = () => {
-        let currentCostumer: any
+        let currentCostumer: any= []
         sales.forEach((sale) => {
             if (sale.costumerName.toLowerCase() == costumerName.toLowerCase()) {
-                currentCostumer = sale
+                currentCostumer.push(sale)
             }
         })
-        setSale((sale: sale) => ({ ...sale, ...currentCostumer }))
+        setSale(currentCostumer.length == 1 ? (sale: sale) => ({ ...sale, ...currentCostumer[0] }): currentCostumer)
     }
 
     const setOrder = () => {
@@ -175,7 +175,7 @@ const AddSaleScreen = () => {
                 <Button
                     className='is-info ml-2'
                     disabled={sale.numTable != 0 ? true : false}
-                    onClick={saleNumber ? findSale : (tableNumber? findTable : findCostumer)}
+                    onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)}
                     text='Buscar'
                 />
 
@@ -184,24 +184,30 @@ const AddSaleScreen = () => {
                     placeholder="00 - Nome do Pedido"
                     onChange={(e: any) => setCurrentOrder(e.target.value)}
                     value={currentOrder}
-                    disabled={sale.numTable == 0 ? true : false}
+                    disabled={sale.numTable == 0 || Array.isArray(sale) ? true : false}
                 />
 
                 <Button
                     onClick={setOrder}
                     className='is-info mt-5 mb-5'
                     text='Acrescentar item'
-                    disabled={sale.numTable == 0 ? true : false}
+                    disabled={sale.numTable == 0 || Array.isArray(sale) ? true : false}
                 />
-{
-                    (saleNumber > 0 || costumerName != '' || tableNumber > 0) &&
+                {
+                    ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && !Array.isArray(sale)) &&
                     <div className='saleInfo mb-3'>
                         <p className='title is-5'>
-                        {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
-                        {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
-                        {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
+                            {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
+                            {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
+                            {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                       {sale.orders.map((item :String) => <p>{item}</p>)}
+                        {sale.orders.map((item: String) => <p>{item}</p>)}
+                    </div>
+                }
+
+                {Array.isArray(sale) &&
+                    <div>
+                        <SaleAccordion sale={sale} selectedSale={(selectedSale :sale) => setSale((sale: sale) => ({ ...sale, ...selectedSale }))}/>
                     </div>
                 }
 
