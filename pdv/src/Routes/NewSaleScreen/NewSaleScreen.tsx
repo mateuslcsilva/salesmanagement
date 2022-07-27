@@ -13,7 +13,8 @@ const NewSaleScreen = () => {
         costumerName: String,
         orders: String[],
         date: String,
-        time: String
+        time: String,
+        closed: boolean
     }
 
     const initialSale: sale = {
@@ -22,7 +23,8 @@ const NewSaleScreen = () => {
         costumerName: '',
         orders: [],
         date: '',
-        time: ''
+        time: '',
+        closed:false
     }
 
     const [tableNumber, setTableNumber] = useState(0)
@@ -70,6 +72,7 @@ const NewSaleScreen = () => {
         setSaleNumber(0)
         setTableNumber(0)
         setCostumerName('')
+        setAlert(<p></p>)
     }
 
     useEffect(() => {

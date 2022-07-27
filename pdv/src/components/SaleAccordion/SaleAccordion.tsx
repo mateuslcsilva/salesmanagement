@@ -14,10 +14,7 @@ export default function SaleAccordion(props :any) {
       setExpanded(isExpanded ? panel : false);
     };
 
-  React.useEffect(() => {
-    console.log(props.sale)
-    console.log('panel' + ( 1+ 1).toString() + "bh-header")
-  })
+
 
   return (
     <div>
