@@ -21,7 +21,7 @@ function App() {
 
 
   return (
-    <body className={theme}>
+    <main className={theme}>
       <Fab  
       aria-label="add" 
       className='mt-2 ml-2' 
@@ -49,7 +49,7 @@ function App() {
       </section>
 
 
-    </body>
+    </main>
   )
 }
 

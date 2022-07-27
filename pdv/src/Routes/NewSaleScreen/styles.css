@@ -24,9 +24,17 @@
     justify-content: center;
 }
 
-.confirmation-text{
-    display: flex;
-    justify-content: end;
+.fading-out{
+    animation: fading-out 5.2s ease;
+}
+
+@keyframes fading-out {
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
+    }
 }
 
 @keyframes growin-up {

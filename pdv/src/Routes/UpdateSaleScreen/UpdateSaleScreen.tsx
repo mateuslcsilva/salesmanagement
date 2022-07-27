@@ -34,6 +34,7 @@ const AddSaleScreen = () => {
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
     const [costumerName, setCostumerName] = useState('')
+    const [newTableNumber, setNewTableNumber] = useState(0)
     const [currentOrder, setCurrentOrder] = useState('')
     const [sale, setSale] = useState({ ...initialSale })
     const [selected, setSelected] = useState(sale.orders);
@@ -120,45 +121,10 @@ const AddSaleScreen = () => {
         setSale(currentCostumer.length == 1 ? (sale: sale) => ({ ...sale, ...currentCostumer[0] }) : currentCostumer)
     }
 
-    const renderSwitch = (currentAction :number) :any => {
-        switch (currentAction) {
-            case 1:
-                <div>
-                    <Checkbox.Group
-                        label="Select cities (controlled)"
-                        color="secondary"
-                        value={selected}
-                        onChange={setSelected}
-                    >
-                        {sale.orders.map((order) => <Checkbox value={order}>{selected.includes(order) ? order.strike() : order}</Checkbox>)}
-                    </Checkbox.Group>
-                </div>
-                break;
-            case 2:
-                <div>
-                    <TextField
-                        id="outlined-basic"
-                        label="Mesa"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : e.target.value)}
-                        value={tableNumber < 1 ? '' : tableNumber}
-                        style={{ 'width': '105px' }}
-                        className='mr-2'
-                    />
-                    <Button
-                        className='is-info ml-2 mb-5'
-                        disabled={sale.numTable != 0 ? true : false}
-                        onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)}
-                        text='Buscar'
-                    />
-                </div>
-                break;
-
-            default:
-                break;
-        }
-
+    const changeNumTable = () => {
+        sale.numTable = newTableNumber
+        clear()
+        setAlert(<Alert severity="success" className='fading-out'>Pronto, mesa alterada!</Alert>)
     }
 
     const clear = () => {
@@ -168,11 +134,21 @@ const AddSaleScreen = () => {
         setTableNumber(0)
         setCostumerName('')
         setAlert(<p></p>)
+        setNewTableNumber(0)
+        setAction(0)
     }
 
     useEffect(() => {
-        console.log(currentOrder)
-    }, [currentOrder])
+        const clearAlert = setTimeout(() => {
+                setAlert(<p></p>)
+            }, 5000)
+
+        return () => clearTimeout(clearAlert)
+    })
+
+    useEffect(() => {
+        console.log(sale)
+    }, [sale])
 
 
     return (
@@ -219,6 +195,9 @@ const AddSaleScreen = () => {
                     onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)}
                     text='Buscar'
                 />
+
+
+                {alert}
 
                 {
                     ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && !Array.isArray(sale)) &&
@@ -268,7 +247,48 @@ const AddSaleScreen = () => {
 
                 <div>
 
-                    {renderSwitch(action)}
+                    {action == 1 &&
+                        <div>
+                            <Checkbox.Group
+                                label="Selecione o pedido a ser excluído:"
+                                color="secondary"
+                                value={selected}
+                                onChange={setSelected}
+                            >
+                                {sale.orders.map((order :string, index :number) => <Checkbox value={order + index}><span className={selected.includes(order) ? 'strike' : ''}>{order}</span></Checkbox>)}
+                            </Checkbox.Group>
+                            <div className='is-flex is-justify-content-flex-end mt-5 mb-5'>
+                                <Button
+                                    className='is-danger ml-2 mb-5'
+                                    disabled={selected.length < 1 ? true : false}
+                                    onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)}
+                                    text='Excluir pedido'
+                                />
+                            </div>
+                        </div>
+                    }
+                    {action == 2 &&
+                        <div className='is-flex is-justify-content-center mb-5 mt-5'>
+                            <TextField
+                                id="outlined-basic"
+                                label="Mesa"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e: any) => setNewTableNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
+                                value={newTableNumber < 1 ? '' :newTableNumber}
+                                style={{ 'width': '105px' }}
+                                className='mr-2'
+                            />
+                            <Button
+                                className='is-info ml-2 mb-5'
+                                disabled={newTableNumber == 0 ? true : false}
+                                onClick={changeNumTable}
+                                text='Alterar'
+                            />
+                        </div>
+                        }
+
+
 
                 </div>
 

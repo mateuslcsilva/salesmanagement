@@ -79,7 +79,11 @@ const NewSaleScreen = () => {
     }
 
     useEffect(() => {
-        console.log(sale)
+        const clearAlert = setTimeout(() => {
+                setAlert(<p></p>)
+            }, 5000)
+
+        return () => clearTimeout(clearAlert)
     })
 
 
@@ -152,7 +156,7 @@ const NewSaleScreen = () => {
                         {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
                         {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                       {sale.orders.map(item => <p>{item}</p>)}
+                       {sale.orders.map((item :any, index :number) => <p key={index}>{item}</p>)}
                     </div>
                 }
 

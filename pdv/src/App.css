@@ -6,8 +6,9 @@
   box-sizing: border-box;
 }
 
-body{
-  height: 150vh;
+main{
+  min-height: 150vh;
+  max-height: auto;
 }
 
 .lightThemed{

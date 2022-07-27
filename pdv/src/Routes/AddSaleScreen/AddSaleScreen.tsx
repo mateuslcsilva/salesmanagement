@@ -8,14 +8,14 @@ import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 const AddSaleScreen = () => {
 
     interface sale {
-        numTable: Number,
-        numSale: Number,
-        costumerName: String,
-        orders: String[],
-        date: String,
-        time: String,
+        numTable: number,
+        numSale: number,
+        costumerName: string,
+        orders: string[],
+        date: string,
+        time: string,
         closed: boolean,
-        paymentMethod: String
+        paymentMethod: string
     }
 
     const initialSale: sale = {
@@ -140,8 +140,12 @@ const AddSaleScreen = () => {
     }
 
     useEffect(() => {
-        console.log(currentOrder)
-    }, [currentOrder])
+        const clearAlert = setTimeout(() => {
+                setAlert(<p></p>)
+            }, 5000)
+
+        return () => clearTimeout(clearAlert)
+    })
 
 
     return (
@@ -213,7 +217,7 @@ const AddSaleScreen = () => {
                             {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
                             {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                        {sale.orders.map((item: String) => <p>{item}</p>)}
+                        {sale.orders.map((item: string, index:number) => <p key={index}>{item}</p>)}
                     </div>
                 }
 

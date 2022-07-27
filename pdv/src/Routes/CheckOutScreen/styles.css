@@ -1,0 +1,12 @@
+.fading-out{
+    animation: fading-out 5.2s ease;
+}
+
+@keyframes fading-out {
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
+    }
+}

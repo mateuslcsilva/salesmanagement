@@ -9,19 +9,20 @@ import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 const AddSaleScreen = () => {
 
     interface sale {
-        numTable: Number,
-        numSale: Number,
-        costumerName: '',
-        orders: String[],
-        date: String,
-        time: String,
+        numTable: number,
+        numSale: number,
+        costumerName: string,
+        orders: string[],
+        date: string,
+        time: string,
         closed: boolean,
-        paymentMethod: String
+        paymentMethod: string
     }
 
-    const initialSale: sale | any = {
+    const initialSale: sale = {
         numTable: 0,
         numSale: 0,
+        costumerName: '',
         orders: [],
         date: '',
         time: '',
@@ -29,14 +30,14 @@ const AddSaleScreen = () => {
         paymentMethod: ''
     }
 
-    const [tableNumber, setTableNumber] = useState(0)
-    const [saleNumber, setSaleNumber] = useState(0)
-    const [costumerName, setCostumerName] = useState('')
-    const [currentOrder, setCurrentOrder] = useState('')
-    const [sale, setSale] = useState({ ...initialSale })
+    const [tableNumber, setTableNumber] =  useState<number>(0)
+    const [saleNumber, setSaleNumber] = useState<number>(0)
+    const [costumerName, setCostumerName] = useState<string>('')
+    const [currentOrder, setCurrentOrder] = useState<string>('')
+    const [sale, setSale] = useState<sale>({ ...initialSale })
     const [totalValue, setTotalValue] = useState('')
-    const [alert, setAlert] = useState(<Alert severity="success" >Pronto, comanda fechada!</Alert>)
-    const [selected, setSelected] = useState<any>('');
+    const [alert, setAlert] = useState(<p></p>)
+    const [selected, setSelected] = useState<any>('Forma de Pagamento');
     const [sales, setSales] = useState([
         {
             "id": 1,
@@ -149,6 +150,8 @@ const AddSaleScreen = () => {
 
         setSale((sale: any) => ({ ...sale, ...updatedSale }))
         setCurrentOrder('')
+        clear()
+        setAlert(<Alert severity="success" className='fading-out'>Pronto, comanda fechada!</Alert>)
     }
 
     const clear = () => {
@@ -157,19 +160,20 @@ const AddSaleScreen = () => {
         setSaleNumber(0)
         setTableNumber(0)
         setCostumerName('')
+        setSelected('Forma de Pagamento')
     }
-
-
-
 
     useEffect(() => {
         getTotalValue()
     }, [sale])
 
     useEffect(() => {
-        console.log(sale.closed)
-    }, [sale.closed])
+        const clearAlert = setTimeout(() => {
+                setAlert(<p></p>)
+            }, 5000)
 
+        return () => clearTimeout(clearAlert)
+    })
 
     return (
         <>
@@ -227,7 +231,7 @@ const AddSaleScreen = () => {
                             {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
                             {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                        {sale.orders.map((item: String) => <p>{item}</p>)}
+                        {sale.orders.map((item: string, index:number) => <p key={index}>{item}</p>)}
                         <p className='mt-3 title is-5'> Total: {totalValue}</p>
                     </div>
                 }
@@ -239,7 +243,7 @@ const AddSaleScreen = () => {
                     </div>
                 }
 
-                {sale.closed && alert}
+                {alert}
 
                 <div className='is-flex is-justify-content-flex-end mt-5 mb-5'>
 

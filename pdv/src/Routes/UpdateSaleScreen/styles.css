@@ -1,0 +1,17 @@
+.strike{
+    text-decoration: line-through !important;
+    transition: .3s ease !important;
+}
+
+.fading-out{
+    animation: fading-out 5.2s ease;
+}
+
+@keyframes fading-out {
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
+    }
+}
