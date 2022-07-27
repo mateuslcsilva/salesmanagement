@@ -14,7 +14,8 @@ const AddSaleScreen = () => {
         orders: String[],
         date: String,
         time: String,
-        closed: boolean
+        closed: boolean,
+        paymentMethod: String
     }
 
     const initialSale: sale = {
@@ -24,7 +25,8 @@ const AddSaleScreen = () => {
         orders: [],
         date: '',
         time: '',
-        closed:false
+        closed:false,
+        paymentMethod: ''
     }
 
     const [tableNumber, setTableNumber] = useState(0)
@@ -47,7 +49,8 @@ const AddSaleScreen = () => {
             ],
             "date": "21/07/2022",
             "time": "21:56",
-            "closed" : false
+            "closed" : false,
+            "paymentMethod": ''
         },
         {
             "id": 2,
@@ -62,7 +65,8 @@ const AddSaleScreen = () => {
             ],
             "date": "21/07/2022",
             "time": "21:56",
-            "closed" : false
+            "closed" : false,
+            "paymentMethod": ''
         },
         {
             "id": 3,
@@ -77,7 +81,8 @@ const AddSaleScreen = () => {
             ],
             "date": "21/07/2022",
             "time": "21:56",
-            "closed" : false
+            "closed" : false,
+            "paymentMethod": ''
         },
     ])
 

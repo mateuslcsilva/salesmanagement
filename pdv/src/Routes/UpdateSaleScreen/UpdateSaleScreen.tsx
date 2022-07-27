@@ -7,21 +7,27 @@ import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 
 const AddSaleScreen = () => {
 
+
     interface sale {
         numTable: Number,
         numSale: Number,
-        costumerName: '',
+        costumerName: String,
         orders: String[],
         date: String,
-        time: String
+        time: String,
+        closed: boolean,
+        paymentMethod: String
     }
 
-    const initialSale: sale | any = {
+    const initialSale: sale = {
         numTable: 0,
         numSale: 0,
+        costumerName: '',
         orders: [],
         date: '',
-        time: ''
+        time: '',
+        closed:false,
+        paymentMethod: ''
     }
 
     const [tableNumber, setTableNumber] = useState(0)
@@ -43,7 +49,9 @@ const AddSaleScreen = () => {
                 "09 - Heineken 600ml R$12.90"
             ],
             "date": "21/07/2022",
-            "time": "21:56"
+            "time": "21:56",
+            "closed": false,
+            "paymentMethod": ''
         },
         {
             "id": 2,
@@ -57,7 +65,9 @@ const AddSaleScreen = () => {
                 "09 - Heineken 600ml R$12.90"
             ],
             "date": "21/07/2022",
-            "time": "21:56"
+            "time": "21:56",
+            "closed": false,
+            "paymentMethod": ''
         },
         {
             "id": 3,
@@ -71,7 +81,9 @@ const AddSaleScreen = () => {
                 "09 - Heineken 600ml R$12.90"
             ],
             "date": "21/07/2022",
-            "time": "21:56"
+            "time": "21:56",
+            "closed": false,
+            "paymentMethod": ''
         },
     ])
 

@@ -7,6 +7,7 @@ import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
 
 const NewSaleScreen = () => {
 
+
     interface sale {
         numTable: Number,
         numSale: Number,
@@ -14,7 +15,8 @@ const NewSaleScreen = () => {
         orders: String[],
         date: String,
         time: String,
-        closed: boolean
+        closed: boolean,
+        paymentMethod: String
     }
 
     const initialSale: sale = {
@@ -24,7 +26,8 @@ const NewSaleScreen = () => {
         orders: [],
         date: '',
         time: '',
-        closed:false
+        closed:false,
+        paymentMethod: ''
     }
 
     const [tableNumber, setTableNumber] = useState(0)
