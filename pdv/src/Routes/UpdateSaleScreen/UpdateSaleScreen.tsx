@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { ReactComponentElement, useEffect, useState } from 'react'
 import './styles.css'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
 import { Accordion, Alert, TextField } from '@mui/material'
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
+import { Checkbox } from '@nextui-org/react'
 
 const AddSaleScreen = () => {
 
@@ -12,7 +13,7 @@ const AddSaleScreen = () => {
         numTable: Number,
         numSale: Number,
         costumerName: String,
-        orders: String[],
+        orders: string[],
         date: String,
         time: String,
         closed: boolean,
@@ -26,7 +27,7 @@ const AddSaleScreen = () => {
         orders: [],
         date: '',
         time: '',
-        closed:false,
+        closed: false,
         paymentMethod: ''
     }
 
@@ -35,7 +36,9 @@ const AddSaleScreen = () => {
     const [costumerName, setCostumerName] = useState('')
     const [currentOrder, setCurrentOrder] = useState('')
     const [sale, setSale] = useState({ ...initialSale })
+    const [selected, setSelected] = useState(sale.orders);
     const [alert, setAlert] = useState(<p></p>)
+    const [action, setAction] = useState(0)
     const [sales, setSales] = useState([
         {
             "id": 1,
@@ -117,18 +120,45 @@ const AddSaleScreen = () => {
         setSale(currentCostumer.length == 1 ? (sale: sale) => ({ ...sale, ...currentCostumer[0] }) : currentCostumer)
     }
 
-    const setOrder = () => {
-        let updatedSale = {
-            numTable: sale.numTable,
-            numSale: sale.numSale,
-            orders: [...sale.orders, currentOrder],
-            date: sale.date,
-            time: sale.time
+    const renderSwitch = (currentAction :number) :any => {
+        switch (currentAction) {
+            case 1:
+                <div>
+                    <Checkbox.Group
+                        label="Select cities (controlled)"
+                        color="secondary"
+                        value={selected}
+                        onChange={setSelected}
+                    >
+                        {sale.orders.map((order) => <Checkbox value={order}>{selected.includes(order) ? order.strike() : order}</Checkbox>)}
+                    </Checkbox.Group>
+                </div>
+                break;
+            case 2:
+                <div>
+                    <TextField
+                        id="outlined-basic"
+                        label="Mesa"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : e.target.value)}
+                        value={tableNumber < 1 ? '' : tableNumber}
+                        style={{ 'width': '105px' }}
+                        className='mr-2'
+                    />
+                    <Button
+                        className='is-info ml-2 mb-5'
+                        disabled={sale.numTable != 0 ? true : false}
+                        onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)}
+                        text='Buscar'
+                    />
+                </div>
+                break;
+
+            default:
+                break;
         }
 
-        setSale((sale: any) => ({ ...sale, ...updatedSale }))
-        setCurrentOrder('')
-        setAlert(<Alert severity="success" >Pedido registrado!</Alert>)
     }
 
     const clear = () => {
@@ -210,30 +240,36 @@ const AddSaleScreen = () => {
 
                 <div className='is-flex is-justify-content-space-evenly mt-5'>
                     <Button
-                        onClick={setOrder}
+                        onClick={() => setAction(1)}
                         className='is-info mt-5 mb-5'
                         text='Excluir Pedido'
                         disabled={sale.numTable == 0 || Array.isArray(sale) ? true : false}
                     />
                     <Button
-                        onClick={setOrder}
+                        onClick={() => setAction(2)}
                         className='is-info mt-5 mb-5'
                         text='Mudar Mesa'
                         disabled={sale.numTable == 0 || Array.isArray(sale) ? true : false}
                     />
                     <Button
-                        onClick={setOrder}
+                        onClick={() => setAction(3)}
                         className='is-info mt-5 mb-5'
                         text='Migrar Pedidos'
                         disabled={sale.numTable == 0 || Array.isArray(sale) ? true : false}
                     />
 
                     <Button
-                        onClick={setOrder}
+                        onClick={() => setAction(4)}
                         className='is-info mt-5 mb-5'
                         text='Excluir Comanda'
                         disabled={sale.numTable == 0 || Array.isArray(sale) ? true : false}
                     />
+                </div>
+
+                <div>
+
+                    {renderSwitch(action)}
+
                 </div>
 
                 <div className='btn-limpar-centered mt-5'>

@@ -36,7 +36,7 @@ const AddSaleScreen = () => {
     const [sale, setSale] = useState({ ...initialSale })
     const [totalValue, setTotalValue] = useState('')
     const [alert, setAlert] = useState(<Alert severity="success" >Pronto, comanda fechada!</Alert>)
-    const [selected, setSelected] = useState('Forma de Pagamento');
+    const [selected, setSelected] = useState<any>('');
     const [sales, setSales] = useState([
         {
             "id": 1,
