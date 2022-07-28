@@ -37,7 +37,7 @@ const AddSaleScreen = () => {
     const [newTableNumber, setNewTableNumber] = useState(0)
     const [currentOrder, setCurrentOrder] = useState('')
     const [sale, setSale] = useState({ ...initialSale })
-    const [selected, setSelected] = useState(sale.orders);
+    const [selected, setSelected] = useState<string[]>([]);
     const [alert, setAlert] = useState(<p></p>)
     const [action, setAction] = useState(0)
     const [sales, setSales] = useState([
@@ -127,6 +127,16 @@ const AddSaleScreen = () => {
         setAlert(<Alert severity="success" className='fading-out'>Pronto, mesa alterada!</Alert>)
     }
 
+    const deleteItems = () => {
+        const selectedToNumber: any[] = selected.map(item => Number(item))
+        selectedToNumber.reverse()
+        selectedToNumber.forEach((item) => {
+            sale.orders.splice(item, 1)
+        })
+        clear()
+        setAlert(<Alert severity="success" className='fading-out'>Pronto, pedidos excluídos!</Alert>)
+    }
+
     const clear = () => {
         setSale({ ...initialSale })
         setCurrentOrder('')
@@ -136,19 +146,21 @@ const AddSaleScreen = () => {
         setAlert(<p></p>)
         setNewTableNumber(0)
         setAction(0)
+        setSelected([])
     }
 
     useEffect(() => {
         const clearAlert = setTimeout(() => {
-                setAlert(<p></p>)
-            }, 5000)
+            setAlert(<p></p>)
+        }, 5000)
 
         return () => clearTimeout(clearAlert)
     })
 
-    useEffect(() => {
+/*     useEffect(() => {
         console.log(sale)
     }, [sale])
+ */
 
 
     return (
@@ -251,17 +263,17 @@ const AddSaleScreen = () => {
                         <div>
                             <Checkbox.Group
                                 label="Selecione o pedido a ser excluído:"
-                                color="secondary"
+                                color="error"
                                 value={selected}
                                 onChange={setSelected}
                             >
-                                {sale.orders.map((order :string, index :number) => <Checkbox value={order + index}><span className={selected.includes(order) ? 'strike' : ''}>{order}</span></Checkbox>)}
+                                {sale.orders.map((order: string, index: number) => <Checkbox value={index.toString()} className={selected.includes(index.toString()) ? 'strike' : ''}>{order}</Checkbox>)}
                             </Checkbox.Group>
                             <div className='is-flex is-justify-content-flex-end mt-5 mb-5'>
                                 <Button
                                     className='is-danger ml-2 mb-5'
                                     disabled={selected.length < 1 ? true : false}
-                                    onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)}
+                                    onClick={deleteItems}
                                     text='Excluir pedido'
                                 />
                             </div>
@@ -275,7 +287,7 @@ const AddSaleScreen = () => {
                                 variant="outlined"
                                 size="small"
                                 onChange={(e: any) => setNewTableNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
-                                value={newTableNumber < 1 ? '' :newTableNumber}
+                                value={newTableNumber < 1 ? '' : newTableNumber}
                                 style={{ 'width': '105px' }}
                                 className='mr-2'
                             />
@@ -286,7 +298,7 @@ const AddSaleScreen = () => {
                                 text='Alterar'
                             />
                         </div>
-                        }
+                    }
 
 
 

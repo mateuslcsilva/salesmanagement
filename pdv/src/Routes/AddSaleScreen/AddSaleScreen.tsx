@@ -8,6 +8,7 @@ import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 const AddSaleScreen = () => {
 
     interface sale {
+        saleId: number | undefined,
         numTable: number,
         numSale: number,
         costumerName: string,
@@ -19,6 +20,7 @@ const AddSaleScreen = () => {
     }
 
     const initialSale: sale = {
+        saleId: undefined,
         numTable: 0,
         numSale: 0,
         costumerName: '',
@@ -37,7 +39,7 @@ const AddSaleScreen = () => {
     const [alert, setAlert] = useState(<p></p>)
     const [sales, setSales] = useState([
         {
-            "id": 1,
+            "saleId": 1,
             "numSale": 12,
             "numTable": 1,
             "costumerName": "carlos",
@@ -53,7 +55,7 @@ const AddSaleScreen = () => {
             "paymentMethod": ''
         },
         {
-            "id": 2,
+            "saleId": 2,
             "numSale": 13,
             "numTable": 2,
             "costumerName": "Carlos",
@@ -69,7 +71,7 @@ const AddSaleScreen = () => {
             "paymentMethod": ''
         },
         {
-            "id": 3,
+            "saleId": 3,
             "numSale": 14,
             "numTable": 1,
             "costumerName": "joao",
@@ -107,7 +109,7 @@ const AddSaleScreen = () => {
     }
 
     const findCostumer = () => {
-        let currentCostumer: any= []
+        let currentCostumer :any = []
         sales.forEach((sale) => {
             if (sale.costumerName.toLowerCase() == costumerName.toLowerCase()) {
                 currentCostumer.push(sale)
@@ -118,11 +120,7 @@ const AddSaleScreen = () => {
 
     const setOrder = () => {
         let updatedSale = {
-            numTable: sale.numTable,
-            numSale: sale.numSale,
-            orders: [...sale.orders, currentOrder],
-            date: sale.date,
-            time: sale.time
+            orders: [...sale.orders, currentOrder]
         }
 
         setSale((sale: any) => ({ ...sale, ...updatedSale }))
@@ -146,7 +144,6 @@ const AddSaleScreen = () => {
 
         return () => clearTimeout(clearAlert)
     })
-
 
     return (
         <>

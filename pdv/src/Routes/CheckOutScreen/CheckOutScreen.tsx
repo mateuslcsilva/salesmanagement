@@ -9,6 +9,7 @@ import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 const AddSaleScreen = () => {
 
     interface sale {
+        saleId: number | undefined,
         numTable: number,
         numSale: number,
         costumerName: string,
@@ -20,6 +21,7 @@ const AddSaleScreen = () => {
     }
 
     const initialSale: sale = {
+        saleId: undefined,
         numTable: 0,
         numSale: 0,
         costumerName: '',
@@ -40,7 +42,7 @@ const AddSaleScreen = () => {
     const [selected, setSelected] = useState<any>('Forma de Pagamento');
     const [sales, setSales] = useState([
         {
-            "id": 1,
+            "saleId": 1,
             "numSale": 12,
             "numTable": 1,
             "costumerName": "carlos",
@@ -56,7 +58,7 @@ const AddSaleScreen = () => {
             "paymentMethod": ''
         },
         {
-            "id": 2,
+            "saleId": 2,
             "numSale": 13,
             "numTable": 2,
             "costumerName": "Carlos",
@@ -72,7 +74,7 @@ const AddSaleScreen = () => {
             "paymentMethod": ''
         },
         {
-            "id": 3,
+            "saleId": 3,
             "numSale": 14,
             "numTable": 1,
             "costumerName": "joao",

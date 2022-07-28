@@ -9,6 +9,7 @@ const NewSaleScreen = () => {
 
 
     interface sale {
+        saleId: number | undefined,
         numTable: Number,
         numSale: Number,
         costumerName: String,
@@ -20,6 +21,7 @@ const NewSaleScreen = () => {
     }
 
     const initialSale: sale = {
+        saleId: undefined,
         numTable: 0,
         numSale: 0,
         costumerName: '',
@@ -56,12 +58,7 @@ const NewSaleScreen = () => {
 
     const setOrder = () => {
         let updatedSale = {
-            numTable: sale.numTable,
-            numSale: sale.numSale,
-            costumerName: sale.costumerName,
             orders: [...sale.orders, currentOrder],
-            date: sale.date,
-            time: sale.time
         }
 
         setSale(sale => ({ ...sale, ...updatedSale }))
@@ -85,8 +82,6 @@ const NewSaleScreen = () => {
 
         return () => clearTimeout(clearAlert)
     })
-
-
 
     return (
         <>
