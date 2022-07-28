@@ -35,7 +35,7 @@ const AddSaleScreen = () => {
     const [saleNumber, setSaleNumber] = useState(0)
     const [costumerName, setCostumerName] = useState('')
     const [newTableNumber, setNewTableNumber] = useState(0)
-    const [currentOrder, setCurrentOrder] = useState('')
+    const [newSaleNumber, setNewSaleNumber] = useState(0)
     const [sale, setSale] = useState({ ...initialSale })
     const [selected, setSelected] = useState<string[]>([]);
     const [alert, setAlert] = useState(<p></p>)
@@ -99,6 +99,7 @@ const AddSaleScreen = () => {
             }
         })
         setSale(currentSale.length == 1 ? (sale: sale) => ({ ...sale, ...currentSale[0] }) : currentSale)
+        setAlert(<p></p>)
     }
 
     const findSale = () => {
@@ -109,6 +110,7 @@ const AddSaleScreen = () => {
             }
         })
         setSale((sale: sale) => ({ ...sale, ...currentSale }))
+        setAlert(<p></p>)
     }
 
     const findCostumer = () => {
@@ -119,6 +121,7 @@ const AddSaleScreen = () => {
             }
         })
         setSale(currentCostumer.length == 1 ? (sale: sale) => ({ ...sale, ...currentCostumer[0] }) : currentCostumer)
+        setAlert(<p></p>)
     }
 
     const changeNumTable = () => {
@@ -130,21 +133,52 @@ const AddSaleScreen = () => {
     const deleteItems = () => {
         const selectedToNumber: any[] = selected.map(item => Number(item))
         selectedToNumber.reverse()
+        let deletedItems :string[] = []
         selectedToNumber.forEach((item) => {
-            sale.orders.splice(item, 1)
+            let deletedItem = sale.orders.splice(item, 1)
+            deletedItems = [...deletedItems, ...deletedItem]
         })
         clear()
         setAlert(<Alert severity="success" className='fading-out'>Pronto, pedidos excluídos!</Alert>)
+        return deletedItems
+    }
+
+    const transferringOrders = () => {
+        const deletedItems = deleteItems()
+        const currentSale = sales.find(sale => sale.numSale == newSaleNumber)
+        if(currentSale) {
+            currentSale.orders = [...currentSale?.orders, ...deletedItems]
+            setSale((sale: sale) => ({ ...sale, ...currentSale}))
+            console.log(currentSale)
+        } else{
+            let current = new Date
+            let currentDay = current.getDate().toString().length < 2 ? '0' + current.getDate() : current.getDate()
+            let currentMonth = current.getMonth().toString().length < 2 ? '0' + (current.getMonth() + 1) : (current.getMonth() + 1)
+            let currentDate = currentDay + '/' + currentMonth + '/' + current.getFullYear()
+            let currentTime = current.getHours() + ':' + current.getMinutes()
+            let updatedSale = {
+                numTable: 0,
+                numSale: newSaleNumber,
+                costumerName: '',
+                orders: deletedItems,
+                date: currentDate,
+                time: currentTime
+            }
+            setSale(sale => ({ ...sale, ...updatedSale }))
+            console.log(updatedSale)
+        }
+        clear()
+        setAlert(<Alert severity="success" className='fading-out'>Pronto, pedidos transferidos!</Alert>)
     }
 
     const clear = () => {
         setSale({ ...initialSale })
-        setCurrentOrder('')
         setSaleNumber(0)
         setTableNumber(0)
         setCostumerName('')
         setAlert(<p></p>)
         setNewTableNumber(0)
+        setNewSaleNumber(0)
         setAction(0)
         setSelected([])
     }
@@ -157,10 +191,14 @@ const AddSaleScreen = () => {
         return () => clearTimeout(clearAlert)
     })
 
-/*     useEffect(() => {
-        console.log(sale)
-    }, [sale])
- */
+   useEffect(() => {
+            console.log(sale)
+        }, [sale])
+        
+    useEffect(() => {
+        console.log(newSaleNumber)
+    }, [newSaleNumber])
+
 
 
     return (
@@ -234,26 +272,26 @@ const AddSaleScreen = () => {
                         onClick={() => setAction(1)}
                         className='is-info mt-5 mb-5'
                         text='Excluir Pedido'
-                        disabled={sale.numTable == 0 || Array.isArray(sale) ? true : false}
+                        disabled={sale.numTable == 0 || Array.isArray(sale) || action != 0 ? true : false}
                     />
                     <Button
                         onClick={() => setAction(2)}
                         className='is-info mt-5 mb-5'
                         text='Mudar Mesa'
-                        disabled={sale.numTable == 0 || Array.isArray(sale) ? true : false}
+                        disabled={sale.numTable == 0 || Array.isArray(sale) || action != 0 ? true : false}
                     />
                     <Button
                         onClick={() => setAction(3)}
                         className='is-info mt-5 mb-5'
                         text='Migrar Pedidos'
-                        disabled={sale.numTable == 0 || Array.isArray(sale) ? true : false}
+                        disabled={sale.numTable == 0 || Array.isArray(sale) || action != 0 ? true : false}
                     />
 
                     <Button
                         onClick={() => setAction(4)}
                         className='is-info mt-5 mb-5'
                         text='Excluir Comanda'
-                        disabled={sale.numTable == 0 || Array.isArray(sale) ? true : false}
+                        disabled={sale.numTable == 0 || Array.isArray(sale) || action != 0 ? true : false}
                     />
                 </div>
 
@@ -299,6 +337,35 @@ const AddSaleScreen = () => {
                             />
                         </div>
                     }
+                    {action == 3 &&
+                        <div className='is-flex is-justify-content-center mb-5 mt-5'>
+                            <Checkbox.Group
+                                label="Selecione o pedido a ser excluído:"
+                                color="error"
+                                value={selected}
+                                onChange={setSelected}
+                            >
+                                {sale.orders.map((order: string, index: number) => <Checkbox value={index.toString()} className={selected.includes(index.toString()) ? 'strike' : ''}>{order}</Checkbox>)}
+                            </Checkbox.Group>
+                            <TextField
+                                id="outlined-basic"
+                                label="Comanda"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e: any) => setNewSaleNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
+                                value={newSaleNumber < 1 ? '' : newSaleNumber}
+                                style={{ 'width': '105px' }}
+                                className='mr-2'
+                            />
+                            <Button
+                                className='is-info ml-2 mb-5'
+                                disabled={newSaleNumber == 0 || selected.length < 1 ? true : false}
+                                onClick={transferringOrders}
+                                text='Transferir pedidos'
+                            />
+                        </div>
+                    }
+
 
 
 
