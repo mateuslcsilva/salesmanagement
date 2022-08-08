@@ -3,41 +3,16 @@ import './styles.css'
 import { Alert, TextField } from '@mui/material'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
-
+import { sale } from '../../types/sale'
 
 const NewSaleScreen = () => {
-
-
-    interface sale {
-        saleId: number | undefined,
-        numTable: Number,
-        numSale: Number,
-        costumerName: String,
-        orders: String[],
-        date: String,
-        time: String,
-        closed: boolean,
-        paymentMethod: String
-    }
-
-    const initialSale: sale = {
-        saleId: undefined,
-        numTable: 0,
-        numSale: 0,
-        costumerName: '',
-        orders: [],
-        date: '',
-        time: '',
-        closed:false,
-        paymentMethod: ''
-    }
 
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
     const [costumerName, setCostumerName] = useState('')
     const [currentOrder, setCurrentOrder] = useState('')
     const [alert, setAlert] = useState(<p></p>)
-    const [sale, setSale] = useState({ ...initialSale })
+    const [sale, setSale] = useState<sale>({} as sale)
 
     const setTable = () => {
         let current = new Date
@@ -67,7 +42,7 @@ const NewSaleScreen = () => {
     }
 
     const clear = () => {
-        setSale({ ...initialSale })
+        setSale({} as sale)
         setCurrentOrder('')
         setSaleNumber(0)
         setTableNumber(0)
@@ -122,40 +97,40 @@ const NewSaleScreen = () => {
                 />
 
                 <Button
-                    className='is-info ml-2'
-                    disabled={sale.numSale != 0 ? true : false}
+                    className='is-info ml-2 mb-5'
+                    disabled={sale.numSale? true : false}
                     onClick={setTable}
                     text='Iniciar comanda'
-                /><br /><br />
+                />
 
                 <ItemsListInput
 
-                    className='is-info'
+                    className='is-info mb-5'
                     placeholder="00 - Nome do Pedido"
                     onChange={(e: any) => setCurrentOrder(e.target.value)}
                     value={currentOrder}
                     disabled={sale.numSale == 0 ? true : false}
-                /><br /><br />
+                />
 
                 <Button
                     onClick={setOrder}
                     className='is-info mb-5'
                     text='Acrescentar item'
-                    disabled={sale.numSale == 0 ? true : false}
+                    disabled={!sale.numSale? true : false}
                 />
-                {
-                    saleNumber > 0 &&
+                {saleNumber > 0 &&
                     <div className='saleInfo mb-3'>
                         <p className='title is-5'>
                         {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
                         {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
                         {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                       {sale.orders.map((item :any, index :number) => <p key={index}>{item}</p>)}
+                       {sale.orders && sale.orders.map((item :any, index :number) => <p key={index}>{item}</p>)}
                     </div>
                 }
 
                 {alert}
+                
                 <div className='btn-limpar-centered mt-5'>
                     <Button onClick={clear} disabled={sale.numSale == 0 ? true : false} text='Limpar' />
                 </div>

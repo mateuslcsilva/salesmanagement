@@ -1,42 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import './styles.css'
 import Button from '../../components/Button/Button'
-import {ItemsList} from '../../assets/ItemsList'
+import { ItemsList } from '../../assets/ItemsList'
 import { Alert, TextField } from '@mui/material'
 import { Dropdown } from '@nextui-org/react';
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
+import { sale } from '../../types/sale'
 
 const AddSaleScreen = () => {
 
-    interface sale {
-        saleId: number | undefined,
-        numTable: number,
-        numSale: number,
-        costumerName: string,
-        orders: string[],
-        date: string,
-        time: string,
-        closed: boolean,
-        paymentMethod: string
-    }
-
-    const initialSale: sale = {
-        saleId: undefined,
-        numTable: 0,
-        numSale: 0,
-        costumerName: '',
-        orders: [],
-        date: '',
-        time: '',
-        closed: false,
-        paymentMethod: ''
-    }
-
-    const [tableNumber, setTableNumber] =  useState<number>(0)
+    const [tableNumber, setTableNumber] = useState<number>(0)
     const [saleNumber, setSaleNumber] = useState<number>(0)
     const [costumerName, setCostumerName] = useState<string>('')
     const [currentOrder, setCurrentOrder] = useState<string>('')
-    const [sale, setSale] = useState<sale>({ ...initialSale })
+    const [sale, setSale] = useState<sale>({} as sale)
     const [totalValue, setTotalValue] = useState('')
     const [alert, setAlert] = useState(<p></p>)
     const [selected, setSelected] = useState<any>('Forma de Pagamento');
@@ -98,7 +75,7 @@ const AddSaleScreen = () => {
 
 
     const findTable = () => {
-        let currentSale: any = []
+        let currentSale :any = []
         sales.forEach((sale) => {
             if (sale.numTable == tableNumber) {
                 currentSale.push(sale)
@@ -129,35 +106,29 @@ const AddSaleScreen = () => {
 
     const getTotalValue = () => {
         if (Array.isArray(sale)) return
-        const itemsId :number[] = sale.orders.map((order :string) => Number(order.substring(0,2)))
-        let total :number = 0
-        itemsId.forEach((order :number) => {
-            ItemsList.forEach((item :any)=> {
-                    item.numItem == order? total += Number(item.itemValue) : {}
+        const itemsId: number[] = sale.orders && sale.orders.map((order: string) => Number(order.substring(0, 2)))
+        let total: number = 0
+        itemsId && itemsId.forEach((order: number) => {
+            ItemsList.forEach((item :any) => {
+                item.numItem == order && (total += Number(item.itemValue))
             })
         })
-        setTotalValue(total.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}))
-        console.log(totalValue)
+        setTotalValue(total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }))
     }
 
     const closeSale = () => {
         let updatedSale = {
-            numTable: sale.numTable,
-            numSale: sale.numSale,
-            orders: [...sale.orders, currentOrder],
-            date: sale.date,
-            time: sale.time,
             closed: true
         }
 
-        setSale((sale: any) => ({ ...sale, ...updatedSale }))
+        setSale((sale) => ({ ...sale, ...updatedSale }))
         setCurrentOrder('')
         clear()
         setAlert(<Alert severity="success" className='fading-out'>Pronto, comanda fechada!</Alert>)
     }
 
     const clear = () => {
-        setSale({ ...initialSale })
+        setSale({} as sale)
         setCurrentOrder('')
         setSaleNumber(0)
         setTableNumber(0)
@@ -166,16 +137,17 @@ const AddSaleScreen = () => {
     }
 
     useEffect(() => {
-        getTotalValue()
-    }, [sale])
-
-    useEffect(() => {
         const clearAlert = setTimeout(() => {
-                setAlert(<p></p>)
-            }, 5000)
+            setAlert(<p></p>)
+        }, 5000)
 
         return () => clearTimeout(clearAlert)
     })
+
+    useEffect(() => {
+        getTotalValue()
+        console.log(sales)
+    }, [sale])
 
     return (
         <>
@@ -219,21 +191,21 @@ const AddSaleScreen = () => {
 
                 <Button
                     className='is-info ml-2 mb-5'
-                    disabled={sale.numTable != 0 ? true : false}
+                    disabled={sale.numTable ? true : false}
                     onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)}
                     text='Buscar'
                 />
 
-
-                {
-                    ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && !Array.isArray(sale) && !sale.closed) &&
+                {((saleNumber > 0 || costumerName != '' || tableNumber > 0) &&
+                    !Array.isArray(sale) &&
+                    !sale.closed) &&
                     <div className='saleInfo mb-3'>
                         <p className='title is-5'>
                             {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
                             {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
                             {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                        {sale.orders.map((item: string, index:number) => <p key={index}>{item}</p>)}
+                        {sale.orders && sale.orders.map((item: string, index: number) => <p key={index}>{item}</p>)}
                         <p className='mt-3 title is-5'> Total: {totalValue}</p>
                     </div>
                 }
@@ -276,12 +248,12 @@ const AddSaleScreen = () => {
                         onClick={closeSale}
                         className='is-success ml-3'
                         text='PAGO!'
-                        disabled={sale.numTable == 0 || Array.isArray(sale) || (paymentMethods == "Forma de Pagamento" )? true : false}
+                        disabled={!sale.numTable || Array.isArray(sale) || (paymentMethods == "Forma de Pagamento") ? true : false}
                     />
                 </div>
 
                 <div className='btn-limpar-centered mt-5'>
-                    <Button onClick={clear} disabled={sale.numTable == 0 ? true : false} text='Limpar' />
+                    <Button onClick={clear} disabled={!sale.numTable ? true : false} text='Limpar' />
                 </div>
             </div>
         </>

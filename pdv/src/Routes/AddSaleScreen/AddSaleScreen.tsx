@@ -2,40 +2,17 @@ import React, { useEffect, useState } from 'react'
 import './styles.css'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
-import {Accordion, Alert, TextField } from '@mui/material'
+import { Accordion, Alert, TextField } from '@mui/material'
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
+import { sale } from '../../types/sale'
 
 const AddSaleScreen = () => {
-
-    interface sale {
-        saleId: number | undefined,
-        numTable: number,
-        numSale: number,
-        costumerName: string,
-        orders: string[],
-        date: string,
-        time: string,
-        closed: boolean,
-        paymentMethod: string
-    }
-
-    const initialSale: sale = {
-        saleId: undefined,
-        numTable: 0,
-        numSale: 0,
-        costumerName: '',
-        orders: [],
-        date: '',
-        time: '',
-        closed:false,
-        paymentMethod: ''
-    }
 
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
     const [costumerName, setCostumerName] = useState('')
     const [currentOrder, setCurrentOrder] = useState('')
-    const [sale, setSale] = useState({ ...initialSale })
+    const [sale, setSale] = useState<sale>({} as sale)
     const [alert, setAlert] = useState(<p></p>)
     const [sales, setSales] = useState([
         {
@@ -51,7 +28,7 @@ const AddSaleScreen = () => {
             ],
             "date": "21/07/2022",
             "time": "21:56",
-            "closed" : false,
+            "closed": false,
             "paymentMethod": ''
         },
         {
@@ -67,7 +44,7 @@ const AddSaleScreen = () => {
             ],
             "date": "21/07/2022",
             "time": "21:56",
-            "closed" : false,
+            "closed": false,
             "paymentMethod": ''
         },
         {
@@ -83,7 +60,7 @@ const AddSaleScreen = () => {
             ],
             "date": "21/07/2022",
             "time": "21:56",
-            "closed" : false,
+            "closed": false,
             "paymentMethod": ''
         },
     ])
@@ -95,7 +72,7 @@ const AddSaleScreen = () => {
                 currentSale.push(sale)
             }
         })
-        setSale(currentSale.length == 1 ? (sale: sale) => ({ ...sale, ...currentSale[0] }): currentSale)
+        setSale(currentSale.length == 1 ? (sale: sale) => ({ ...sale, ...currentSale[0] }) : currentSale)
     }
 
     const findSale = () => {
@@ -109,13 +86,13 @@ const AddSaleScreen = () => {
     }
 
     const findCostumer = () => {
-        let currentCostumer :any = []
+        let currentCostumer: any = []
         sales.forEach((sale) => {
             if (sale.costumerName.toLowerCase() == costumerName.toLowerCase()) {
                 currentCostumer.push(sale)
             }
         })
-        setSale(currentCostumer.length == 1 ? (sale: sale) => ({ ...sale, ...currentCostumer[0] }): currentCostumer)
+        setSale(currentCostumer.length == 1 ? (sale: sale) => ({ ...sale, ...currentCostumer[0] }) : currentCostumer)
     }
 
     const setOrder = () => {
@@ -129,7 +106,7 @@ const AddSaleScreen = () => {
     }
 
     const clear = () => {
-        setSale({ ...initialSale })
+        setSale({} as sale)
         setCurrentOrder('')
         setSaleNumber(0)
         setTableNumber(0)
@@ -139,8 +116,8 @@ const AddSaleScreen = () => {
 
     useEffect(() => {
         const clearAlert = setTimeout(() => {
-                setAlert(<p></p>)
-            }, 5000)
+            setAlert(<p></p>)
+        }, 5000)
 
         return () => clearTimeout(clearAlert)
     })
@@ -187,7 +164,7 @@ const AddSaleScreen = () => {
 
                 <Button
                     className='is-info ml-2'
-                    disabled={sale.numTable != 0 ? true : false}
+                    disabled={sale.numTable ? true : false}
                     onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)}
                     text='Buscar'
                 />
@@ -204,7 +181,7 @@ const AddSaleScreen = () => {
                     onClick={setOrder}
                     className='is-info mt-5 mb-5'
                     text='Acrescentar item'
-                    disabled={sale.numTable == 0 || Array.isArray(sale) ? true : false}
+                    disabled={!sale.numTable || Array.isArray(sale) ? true : false}
                 />
                 {
                     ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && !Array.isArray(sale)) &&
@@ -214,13 +191,13 @@ const AddSaleScreen = () => {
                             {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
                             {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                        {sale.orders.map((item: string, index:number) => <p key={index}>{item}</p>)}
+                        {sale.orders && sale.orders.map((item: string, index: number) => <p key={index}>{item}</p>)}
                     </div>
                 }
 
                 {Array.isArray(sale) &&
                     <div>
-                        <SaleAccordion sale={sale} selectedSale={(selectedSale :sale) => setSale((sale: sale) => ({ ...sale, ...selectedSale }))}/>
+                        <SaleAccordion sale={sale} selectedSale={(selectedSale: sale) => setSale((sale: sale) => ({ ...sale, ...selectedSale }))} />
                     </div>
                 }
 

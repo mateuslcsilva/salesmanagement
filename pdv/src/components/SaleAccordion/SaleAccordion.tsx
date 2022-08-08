@@ -21,7 +21,7 @@ export default function SaleAccordion(props :any) {
       {props.sale.map((sale: any, index: number) => {
         const indexof = index++
         return(
-                  <Accordion expanded={expanded === ('panel' + ((indexof).toString()))} onChange={handleChange('panel' + ((indexof).toString()))} key={indexof}>
+          <Accordion expanded={expanded === ('panel' + ((indexof).toString()))} onChange={handleChange('panel' + ((indexof).toString()))} key={indexof}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls={"panel" + ((indexof).toString()) + "bh-content"}

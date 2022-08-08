@@ -5,38 +5,16 @@ import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
 import { Accordion, Alert, TextField } from '@mui/material'
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { Checkbox } from '@nextui-org/react'
+import { sale } from '../../types/sale'
 
 const AddSaleScreen = () => {
-
-
-    interface sale {
-        numTable: Number,
-        numSale: Number,
-        costumerName: String,
-        orders: string[],
-        date: String,
-        time: String,
-        closed: boolean,
-        paymentMethod: String
-    }
-
-    const initialSale: sale = {
-        numTable: 0,
-        numSale: 0,
-        costumerName: '',
-        orders: [],
-        date: '',
-        time: '',
-        closed: false,
-        paymentMethod: ''
-    }
 
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
     const [costumerName, setCostumerName] = useState('')
     const [newTableNumber, setNewTableNumber] = useState(0)
     const [newSaleNumber, setNewSaleNumber] = useState(0)
-    const [sale, setSale] = useState({ ...initialSale })
+    const [sale, setSale] = useState<sale>({} as sale)
     const [selected, setSelected] = useState<string[]>([]);
     const [alert, setAlert] = useState(<p></p>)
     const [action, setAction] = useState(0)
@@ -172,7 +150,7 @@ const AddSaleScreen = () => {
     }
 
     const clear = () => {
-        setSale({ ...initialSale })
+        setSale({} as sale)
         setSaleNumber(0)
         setTableNumber(0)
         setCostumerName('')
@@ -241,7 +219,7 @@ const AddSaleScreen = () => {
 
                 <Button
                     className='is-info ml-2 mb-5'
-                    disabled={sale.numTable != 0 ? true : false}
+                    disabled={sale.numTable? true : false}
                     onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)}
                     text='Buscar'
                 />
@@ -257,7 +235,7 @@ const AddSaleScreen = () => {
                             {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
                             {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                        {sale.orders.map((item: String) => <p>{item}</p>)}
+                        {sale.orders && sale.orders.map((item: string, index :number) => <p key={index}>{item}</p>)}
                     </div>
                 }
 
@@ -272,26 +250,26 @@ const AddSaleScreen = () => {
                         onClick={() => setAction(1)}
                         className='is-info mt-5 mb-5'
                         text='Excluir Pedido'
-                        disabled={sale.numTable == 0 || Array.isArray(sale) || action != 0 ? true : false}
+                        disabled={!sale.numTable|| Array.isArray(sale) || action != 0 ? true : false}
                     />
                     <Button
                         onClick={() => setAction(2)}
                         className='is-info mt-5 mb-5'
                         text='Mudar Mesa'
-                        disabled={sale.numTable == 0 || Array.isArray(sale) || action != 0 ? true : false}
+                        disabled={!sale.numTable|| Array.isArray(sale) || action != 0 ? true : false}
                     />
                     <Button
                         onClick={() => setAction(3)}
                         className='is-info mt-5 mb-5'
                         text='Migrar Pedidos'
-                        disabled={sale.numTable == 0 || Array.isArray(sale) || action != 0 ? true : false}
+                        disabled={!sale.numTable|| Array.isArray(sale) || action != 0 ? true : false}
                     />
 
                     <Button
                         onClick={() => setAction(4)}
                         className='is-info mt-5 mb-5'
                         text='Excluir Comanda'
-                        disabled={sale.numTable == 0 || Array.isArray(sale) || action != 0 ? true : false}
+                        disabled={!sale.numTable|| Array.isArray(sale) || action != 0 ? true : false}
                     />
                 </div>
 
