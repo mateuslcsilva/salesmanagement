@@ -5,6 +5,7 @@ import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
 import { Accordion, Alert, TextField } from '@mui/material'
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { sale } from '../../types/sale'
+import { salesList } from '../../assets/salesList'
 
 const AddSaleScreen = () => {
 
@@ -14,56 +15,7 @@ const AddSaleScreen = () => {
     const [currentOrder, setCurrentOrder] = useState('')
     const [sale, setSale] = useState<sale>({} as sale)
     const [alert, setAlert] = useState(<p></p>)
-    const [sales, setSales] = useState([
-        {
-            "saleId": 1,
-            "numSale": 12,
-            "numTable": 1,
-            "costumerName": "carlos",
-            "orders": [
-                "05 - Porção Alcatra R$49.90",
-                "06 - Devassa 600ml R$9.90",
-                "06 - Devassa 600ml R$9.90",
-                "09 - Heineken 600ml R$12.90"
-            ],
-            "date": "21/07/2022",
-            "time": "21:56",
-            "closed": false,
-            "paymentMethod": ''
-        },
-        {
-            "saleId": 2,
-            "numSale": 13,
-            "numTable": 2,
-            "costumerName": "Carlos",
-            "orders": [
-                "05 - Porção Alcatra R$49.90",
-                "06 - Devassa 600ml R$9.90",
-                "06 - Devassa 600ml R$9.90",
-                "09 - Heineken 600ml R$12.90"
-            ],
-            "date": "21/07/2022",
-            "time": "21:56",
-            "closed": false,
-            "paymentMethod": ''
-        },
-        {
-            "saleId": 3,
-            "numSale": 14,
-            "numTable": 1,
-            "costumerName": "joao",
-            "orders": [
-                "05 - Porção Alcatra R$49.90",
-                "06 - Devassa 600ml R$9.90",
-                "06 - Devassa 600ml R$9.90",
-                "09 - Heineken 600ml R$12.90"
-            ],
-            "date": "21/07/2022",
-            "time": "21:56",
-            "closed": false,
-            "paymentMethod": ''
-        },
-    ])
+    const [sales, setSales] = useState(salesList)
 
     const findTable = () => {
         let currentSale: any = []

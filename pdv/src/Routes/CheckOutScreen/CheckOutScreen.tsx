@@ -6,6 +6,7 @@ import { Alert, TextField } from '@mui/material'
 import { Dropdown } from '@nextui-org/react';
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { sale } from '../../types/sale'
+import { salesList } from '../../assets/salesList'
 
 const AddSaleScreen = () => {
 
@@ -17,62 +18,12 @@ const AddSaleScreen = () => {
     const [totalValue, setTotalValue] = useState('')
     const [alert, setAlert] = useState(<p></p>)
     const [selected, setSelected] = useState<any>('Forma de Pagamento');
-    const [sales, setSales] = useState([
-        {
-            "saleId": 1,
-            "numSale": 12,
-            "numTable": 1,
-            "costumerName": "carlos",
-            "orders": [
-                "05 - Porção Alcatra R$49.90",
-                "06 - Devassa 600ml R$9.90",
-                "06 - Devassa 600ml R$9.90",
-                "09 - Heineken 600ml R$12.90"
-            ],
-            "date": "21/07/2022",
-            "time": "21:56",
-            "closed": false,
-            "paymentMethod": ''
-        },
-        {
-            "saleId": 2,
-            "numSale": 13,
-            "numTable": 2,
-            "costumerName": "Carlos",
-            "orders": [
-                "05 - Porção Alcatra R$49.90",
-                "06 - Devassa 600ml R$9.90",
-                "06 - Devassa 600ml R$9.90",
-                "09 - Heineken 600ml R$12.90"
-            ],
-            "date": "21/07/2022",
-            "time": "21:56",
-            "closed": false,
-            "paymentMethod": ''
-        },
-        {
-            "saleId": 3,
-            "numSale": 14,
-            "numTable": 1,
-            "costumerName": "joao",
-            "orders": [
-                "05 - Porção Alcatra R$49.90",
-                "06 - Devassa 600ml R$9.90",
-                "06 - Devassa 600ml R$9.90",
-                "09 - Heineken 600ml R$12.90"
-            ],
-            "date": "21/07/2022",
-            "time": "21:56",
-            "closed": false,
-            "paymentMethod": ''
-        },
-    ])
+    const [sales, setSales] = useState(salesList)
 
     const paymentMethods = React.useMemo(
         () => Array.from(selected).join("").replaceAll("_", " "),
         [selected]
     );
-
 
     const findTable = () => {
         let currentSale :any = []
@@ -118,11 +69,17 @@ const AddSaleScreen = () => {
 
     const closeSale = () => {
         let updatedSale = {
+            paymentMethod: paymentMethods,
             closed: true
         }
 
-        setSale((sale) => ({ ...sale, ...updatedSale }))
-        setCurrentOrder('')
+        setSale({ ...sale, ...updatedSale })
+        sales.forEach((item) => {
+            if(item.saleId == sale.saleId){
+                item.closed = true
+                item.paymentMethod = paymentMethods
+            }
+        })
         clear()
         setAlert(<Alert severity="success" className='fading-out'>Pronto, comanda fechada!</Alert>)
     }
