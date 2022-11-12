@@ -104,7 +104,6 @@ const NewSaleScreen = () => {
                 />
 
                 <ItemsListInput
-
                     className='is-info mb-5'
                     placeholder="00 - Nome do Pedido"
                     onChange={(e: any) => setCurrentOrder(e.target.value)}
