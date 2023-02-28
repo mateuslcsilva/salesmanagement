@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import {
   Modal,
   Button,
@@ -9,78 +9,103 @@ import {
   Checkbox,
   Spacer,
 } from "@nextui-org/react";
+import { initialSignUp, initialSignIn, initialWorkplaceSignUp } from '../../types/Login/loginTypes'
+
+import { db } from "../../utils/firebase/firebase";
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 
 export default function App() {
 
-  interface initialSignUp {
-    workplace: string,
-    username: string,
-    email: string,
-    password: string,
-    repetedPassword: string,
-    hasConsented: boolean,
-  };
+  const initialSignUpState = {} as initialSignUp;
 
-  const initialSignUpState: initialSignUp = {
-    workplace: "",
-    username: "",
-    email: "",
-    password: "",
-    repetedPassword: "",
-    hasConsented: false,
-  };
+  const initialSignInState = {} as initialSignIn;
 
-  const [signUpValues, setSignUpValues] = React.useReducer(
+  const [signUpValues, setSignUpValues] = useReducer(
     (currentValues: initialSignUp, newValues: initialSignUp) => {
-      return ({ ...currentValues, ...newValues });
+      return { ...currentValues, ...newValues };
     },
     initialSignUpState
   );
+  const collectionRef = collection(db, "empresas")
 
-  const { workplace, username, email, password, repetedPassword, hasConsented } =
-    signUpValues;
+  const {
+    workplace,
+    username,
+    email,
+    password,
+    repetedPassword,
+    hasConsented,
+  } = signUpValues;
 
-  const handleSignUpChange = (event: { target: { name: string; value: string; }; }) => {
-    const {name, value}= event.target;
+  const handleSignUpChange = (event: {
+    target: { name: string; value: string };
+  }) => {
+    const { name, value } = event.target;
     const newValues = { [name]: value };
-    setSignUpValues({...signUpValues, ...newValues});
-  };
-
-  interface initialSignIn {
-    userWorkplace: string,
-    userEmail: string,
-    userPassword: string,
-  };
-
-  const initialSignInState :initialSignIn= {
-    userWorkplace: "",
-    userEmail: "",
-    userPassword: "",
+    setSignUpValues({ ...signUpValues, ...newValues });
   };
 
   const [signInValues, setSignInValues] = React.useReducer(
-    (currentValues:initialSignIn, newValues:initialSignIn) => ({ ...currentValues, ...newValues }),
+    (currentValues: initialSignIn, newValues: initialSignIn) => ({
+      ...currentValues,
+      ...newValues,
+    }),
     initialSignInState
   );
 
-  const {userWorkplace, userEmail, userPassword} = signInValues;
+  const { userWorkplace, userEmail, userPassword } = signInValues;
 
-  const handleSignInChange = (event: { target: { name: string; value: string; }; }) => {
-    const {name, value} = event.target;
-    let newValues = {[name]: value }
-    setSignInValues({...signInValues, ...newValues});
+  const handleSignInChange = (event: {
+    target: { name: string; value: string };
+  }) => {
+    const { name, value } = event.target;
+    let newValues = { [name]: value };
+    setSignInValues({ ...signInValues, ...newValues });
   };
 
-  const [visible, setVisible] = React.useState(true);
-  const [hasAccount, setHasAccount] = React.useState(true);
+  const [visible, setVisible] = useState(true);
+  const [hasAccount, setHasAccount] = useState(true);
   const handler = () => setVisible(true);
   const closeHandler = () => {
     setVisible(false);
   };
 
-  React.useEffect(() => {
+  const dataHandler = async () => {
+    if (hasAccount) {
+      closeHandler();
+      return false;
+    }
+
+    let dbStructure = {} as initialWorkplaceSignUp
+    let newInfo = {
+      workplace: {
+        name: signUpValues.workplace,
+        users: [{
+          username: signUpValues.username,
+          email: signUpValues.email,
+          password: signUpValues.password,
+        }],
+        items: [],
+        sales: []
+      },
+    }
+
+    console.log(dbStructure, newInfo);
+    const docRef = await addDoc(collection(db, "empresas"), newInfo)
+    .then(response => console.log(response, 'Dados adicionados com sucesso'))
+    .catch(err => alert(err.message));
+  };
+
+  useEffect(() => {
     console.log(signUpValues);
-  }, [signUpValues, signInValues]);
+  }, [signUpValues, signInValues])
+
+  useEffect( () => {
+    const getDoc  = query(collection(db, "empresas"), where("name", "==", "teste12"))
+
+    console.log(getDoc, query(collection(db, "empresas"), where("name", "==", "teste12")).firestore)
+  })
+
   return (
     <div>
       <Modal
@@ -214,7 +239,12 @@ export default function App() {
             />
             <Checkbox
               name="hasConsented"
-              onChange={() => setSignUpValues({...signUpValues, hasConsented: !hasConsented})}
+              onChange={() =>
+                setSignUpValues({
+                  ...signUpValues,
+                  hasConsented: !hasConsented,
+                })
+              }
             >
               <Text size={14}>Concordo com os Termos de Uso</Text>
             </Checkbox>
@@ -230,7 +260,7 @@ export default function App() {
           >
             {hasAccount ? "Cadastrar" : "Entrar"}
           </Button>
-          <Button auto /* onClick={closeHandler} */>
+          <Button auto onClick={dataHandler}>
             {hasAccount ? "Entrar" : "Concluir Cadastro"}
           </Button>
         </Modal.Footer>
