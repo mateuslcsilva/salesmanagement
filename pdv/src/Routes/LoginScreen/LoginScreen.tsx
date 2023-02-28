@@ -26,7 +26,6 @@ export const LoginScreen = () => {
     },
     initialSignUpState
   );
-  const collectionRef = collection(db, "empresas")
 
   const {
     workplace,
