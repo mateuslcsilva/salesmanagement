@@ -27,15 +27,6 @@ export const LoginScreen = () => {
     initialSignUpState
   );
 
-  const {
-    workplace,
-    username,
-    email,
-    password,
-    repetedPassword,
-    hasConsented,
-  } = signUpValues;
-
   const handleSignUpChange = (event: {
     target: { name: string; value: string };
   }) => {
@@ -44,7 +35,16 @@ export const LoginScreen = () => {
     setSignUpValues({ ...signUpValues, ...newValues });
   };
 
-  const [signInValues, setSignInValues] = React.useReducer(
+/*   const {
+    workplace,
+    username,
+    email,
+    password,
+    repetedPassword,
+    hasConsented,
+  } = signUpValues; */
+
+  const [signInValues, setSignInValues] = useReducer(
     (currentValues: initialSignIn, newValues: initialSignIn) => ({
       ...currentValues,
       ...newValues,
@@ -52,7 +52,7 @@ export const LoginScreen = () => {
     initialSignInState
   );
 
-  const { userWorkplace, userEmail, userPassword } = signInValues;
+/*   const { userWorkplace, userEmail, userPassword } = signInValues; */
 
   const handleSignInChange = (event: {
     target: { name: string; value: string };
@@ -94,8 +94,8 @@ export const LoginScreen = () => {
   };
 
   useEffect(() => {
-    console.log(signInValues)
-  }, [signInValues])
+    console.log(signUpValues)
+  }, [signUpValues])
 
   /*   useEffect(() => {
       const getDoc = query(collection(db, "empresas"), where("name", "==", "teste12"))
@@ -129,7 +129,7 @@ export const LoginScreen = () => {
           </Col>
         </Modal.Header>
         {hasAccount && <SignIn signInValues={signInValues} handleSignInChange={handleSignInChange} />}
-        {!hasAccount && <SignUp signUpValues={signUpValues} handleSignUpChange={handleSignUpChange} />}
+        {!hasAccount && <SignUp signUpValues={signUpValues} setSignUpValues={setSignUpValues} handleSignUpChange={handleSignUpChange} />}
         <Modal.Footer>
           <Button
             auto

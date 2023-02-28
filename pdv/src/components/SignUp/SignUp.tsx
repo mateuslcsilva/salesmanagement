@@ -23,6 +23,7 @@ export const SignUp = (props :any) => {
               placeholder="Digite o nome da empresa"
               contentLeft={<i className="bi bi-people is-size-5"></i>}
               name="workplace"
+              aria-label="workplace"
               value={props.workplace}
               onChange={props.handleSignUpChange}
             />
@@ -35,6 +36,7 @@ export const SignUp = (props :any) => {
               placeholder="Digite seu nome"
               contentLeft={<i className="bi bi-person is-size-5"></i>}
               name="username"
+              aria-label="username"
               value={props.username}
               onChange={props.handleSignUpChange}
             />
@@ -47,6 +49,7 @@ export const SignUp = (props :any) => {
               placeholder="Digite seu email"
               contentLeft={<i className="bi bi-envelope is-size-5"></i>}
               name="email"
+              aria-label="email"
               value={props.email}
               onChange={props.handleSignUpChange}
             />
@@ -58,6 +61,7 @@ export const SignUp = (props :any) => {
               placeholder="Digite sua senha"
               contentLeft={<i className="bi bi-key is-size-5"></i>}
               name="password"
+              aria-label="password"
               value={props.password}
               onChange={props.handleSignUpChange}
             />
@@ -69,6 +73,7 @@ export const SignUp = (props :any) => {
               placeholder="Repita sua senha"
               contentLeft={<i className="bi bi-key is-size-5"></i>}
               name="repetedPassword"
+              aria-label="repetedPassword"
               value={props.repetedPassword}
               onChange={props.handleSignUpChange}
             />
