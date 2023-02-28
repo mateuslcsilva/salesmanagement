@@ -1,11 +1,12 @@
 export interface sale {
     saleId: number | undefined,
-    numTable: number,
+    numTable: number | undefined,
     numSale: number,
-    costumerName: string,
+    costumerName: string | undefined,
     orders: string[],
     date: string,
     time: string,
     closed: boolean,
-    paymentMethod: string
+    paymentMethod: string,
+    totalValue: number
 }

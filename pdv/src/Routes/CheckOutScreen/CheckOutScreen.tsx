@@ -5,7 +5,7 @@ import { ItemsList } from '../../assets/ItemsList'
 import { Alert, TextField } from '@mui/material'
 import { Dropdown } from '@nextui-org/react';
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
-import { sale } from '../../types/sale'
+import { sale } from '../../types/sale/sale'
 import { salesList } from '../../assets/salesList'
 
 const AddSaleScreen = () => {

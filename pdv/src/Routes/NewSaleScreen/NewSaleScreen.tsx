@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import './styles.css'
 import { Alert, TextField } from '@mui/material'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
-import { sale } from '../../types/sale'
+import { sale } from '../../types/sale/sale'
 
 const NewSaleScreen = () => {
 

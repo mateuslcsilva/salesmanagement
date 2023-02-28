@@ -3,18 +3,18 @@ import {
   Modal,
   Button,
   Text,
-  Input,
-  Row,
   Col,
-  Checkbox,
   Spacer,
 } from "@nextui-org/react";
-import { initialSignUp, initialSignIn, initialWorkplaceSignUp } from '../../types/Login/loginTypes'
-
+import { initialSignUp, initialSignIn } from '../../types/Login/loginTypes'
+import { SignIn } from "../../components/SignIn/SignIn";
+import { SignUp } from "../../components/SignUp/SignUp";
 import { db } from "../../utils/firebase/firebase";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function App() {
+export const LoginScreen = () => {
 
   const initialSignUpState = {} as initialSignUp;
 
@@ -65,18 +65,13 @@ export default function App() {
 
   const [visible, setVisible] = useState(true);
   const [hasAccount, setHasAccount] = useState(true);
-  const handler = () => setVisible(true);
-  const closeHandler = () => {
-    setVisible(false);
-  };
 
   const dataHandler = async () => {
     if (hasAccount) {
-      closeHandler();
+      setVisible(false)
       return false;
     }
 
-    let dbStructure = {} as initialWorkplaceSignUp
     let newInfo = {
       workplace: {
         name: signUpValues.workplace,
@@ -89,22 +84,25 @@ export default function App() {
         sales: []
       },
     }
-
-    console.log(dbStructure, newInfo);
     const docRef = await addDoc(collection(db, "empresas"), newInfo)
-    .then(response => console.log(response, 'Dados adicionados com sucesso'))
-    .catch(err => alert(err.message));
+      .then(response => {
+        setVisible(false)
+        toast.success('Conta criada com sucesso!');
+      })
+      .catch(err => {
+        toast.error(err.message)
+      });
   };
 
   useEffect(() => {
-    console.log(signUpValues);
-  }, [signUpValues, signInValues])
+    console.log(signInValues)
+  }, [signInValues])
 
-  useEffect( () => {
-    const getDoc  = query(collection(db, "empresas"), where("name", "==", "teste12"))
-
-    console.log(getDoc, query(collection(db, "empresas"), where("name", "==", "teste12")).firestore)
-  })
+  /*   useEffect(() => {
+      const getDoc = query(collection(db, "empresas"), where("name", "==", "teste12"))
+  
+      console.log(getDoc, query(collection(db, "empresas"), where("name", "==", "teste12")).firestore)
+    }) */
 
   return (
     <div>
@@ -112,7 +110,7 @@ export default function App() {
         preventClose
         aria-labelledby="modal-title"
         open={visible}
-        onClose={closeHandler}
+        onClose={() => setVisible(false)}
       >
         <Modal.Header>
           <Col>
@@ -131,126 +129,8 @@ export default function App() {
             )}
           </Col>
         </Modal.Header>
-        {hasAccount && (
-          <Modal.Body>
-            <Input
-              clearable
-              bordered
-              fullWidth
-              color="primary"
-              size="lg"
-              placeholder="Digite o nome da empresa"
-              contentLeft={<i className="bi bi-people is-size-5"></i>}
-              name="userWorkplace"
-              value={userWorkplace}
-              onChange={handleSignInChange}
-            />
-            <Input
-              clearable
-              bordered
-              fullWidth
-              color="primary"
-              size="lg"
-              placeholder="Digite seu email"
-              contentLeft={<i className="bi bi-envelope is-size-5"></i>}
-              name="userEmail"
-              value={userEmail}
-              onChange={handleSignInChange}
-            />
-            <Input.Password
-              bordered
-              fullWidth
-              color="primary"
-              size="lg"
-              placeholder="Digite sua senha"
-              contentLeft={<i className="bi bi-key is-size-5"></i>}
-              name="userPassword"
-              value={userPassword}
-              onChange={handleSignInChange}
-            />
-            <Row justify="space-between">
-              <Checkbox>
-                <Text size={14}>Lembre minha senha</Text>
-              </Checkbox>
-              <Text size={14}>Esqueceu a senha?</Text>
-            </Row>
-          </Modal.Body>
-        )}
-
-        {!hasAccount && (
-          <Modal.Body>
-            <Input
-              clearable
-              bordered
-              fullWidth
-              color="primary"
-              size="lg"
-              placeholder="Digite o nome da empresa"
-              contentLeft={<i className="bi bi-people is-size-5"></i>}
-              name="workplace"
-              value={workplace}
-              onChange={handleSignUpChange}
-            />
-            <Input
-              clearable
-              bordered
-              fullWidth
-              color="primary"
-              size="lg"
-              placeholder="Digite seu nome"
-              contentLeft={<i className="bi bi-person is-size-5"></i>}
-              name="username"
-              value={username}
-              onChange={handleSignUpChange}
-            />
-            <Input
-              clearable
-              bordered
-              fullWidth
-              color="primary"
-              size="lg"
-              placeholder="Digite seu email"
-              contentLeft={<i className="bi bi-envelope is-size-5"></i>}
-              name="email"
-              value={email}
-              onChange={handleSignUpChange}
-            />
-            <Input.Password
-              bordered
-              fullWidth
-              color="primary"
-              size="lg"
-              placeholder="Digite sua senha"
-              contentLeft={<i className="bi bi-key is-size-5"></i>}
-              name="password"
-              value={password}
-              onChange={handleSignUpChange}
-            />
-            <Input.Password
-              bordered
-              fullWidth
-              color="primary"
-              size="lg"
-              placeholder="Repita sua senha"
-              contentLeft={<i className="bi bi-key is-size-5"></i>}
-              name="repetedPassword"
-              value={repetedPassword}
-              onChange={handleSignUpChange}
-            />
-            <Checkbox
-              name="hasConsented"
-              onChange={() =>
-                setSignUpValues({
-                  ...signUpValues,
-                  hasConsented: !hasConsented,
-                })
-              }
-            >
-              <Text size={14}>Concordo com os Termos de Uso</Text>
-            </Checkbox>
-            <Spacer y={0.5}></Spacer>
-          </Modal.Body>
-        )}
+        {hasAccount && <SignIn signInValues={signInValues} handleSignInChange={handleSignInChange} />}
+        {!hasAccount && <SignUp signUpValues={signUpValues} handleSignUpChange={handleSignUpChange} />}
         <Modal.Footer>
           <Button
             auto
@@ -265,6 +145,17 @@ export default function App() {
           </Button>
         </Modal.Footer>
       </Modal>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"></ToastContainer>
     </div>
   );
 }

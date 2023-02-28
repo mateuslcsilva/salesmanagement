@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import './App.css'
 import NavBarButtons from '../src/Routes/NavBarButtons/NavBarButtons'
-import LoginScreen from '../src/Routes/LoginScreen/LoginScreen'
+import { LoginScreen } from '../src/Routes/LoginScreen/LoginScreen'
 import { Fab, ThemeProvider } from '@mui/material'
 
 function App() {

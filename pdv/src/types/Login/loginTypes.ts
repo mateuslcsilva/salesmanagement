@@ -1,7 +1,3 @@
-import { sale } from '../sale/index'
-import { item } from '../item'
-import { user } from '../user'
-
 export interface initialSignUp {
     workplace: string;
     username: string;
@@ -15,13 +11,4 @@ export interface initialSignUp {
     userWorkplace: string;
     userEmail: string;
     userPassword: string;
-  }
-
-  export interface initialWorkplaceSignUp {
-        workplace: {
-          name: string,
-          users: user[],
-          items: item[],
-          sales: sale[]
-        }
   }
