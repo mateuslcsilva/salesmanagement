@@ -13,6 +13,7 @@ import { db } from "../../utils/firebase/firebase";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { queryData } from "../../utils/requests/queryData";
 
 export const LoginScreen = () => {
 
@@ -35,14 +36,14 @@ export const LoginScreen = () => {
     setSignUpValues({ ...signUpValues, ...newValues });
   };
 
-/*   const {
-    workplace,
-    username,
-    email,
-    password,
-    repetedPassword,
-    hasConsented,
-  } = signUpValues; */
+  /*   const {
+      workplace,
+      username,
+      email,
+      password,
+      repetedPassword,
+      hasConsented,
+    } = signUpValues; */
 
   const [signInValues, setSignInValues] = useReducer(
     (currentValues: initialSignIn, newValues: initialSignIn) => ({
@@ -52,7 +53,7 @@ export const LoginScreen = () => {
     initialSignInState
   );
 
-/*   const { userWorkplace, userEmail, userPassword } = signInValues; */
+  /*   const { userWorkplace, userEmail, userPassword } = signInValues; */
 
   const handleSignInChange = (event: {
     target: { name: string; value: string };
@@ -65,12 +66,40 @@ export const LoginScreen = () => {
   const [visible, setVisible] = useState(true);
   const [hasAccount, setHasAccount] = useState(true);
 
+  const getAccount = async () => {
+    const accountInfo = await getDocs(query(collection(db, "empresas"), where("workplace.name", "==", signInValues.userWorkplace)))
+        .then(response => {
+          if(response.size > 1) return 'Existe mais de uma empresa com esse nome, entre em contato com o suporte!!' //todo: testar
+          let idObject = {id: response.docs[0].id}
+          return {...idObject, ...response.docs[0].data().workplace}
+        })
+        return accountInfo
+  }
+
+
+
   const dataHandler = async () => {
     if (hasAccount) {
-      setVisible(false)
-      return false;
-    }
+      const accountInfo = await queryData('accountInfo', 'name', signInValues.userWorkplace)
+      console.log(accountInfo)
+      //tratamento de erros
+      if(typeof(accountInfo) == "string"){
+        toast.error(accountInfo)
+        return
+      }
+      let user = accountInfo?.users?.find(user => user.email == signInValues.userEmail)
+      console.log(user)
+      if(!user){
+        return toast.error("Conta não encontrata!")
+      }
+      if(user.password != signInValues.userPassword){
+        return toast.error("Senha incorreta!")
+      }
 
+      //fazer um context pra mandar informação de account pro app
+      return setVisible(false);
+    }
+    console.log('here')
     let newInfo = {
       workplace: {
         name: signUpValues.workplace,
@@ -93,15 +122,28 @@ export const LoginScreen = () => {
       });
   };
 
-  useEffect(() => {
-    console.log(signUpValues)
-  }, [signUpValues])
-
   /*   useEffect(() => {
-      const getDoc = query(collection(db, "empresas"), where("name", "==", "teste12"))
-  
-      console.log(getDoc, query(collection(db, "empresas"), where("name", "==", "teste12")).firestore)
-    }) */
+      console.log(signUpValues)
+    }, [signUpValues]) */
+
+  const getData2 = async () => {
+    const doc = await getDocs(query(collection(db, "empresas"), where("workplace.name", "==", 'fdsafdas')))
+      .then(response => {
+        console.log(response.docs.map(item => item.id))
+        console.log(response.docs.map(item => item.data()))
+      })
+  }
+
+  const getData = async () => {
+    let data = await getDocs(collection(db, "empresas"))
+      .then(response => console.log(response.docs.map(item => item.data())))
+      .catch(err => toast.error(err.message))
+  }
+
+  useEffect(() => {
+/*     getData()
+    getData2() */
+  }, [])
 
   return (
     <div>

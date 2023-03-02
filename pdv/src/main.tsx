@@ -15,6 +15,8 @@ import App from './App'
 import './index.css'
 import '../node_modules/bulma/css/bulma.min.css'
 
+  //TODO: FAZER UM CONTEXT PRA TRAZER OS SEGUINTES DADOS PRA CÁ: ID, DADOS DE USUÁRIO
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter >

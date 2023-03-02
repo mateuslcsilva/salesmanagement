@@ -8,5 +8,6 @@ export interface sale {
     time: string,
     closed: boolean,
     paymentMethod: string,
-    totalValue: number
+    totalValue: number,
+    loggedUser: string
 }

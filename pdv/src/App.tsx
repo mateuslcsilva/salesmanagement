@@ -20,7 +20,6 @@ function App() {
     setTheme(storagedTheme? storagedTheme : 'lightThemed')
   }, [])
 
-
   return (
     <main className={theme}>
       <LoginScreen />
