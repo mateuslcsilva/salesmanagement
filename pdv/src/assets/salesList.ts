@@ -13,7 +13,9 @@ export const salesList = [
         "date": "21/07/2022",
         "time": "21:56",
         "closed": false,
-        "paymentMethod": ''
+        "paymentMethod": '',
+        "totalValue": 82.6,
+        "loggedUser": "default"
     },
     {
         "saleId": 2,
@@ -29,7 +31,9 @@ export const salesList = [
         "date": "21/07/2022",
         "time": "21:56",
         "closed": false,
-        "paymentMethod": ''
+        "paymentMethod": '',
+        "totalValue": 82.6,
+        "loggedUser": "default"
     },
     {
         "saleId": 3,
@@ -45,6 +49,8 @@ export const salesList = [
         "date": "21/07/2022",
         "time": "21:56",
         "closed": false,
-        "paymentMethod": ''
+        "paymentMethod": '',
+        "totalValue": 82.6,
+        "loggedUser": "default"
     }
 ]

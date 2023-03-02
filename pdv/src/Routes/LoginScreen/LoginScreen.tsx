@@ -87,7 +87,7 @@ export const LoginScreen = () => {
         toast.error(accountInfo)
         return
       }
-      let user = accountInfo?.users?.find(user => user.email == signInValues.userEmail)
+      let user = accountInfo?.users?.find((user :any) => user.email == signInValues.userEmail)
       console.log(user)
       if(!user){
         return toast.error("Conta não encontrata!")
