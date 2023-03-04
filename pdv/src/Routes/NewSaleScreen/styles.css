@@ -21,7 +21,8 @@
 .btn-limpar-centered{
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: center; 
+    gap: 15px;
 }
 
 .fading-out{

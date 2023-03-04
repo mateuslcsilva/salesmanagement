@@ -1,32 +1,74 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, createContext, useContext } from 'react'
 import './styles.css'
 import { Alert, TextField } from '@mui/material'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
 import { sale } from '../../types/sale/sale'
+import { useAuthContext } from '../../utils/contexts/AuthProvider'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../../utils/firebase/firebase'
+import { queryData } from '../../utils/requests/queryData'
+import { toast } from 'react-toastify'
+import { useOrderContext } from '../../utils/contexts/OrderContext'
 
-const NewSaleScreen = () => {
 
+export const NewSaleScreen = () => {
+
+    const [itemList, setItemList] = useState<itemType[]>([])
+    const [currentUserId, setCurrentUserId] = useState<string>()
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
     const [costumerName, setCostumerName] = useState('')
-    const [currentOrder, setCurrentOrder] = useState('')
+    const [currentOrder, setCurrentOrder] = useState<number>(0)
     const [alert, setAlert] = useState(<p></p>)
     const [sale, setSale] = useState<sale>({} as sale)
+    const AuthContext = useAuthContext()
+    const orderContext = useOrderContext()
+
+    interface itemType {
+        numItem: number;
+        item: string;
+        itemValue: string
+    }
+
+    const getItems = async () => {
+        if (AuthContext.currentUser.id == '') return false
+        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
+        let data = await getDoc(docRef)
+            .then(res => res.data()?.items)
+        setItemList(data)
+    }
+
+    const getItemText = (typeParam: string, value: number | undefined) => {
+        if (AuthContext.currentUser.id == '') return
+        if (!value) return
+        if (typeParam == "numItem") {
+            let index = itemList.findIndex(item => item.numItem == value)
+            let text = (itemList[index]?.numItem < 10 ? '0' + itemList[index]?.numItem : itemList[index]?.numItem.toString()) + ' - ' + itemList[index]?.item + ' R$' + itemList[index]?.itemValue
+            return text
+        }
+        if (!itemList[value]) return ''
+        if (typeParam == "index") {
+            let text = (itemList[value]?.numItem < 10 ? '0' + itemList[value]?.numItem : itemList[value]?.numItem.toString()) + ' - ' + itemList[value]?.item + ' R$' + itemList[value]?.itemValue
+            return text
+        }
+    }
 
     const setTable = () => {
+        if (saleNumber == 0) return false
         let current = new Date
         let currentDay = current.getDate().toString().length < 2 ? '0' + current.getDate() : current.getDate()
         let currentMonth = current.getMonth().toString().length < 2 ? '0' + (current.getMonth() + 1) : (current.getMonth() + 1)
         let currentDate = currentDay + '/' + currentMonth + '/' + current.getFullYear()
-        let currentTime = current.getHours() + ':' + current.getMinutes()
+        let currentTime = current.getHours() + ':' + (current.getMinutes() < 10 ? "0" + current.getMinutes() : current.getMinutes())
         let updatedSale = {
-            numTable: tableNumber,
+            numTable: tableNumber ? tableNumber : "Não informado",
             numSale: saleNumber,
-            costumerName: costumerName,
             orders: [],
+            costumerName: costumerName ? costumerName : "Não informado",
             date: currentDate,
-            time: currentTime
+            time: currentTime,
+            loggedUser: AuthContext.currentUser.userName
         }
         setSale(sale => ({ ...sale, ...updatedSale }))
     }
@@ -38,25 +80,61 @@ const NewSaleScreen = () => {
 
         setSale(sale => ({ ...sale, ...updatedSale }))
         setAlert(<Alert severity="success" >Pedido registrado!</Alert>)
-        setCurrentOrder('')
+        getTotalValue()
+        setCurrentOrder(0)
+    }
+
+    const getTotalValue = () => {
+        let totalValue = 0
+        sale.orders?.map(order => {
+            let item = itemList.find(item => item.numItem == order)
+            if(item) totalValue += Number(item.itemValue)
+        })
+        let obj = {totalValue: totalValue}
+        setSale(sale => ({...sale, ...obj}))
     }
 
     const clear = () => {
         setSale({} as sale)
-        setCurrentOrder('')
+        setCurrentOrder(0)
         setSaleNumber(0)
         setTableNumber(0)
         setCostumerName('')
         setAlert(<p></p>)
     }
 
+    const updateSales = async () => {
+        const update = await queryData("saleUpdate", "null", { id: AuthContext.currentUser.id, sale: sale })
+            .then(res => {
+                toast.success("Venda salva com sucesso!")
+                clear()
+            })
+            .catch(err => console.log(err.message))
+    }
+    
+    useEffect(() => {
+        console.log(sale)
+    }, [sale])
+
     useEffect(() => {
         const clearAlert = setTimeout(() => {
-                setAlert(<p></p>)
-            }, 5000)
+            setAlert(<p></p>)
+        }, 5000)
 
         return () => clearTimeout(clearAlert)
-    })
+    }, [alert])
+
+    useEffect(() => {
+        setCurrentUserId(AuthContext.currentUser.id)
+    }, [AuthContext.currentUser.id])
+
+    useEffect(() => {
+        getItems()
+    }, [currentUserId])
+
+    useEffect(() => {
+        if(orderContext.currentOrder) setCurrentOrder(orderContext.currentOrder)
+    }, [orderContext.currentOrder])
 
     return (
         <>
@@ -98,44 +176,46 @@ const NewSaleScreen = () => {
 
                 <Button
                     className='is-info ml-2 mb-5'
-                    disabled={sale.numSale? true : false}
+                    disabled={sale.numSale ? true : false}
                     onClick={setTable}
                     text='Iniciar comanda'
                 />
 
-                <ItemsListInput
-                    className='is-info mb-5'
-                    placeholder="00 - Nome do Pedido"
-                    onChange={(e: any) => setCurrentOrder(e.target.value)}
-                    value={currentOrder}
-                    disabled={sale.numSale == 0 ? true : false}
-                />
+                    <ItemsListInput
+                        className='is-info mb-5'
+                        placeholder="00 - Nome do Pedido"
+                        disabled={sale.numSale == undefined ? true : false}
+                    />
 
                 <Button
                     onClick={setOrder}
                     className='is-info mb-5'
                     text='Acrescentar item'
-                    disabled={!sale.numSale? true : false}
+                    disabled={!sale.numSale ? true : false}
                 />
                 {saleNumber > 0 &&
                     <div className='saleInfo mb-3'>
                         <p className='title is-5'>
-                        {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
-                        {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
-                        {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
+                            {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
+                            {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
+                            {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                       {sale.orders && sale.orders.map((item :any, index :number) => <p key={index}>{item}</p>)}
+                        {sale.orders && sale.orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
                     </div>
                 }
 
                 {alert}
-                
+
                 <div className='btn-limpar-centered mt-5'>
-                    <Button onClick={clear} disabled={sale.numSale == 0 ? true : false} text='Limpar' />
+                    <Button
+                        onClick={updateSales}
+                        disabled={sale.numSale == undefined || sale.orders.length < 1 ? true : false}
+                        text='Salvar'
+                        className="is-success"
+                    />
+                    <Button onClick={clear} disabled={sale.numSale == undefined ? true : false} text='Limpar' />
                 </div>
             </div>
         </>
     )
 }
-
-export default NewSaleScreen

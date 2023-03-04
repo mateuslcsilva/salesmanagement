@@ -1,9 +1,9 @@
 export interface sale {
     saleId: number | undefined,
-    numTable: number | undefined,
+    numTable: number | string,
     numSale: number,
     costumerName: string | undefined,
-    orders: string[],
+    orders: (number | undefined)[],
     date: string,
     time: string,
     closed: boolean,

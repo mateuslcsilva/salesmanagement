@@ -1,3 +1,47 @@
+section{
+    position: relative;
+    z-index: 999;
+    overflow: visible;
+}
+
 #itemList{
     width: 100%;
+    background-color: #FFF !important;
+    border: none;
+    overflow: hidden;
+    height: 0;
+    border-radius: 5px;
+    transition: .3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+#itemList button{
+    margin-bottom: 5px;
+    padding: 0 5px;
+    border-radius: 3px;
+    text-align: start;
+    outline: none;
+    border: none;
+    background-color: #FFF;
+    font-family: inherit;
+    font-size: 14pt;
+    font-weight: 500;
+    width: auto;
+    height: auto;
+}
+
+#itemList.active{
+    height: 120px;
+    border: 1px solid #3e8ed0;
+    padding: 10px;
+    overflow-y: scroll;
+    position: absolute;
+    transition: .3s ease;
+}
+
+#itemList.active .item-btn:hover{
+    background-color: #3e8ed0;
+    color: #FFF;
+    cursor: pointer;
 }

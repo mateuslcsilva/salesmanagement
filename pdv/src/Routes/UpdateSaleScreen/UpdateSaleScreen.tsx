@@ -2,13 +2,13 @@ import React, { ReactComponentElement, useEffect, useState } from 'react'
 import './styles.css'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
-import { Accordion, Alert, TextField } from '@mui/material'
+import {  Alert, TextField } from '@mui/material'
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { Checkbox } from '@nextui-org/react'
 import { sale } from '../../types/sale/sale'
 import { salesList } from '../../assets/salesList'
 
-const AddSaleScreen = () => {
+export const UpdateSaleScreen = () => {
 
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
@@ -295,10 +295,6 @@ const AddSaleScreen = () => {
                             />
                         </div>
                     }
-
-
-
-
                 </div>
 
                 <div className='btn-limpar-centered mt-5'>
@@ -308,5 +304,3 @@ const AddSaleScreen = () => {
         </>
     )
 }
-
-export default AddSaleScreen

@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect } from "react";
+import React, { useReducer, useState, useEffect, useContext } from "react";
 import {
   Modal,
   Button,
@@ -10,10 +10,11 @@ import { initialSignUp, initialSignIn } from '../../types/Login/loginTypes'
 import { SignIn } from "../../components/SignIn/SignIn";
 import { SignUp } from "../../components/SignUp/SignUp";
 import { db } from "../../utils/firebase/firebase";
-import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where, doc, getDoc, setDoc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { queryData } from "../../utils/requests/queryData";
+import { useAuthContext } from "../../utils/contexts/AuthProvider";
 
 export const LoginScreen = () => {
 
@@ -36,15 +37,6 @@ export const LoginScreen = () => {
     setSignUpValues({ ...signUpValues, ...newValues });
   };
 
-  /*   const {
-      workplace,
-      username,
-      email,
-      password,
-      repetedPassword,
-      hasConsented,
-    } = signUpValues; */
-
   const [signInValues, setSignInValues] = useReducer(
     (currentValues: initialSignIn, newValues: initialSignIn) => ({
       ...currentValues,
@@ -53,7 +45,6 @@ export const LoginScreen = () => {
     initialSignInState
   );
 
-  /*   const { userWorkplace, userEmail, userPassword } = signInValues; */
 
   const handleSignInChange = (event: {
     target: { name: string; value: string };
@@ -66,42 +57,33 @@ export const LoginScreen = () => {
   const [visible, setVisible] = useState(true);
   const [hasAccount, setHasAccount] = useState(true);
 
-  const getAccount = async () => {
-    const accountInfo = await getDocs(query(collection(db, "empresas"), where("workplace.name", "==", signInValues.userWorkplace)))
-        .then(response => {
-          if(response.size > 1) return 'Existe mais de uma empresa com esse nome, entre em contato com o suporte!!' //todo: testar
-          let idObject = {id: response.docs[0].id}
-          return {...idObject, ...response.docs[0].data().workplace}
-        })
-        return accountInfo
-  }
-
-
+  const setAuthContext = useAuthContext()
 
   const dataHandler = async () => {
-    if (hasAccount) {
+    if (hasAccount) { //signin shit
       const accountInfo = await queryData('accountInfo', 'name', signInValues.userWorkplace)
-      console.log(accountInfo)
+
       //tratamento de erros
-      if(typeof(accountInfo) == "string"){
+      if (typeof (accountInfo) == "string") {
         toast.error(accountInfo)
         return
       }
-      let user = accountInfo?.users?.find((user :any) => user.email == signInValues.userEmail)
-      console.log(user)
-      if(!user){
+
+      let user = accountInfo?.users?.find((user: any) => user.email == signInValues.userEmail)
+
+      if (!user) {
         return toast.error("Conta não encontrata!")
       }
-      if(user.password != signInValues.userPassword){
+      if (user.password != signInValues.userPassword) {
         return toast.error("Senha incorreta!")
       }
 
-      //fazer um context pra mandar informação de account pro app
+      if (accountInfo) setAuthContext.setCurrentUser({ id: accountInfo.id, userName: accountInfo.users[0].username})
       return setVisible(false);
     }
-    console.log('here')
+
+    //signup shit
     let newInfo = {
-      workplace: {
         name: signUpValues.workplace,
         users: [{
           username: signUpValues.username,
@@ -110,9 +92,10 @@ export const LoginScreen = () => {
         }],
         items: [],
         sales: []
-      },
     }
-    const docRef = await addDoc(collection(db, "empresas"), newInfo)
+
+    const collectionRef = collection(db, "empresas")
+    const docRef = await setDoc(doc(collectionRef, signUpValues.workplace), newInfo)
       .then(response => {
         setVisible(false)
         toast.success('Conta criada com sucesso!');
@@ -135,15 +118,11 @@ export const LoginScreen = () => {
   }
 
   const getData = async () => {
-    let data = await getDocs(collection(db, "empresas"))
-      .then(response => console.log(response.docs.map(item => item.data())))
+    let docRef = doc(db, "empresas", "nkBcZEjwowS2MFNovdeB")
+    let data = await getDoc(docRef)
+      .then(response => console.log(response.data()))
       .catch(err => toast.error(err.message))
   }
-
-  useEffect(() => {
-/*     getData()
-    getData2() */
-  }, [])
 
   return (
     <div>

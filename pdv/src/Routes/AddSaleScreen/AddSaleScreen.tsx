@@ -6,47 +6,78 @@ import { Accordion, Alert, TextField } from '@mui/material'
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { sale } from '../../types/sale/sale'
 import { salesList } from '../../assets/salesList'
+import { useAuthContext } from '../../utils/contexts/AuthProvider'
+import { useOrderContext } from '../../utils/contexts/OrderContext'
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore'
+import { db } from '../../utils/firebase/firebase'
 
 const AddSaleScreen = () => {
 
-    const [tableNumber, setTableNumber] = useState(0)
+    const [itemList, setItemList] = useState<itemType[]>([])
+    const [currentUserId, setCurrentUserId] = useState<string>()
+    const [tableNumber, setTableNumber] = useState(12)
     const [saleNumber, setSaleNumber] = useState(0)
     const [costumerName, setCostumerName] = useState('')
     const [currentOrder, setCurrentOrder] = useState('')
     const [sale, setSale] = useState<sale>({} as sale)
     const [alert, setAlert] = useState(<p></p>)
     const [sales, setSales] = useState(salesList)
+    const AuthContext = useAuthContext()
+    const orderContext = useOrderContext()
 
-    const findTable = () => {
-        let currentSale: any = []
-        sales.forEach((sale) => {
-            if (sale.numTable == tableNumber) {
-                currentSale.push(sale)
-            }
-        })
-        setSale(currentSale.length == 1 ? (sale: sale) => ({ ...sale, ...currentSale[0] }) : currentSale)
+    interface itemType {
+        numItem: number;
+        item: string;
+        itemValue: string
     }
 
-    const findSale = () => {
-        let currentSale: sale
-        sales.forEach((sale) => {
-            if (sale.numSale == saleNumber) {
-                currentSale = sale
-            }
+    const getItems = async () => {
+        if (AuthContext.currentUser.id == '') return false
+        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
+        let data = await getDoc(docRef)
+            .then(res => res.data()?.items)
+        setItemList(data)
+    }
+
+    const getItemText = (typeParam: string, value: number | undefined) => {
+        if (AuthContext.currentUser.id == '') return
+        if (!value) return
+        if (typeParam == "numItem") {
+            let index = itemList.findIndex(item => item.numItem == value)
+            let text = (itemList[index]?.numItem < 10 ? '0' + itemList[index]?.numItem : itemList[index]?.numItem.toString()) + ' - ' + itemList[index]?.item + ' R$' + itemList[index]?.itemValue
+            return text
+        }
+        if (!itemList[value]) return ''
+        if (typeParam == "index") {
+            let text = (itemList[value]?.numItem < 10 ? '0' + itemList[value]?.numItem : itemList[value]?.numItem.toString()) + ' - ' + itemList[value]?.item + ' R$' + itemList[value]?.itemValue
+            return text
+        }
+    }
+
+   /*  const findTable = async () => {
+        let currentSale :any[] = []
+        let docRef = collection(db, `empresas`, `${AuthContext.currentUser.id}`, 'sales')
+        const saleInfo = await getDocs(query(docRef, where("numTable", "==", tableNumber.toString())))
+        .then((res)=> {
+            console.log('res ', res)
+            res.docs.forEach(item => currentSale.push(item))
         })
+        .catch(err => console.log(err.message))
+        console.log('current sale', currentSale)
+        setSale(currentSale.length == 1 ? (sale: sale) => ({ ...sale, ...currentSale[0] }) : currentSale)
+    } */
+
+    /* const findSale = () => {
+
         setSale((sale: sale) => ({ ...sale, ...currentSale }))
     }
 
     const findCostumer = () => {
         let currentCostumer: any = []
-        sales.forEach((sale) => {
-            if (sale.costumerName.toLowerCase() == costumerName.toLowerCase()) {
-                currentCostumer.push(sale)
-            }
-        })
+        
         setSale(currentCostumer.length == 1 ? (sale: sale) => ({ ...sale, ...currentCostumer[0] }) : currentCostumer)
     }
-
+ */
     const setOrder = () => {
         let updatedSale = {
             orders: [...sale.orders, currentOrder]
@@ -73,6 +104,19 @@ const AddSaleScreen = () => {
 
         return () => clearTimeout(clearAlert)
     })
+
+    useEffect(() => {
+        setCurrentUserId(AuthContext.currentUser.id)
+    }, [AuthContext.currentUser.id])
+
+    useEffect(() => {
+        getItems()
+    }, [currentUserId])
+
+/*     useEffect(() => {
+        findTable()
+    },  [AuthContext.currentUser.id]) */
+
 
     return (
         <>
@@ -117,7 +161,7 @@ const AddSaleScreen = () => {
                 <Button
                     className='is-info ml-2'
                     disabled={sale.numTable ? true : false}
-                    onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)}
+                    /* onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)} */
                     text='Buscar'
                 />
 
@@ -143,7 +187,7 @@ const AddSaleScreen = () => {
                             {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
                             {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                        {sale.orders && sale.orders.map((item: string, index: number) => <p key={index}>{item}</p>)}
+                        {sale.orders && sale.orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
                     </div>
                 }
 

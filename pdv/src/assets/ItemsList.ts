@@ -1,4 +1,7 @@
-export const ItemsList :any = [
+import { db } from "../utils/firebase/firebase";
+import { collection, addDoc, getDocs, query, where, doc, getDoc, updateDoc } from "firebase/firestore";
+
+export const ItemsList = [
     {
         numItem: 1,
         item: 'Porção de Asinha',
@@ -50,3 +53,13 @@ export const ItemsList :any = [
         itemValue: '6.00'
     }
 ]
+
+/* 
+const subirItemList = async () => {
+    await updateDoc(doc(db, "empresas", "b"), {
+        items: ItemsList
+    }).then(res => console.log(res))
+    .catch(err => console.log(err.message))
+}
+
+subirItemList() */
