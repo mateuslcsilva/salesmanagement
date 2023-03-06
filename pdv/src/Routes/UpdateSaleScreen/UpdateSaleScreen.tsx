@@ -61,7 +61,7 @@ export const UpdateSaleScreen = () => {
     }
 
     const deleteItems = () => {
-        const selectedToNumber: any[] = selected.map(item => Number(item))
+/*         const selectedToNumber: any[] = selected.map(item => Number(item))
         selectedToNumber.reverse()
         let deletedItems :string[] = []
         selectedToNumber.forEach((item) => {
@@ -70,11 +70,12 @@ export const UpdateSaleScreen = () => {
         })
         clear()
         setAlert(<Alert severity="success" className='fading-out'>Pronto, pedidos excluídos!</Alert>)
-        return deletedItems
+        return deletedItems */
+        return
     }
 
     const transferringOrders = () => {
-        const deletedItems = deleteItems()
+        /* const deletedItems = deleteItems()
         const currentSale = sales.find(sale => sale.numSale == newSaleNumber)
         if(currentSale) {
             currentSale.orders = [...currentSale?.orders, ...deletedItems]
@@ -98,7 +99,7 @@ export const UpdateSaleScreen = () => {
             console.log(updatedSale)
         }
         clear()
-        setAlert(<Alert severity="success" className='fading-out'>Pronto, pedidos transferidos!</Alert>)
+        setAlert(<Alert severity="success" className='fading-out'>Pronto, pedidos transferidos!</Alert>) */
     }
 
     const clear = () => {
@@ -187,7 +188,7 @@ export const UpdateSaleScreen = () => {
                             {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
                             {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                        {sale.orders && sale.orders.map((item: string, index :number) => <p key={index}>{item}</p>)}
+                        {/* {sale.orders && sale.orders.map((item: string, index :number) => <p key={index}>{item}</p>)} */}
                     </div>
                 }
 
@@ -235,7 +236,7 @@ export const UpdateSaleScreen = () => {
                                 value={selected}
                                 onChange={setSelected}
                             >
-                                {sale.orders.map((order: string, index: number) => <Checkbox value={index.toString()} className={selected.includes(index.toString()) ? 'strike' : ''}>{order}</Checkbox>)}
+                                {/* {sale.orders.map((order: string, index: number) => <Checkbox value={index.toString()} className={selected.includes(index.toString()) ? 'strike' : ''}>{order}</Checkbox>)} */}
                             </Checkbox.Group>
                             <div className='is-flex is-justify-content-flex-end mt-5 mb-5'>
                                 <Button
@@ -275,7 +276,7 @@ export const UpdateSaleScreen = () => {
                                 value={selected}
                                 onChange={setSelected}
                             >
-                                {sale.orders.map((order: string, index: number) => <Checkbox value={index.toString()} className={selected.includes(index.toString()) ? 'strike' : ''}>{order}</Checkbox>)}
+                                {/* {sale.orders.map((order: string, index: number) => <Checkbox value={index.toString()} className={selected.includes(index.toString()) ? 'strike' : ''}>{order}</Checkbox>)} */}
                             </Checkbox.Group>
                             <TextField
                                 id="outlined-basic"

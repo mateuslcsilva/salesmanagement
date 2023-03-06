@@ -56,7 +56,7 @@ const AddSaleScreen = () => {
     }
 
     const getTotalValue = () => {
-        if (Array.isArray(sale)) return
+       /*  if (Array.isArray(sale)) return
         const itemsId: number[] = sale.orders && sale.orders.map((order: string) => Number(order.substring(0, 2)))
         let total: number = 0
         itemsId && itemsId.forEach((order: number) => {
@@ -64,7 +64,7 @@ const AddSaleScreen = () => {
                 item.numItem == order && (total += Number(item.itemValue))
             })
         })
-        setTotalValue(total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }))
+        setTotalValue(total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })) */
     }
 
     const closeSale = () => {
@@ -162,7 +162,7 @@ const AddSaleScreen = () => {
                             {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
                             {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                        {sale.orders && sale.orders.map((item: string, index: number) => <p key={index}>{item}</p>)}
+                        {/* {sale.orders && sale.orders.map((item: string, index: number) => <p key={index}>{item}</p>)} */}
                         <p className='mt-3 title is-5'> Total: {totalValue}</p>
                     </div>
                 }
