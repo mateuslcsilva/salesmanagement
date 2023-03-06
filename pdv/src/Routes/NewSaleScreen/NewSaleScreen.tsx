@@ -106,7 +106,7 @@ export const NewSaleScreen = () => {
     const updateSales = async () => {
         const update = await queryData("saleUpdate", "null", { id: AuthContext.currentUser.id, sale: sale })
             .then(res => {
-                toast.success("Venda salva com sucesso!")
+                /* toast.success("Venda salva com sucesso!") */
                 clear()
             })
             .catch(err => console.log(err.message))
