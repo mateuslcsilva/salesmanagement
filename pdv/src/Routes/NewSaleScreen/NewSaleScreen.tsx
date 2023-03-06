@@ -8,7 +8,7 @@ import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 import { queryData } from '../../utils/requests/queryData'
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 
