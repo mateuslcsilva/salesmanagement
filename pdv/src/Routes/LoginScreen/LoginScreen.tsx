@@ -65,17 +65,44 @@ export const LoginScreen = () => {
 
       //tratamento de erros
       if (typeof (accountInfo) == "string") {
-        toast.error(accountInfo)
+        toast.error(accountInfo, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          })
         return
       }
 
       let user = accountInfo?.users?.find((user: any) => user.email == signInValues.userEmail)
 
       if (!user) {
-        return toast.error("Conta não encontrata!")
+        return toast.error("Conta não encontrata!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          })
       }
       if (user.password != signInValues.userPassword) {
-        return toast.error("Senha incorreta!")
+        return toast.error("Senha incorreta!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          })
       }
 
       if (accountInfo) setAuthContext.setCurrentUser({ id: accountInfo.id, userName: accountInfo.users[0].username})
@@ -166,7 +193,7 @@ export const LoginScreen = () => {
         </Modal.Footer>
       </Modal>
       <ToastContainer
-        position="top-right"/* 
+        position="top-right"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -174,7 +201,7 @@ export const LoginScreen = () => {
         rtl={false}
         pauseOnFocusLoss
         draggable
-        pauseOnHover */
+        pauseOnHover
         theme="light"
         ></ToastContainer>
     </div>
