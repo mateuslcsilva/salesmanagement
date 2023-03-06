@@ -8,7 +8,8 @@ import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 import { queryData } from '../../utils/requests/queryData'
-import { toast } from 'react-toastify'
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 
 
@@ -106,7 +107,7 @@ export const NewSaleScreen = () => {
     const updateSales = async () => {
         const update = await queryData("saleUpdate", "null", { id: AuthContext.currentUser.id, sale: sale })
             .then(res => {
-                /* toast.success("Venda salva com sucesso!") */
+                toast.success("Venda salva com sucesso!")
                 clear()
             })
             .catch(err => console.log(err.message))
@@ -216,6 +217,17 @@ export const NewSaleScreen = () => {
                     <Button onClick={clear} disabled={sale.numSale == undefined ? true : false} text='Limpar' />
                 </div>
             </div>
+            <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"></ToastContainer>
         </>
     )
 }
