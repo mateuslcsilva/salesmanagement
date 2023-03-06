@@ -65,7 +65,7 @@ export const LoginScreen = () => {
 
       //tratamento de erros
       if (typeof (accountInfo) == "string") {
-        toast.error(accountInfo, {
+        /* toast.error(accountInfo, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -74,14 +74,16 @@ export const LoginScreen = () => {
           draggable: true,
           progress: undefined,
           theme: "light",
-          })
+          }) */
+          alert(accountInfo)
         return
       }
 
       let user = accountInfo?.users?.find((user: any) => user.email == signInValues.userEmail)
 
       if (!user) {
-        return toast.error("Conta não encontrata!", {
+        return alert("Conta não encontrada!")
+        /* toast.error("Conta não encontrata!", { 
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -90,10 +92,11 @@ export const LoginScreen = () => {
           draggable: true,
           progress: undefined,
           theme: "light",
-          })
+          }) */
       }
       if (user.password != signInValues.userPassword) {
-        return toast.error("Senha incorreta!", {
+        return alert("Senha Incorreta!")
+/*         toast.error("Senha incorreta!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -102,7 +105,7 @@ export const LoginScreen = () => {
           draggable: true,
           progress: undefined,
           theme: "light",
-          })
+          }) */
       }
 
       if (accountInfo) setAuthContext.setCurrentUser({ id: accountInfo.id, userName: accountInfo.users[0].username})
@@ -125,10 +128,10 @@ export const LoginScreen = () => {
     const docRef = await setDoc(doc(collectionRef, signUpValues.workplace), newInfo)
       .then(response => {
         setVisible(false)
-        toast.success('Conta criada com sucesso!');
+        /* toast.success('Conta criada com sucesso!'); */
       })
       .catch(err => {
-        toast.error(err.message)
+        /* toast.error(err.message) */
       });
   };
 
@@ -148,7 +151,7 @@ export const LoginScreen = () => {
     let docRef = doc(db, "empresas", "nkBcZEjwowS2MFNovdeB")
     let data = await getDoc(docRef)
       .then(response => console.log(response.data()))
-      .catch(err => toast.error(err.message))
+      .catch(err => console.log(err.message))
   }
 
   return (
@@ -192,7 +195,7 @@ export const LoginScreen = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <ToastContainer
+{/*       <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -203,7 +206,7 @@ export const LoginScreen = () => {
         draggable
         pauseOnHover
         theme="light"
-        ></ToastContainer>
+        ></ToastContainer> */}
     </div>
   );
 }

@@ -108,7 +108,7 @@ export const NewSaleScreen = () => {
         const update = await queryData("saleUpdate", "null", { id: AuthContext.currentUser.id, sale: sale })
             .then(res => {
                 clear()
-                return toast.success("Venda salva com sucesso!")
+                return /* toast.success("Venda salva com sucesso!") */
             })
             .catch(err => console.log(err.message))
     }
@@ -217,7 +217,7 @@ export const NewSaleScreen = () => {
                     <Button onClick={clear} disabled={sale.numSale == undefined ? true : false} text='Limpar' />
                 </div>
             </div>
-            <ToastContainer
+{/*             <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -227,7 +227,7 @@ export const NewSaleScreen = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"></ToastContainer>
+        theme="light"></ToastContainer> */}
         </>
     )
 }
