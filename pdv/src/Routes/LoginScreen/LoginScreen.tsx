@@ -166,7 +166,7 @@ export const LoginScreen = () => {
         </Modal.Footer>
       </Modal>
       <ToastContainer
-        position="top-right"
+        position="top-right"/* 
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -174,8 +174,9 @@ export const LoginScreen = () => {
         rtl={false}
         pauseOnFocusLoss
         draggable
-        pauseOnHover
-        theme="light"></ToastContainer>
+        pauseOnHover */
+        theme="light"
+        ></ToastContainer>
     </div>
   );
 }
