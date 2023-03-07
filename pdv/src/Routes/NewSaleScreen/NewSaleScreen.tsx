@@ -45,18 +45,32 @@ export const NewSaleScreen = () => {
         if (!value) return
         if (typeParam == "numItem") {
             let index = itemList.findIndex(item => item.numItem == value)
-            let text = (itemList[index]?.numItem < 10 ? '0' + itemList[index]?.numItem : itemList[index]?.numItem.toString()) + ' - ' + itemList[index]?.item + ' R$' + itemList[index]?.itemValue
+            let text = (itemList[index]?.numItem < 10 ? '0' + itemList[index]?.numItem : itemList[index]?.numItem.toString()) + ' - ' + itemList[index]?.item + ' ' + itemList[index]?.itemValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
             return text
         }
         if (!itemList[value]) return ''
         if (typeParam == "index") {
-            let text = (itemList[value]?.numItem < 10 ? '0' + itemList[value]?.numItem : itemList[value]?.numItem.toString()) + ' - ' + itemList[value]?.item + ' R$' + itemList[value]?.itemValue
+            let text = (itemList[value]?.numItem < 10 ? '0' + itemList[value]?.numItem : itemList[value]?.numItem.toString()) + ' - ' + itemList[value]?.item + ' ' + itemList[value]?.itemValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
             return text
         }
     }
 
-    const setTable = () => {
+    const setTable = async () => {
         if (saleNumber == 0) return false
+
+        let alert = ""
+        await getDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`))
+        .then(res => {
+            let sales = res.data()?.sales
+            if(sales){
+                sales.forEach((sale :sale) => {
+                    if(!sale.closed && sale.numSale == saleNumber) {
+                        alert = "Essa comanda já está em uso!"
+                    }
+                })
+            }
+        })
+        if(alert) return window.alert(alert)
         let current = new Date
         let currentDay = current.getDate().toString().length < 2 ? '0' + current.getDate() : current.getDate()
         let currentMonth = current.getMonth().toString().length < 2 ? '0' + (current.getMonth() + 1) : (current.getMonth() + 1)

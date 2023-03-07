@@ -85,8 +85,8 @@ export const LoginScreen = () => {
         sales: []
     }
 
-    const collectionRef = collection(db, "empresas")
-    const docRef = await setDoc(doc(collectionRef, signUpValues.workplace), newInfo)
+    const collectionRef = collection(db, signUpValues.workplace)
+    const docRef = await setDoc(doc(collectionRef), newInfo)
       .then(response => {
         setVisible(false)
         /* toast.success('Conta criada com sucesso!'); */
