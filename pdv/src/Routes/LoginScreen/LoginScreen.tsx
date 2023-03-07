@@ -95,17 +95,7 @@ export const LoginScreen = () => {
           }) */
       }
       if (user.password != signInValues.userPassword) {
-        return alert("Senha Incorreta!")
-/*         toast.error("Senha incorreta!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          }) */
+        return toast.error("Senha incorreta!")
       }
 
       if (accountInfo) setAuthContext.setCurrentUser({ id: accountInfo.id, userName: accountInfo.users[0].username})
@@ -195,18 +185,7 @@ export const LoginScreen = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-{/*       <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        ></ToastContainer> */}
+{      <ToastContainer position="top-right"/>}
     </div>
   );
 }
