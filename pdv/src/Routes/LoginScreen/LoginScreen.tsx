@@ -62,44 +62,15 @@ export const LoginScreen = () => {
   const dataHandler = async () => {
     if (hasAccount) { //signin shit
       const accountInfo = await queryData('accountInfo', 'name', signInValues.userWorkplace)
-
-      //tratamento de erros
-      if (typeof (accountInfo) == "string") {
-        /* toast.error(accountInfo, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          }) */
-          alert(accountInfo)
-        return
-      }
-
-      let user = accountInfo?.users?.find((user: any) => user.email == signInValues.userEmail)
-
-      if (!user) {
-        return alert("Conta não encontrada!")
-        /* toast.error("Conta não encontrata!", { 
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          }) */
-      }
-      if (user.password != signInValues.userPassword) {
-        return toast.error("Senha incorreta!")
-      }
-
-      if (accountInfo) setAuthContext.setCurrentUser({ id: accountInfo.id, userName: accountInfo.users[0].username})
-      return setVisible(false);
+      .then( res => {
+        if (typeof (res) == "string") return alert(res)
+        let user = res?.users?.find((user: any) => user.email == signInValues.userEmail)
+        if (!user) return alert("Conta não encontrada!")
+        if (user.password != signInValues.userPassword) return toast.error("Senha Incorreta!")
+        if (res) setAuthContext.setCurrentUser({ id: res.id, userName: res.users[0].username})
+        return setVisible(false);
+      }) 
+      
     }
 
     //signup shit
