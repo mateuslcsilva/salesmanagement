@@ -8,7 +8,7 @@ import { sale } from '../../types/sale/sale'
 import { salesList } from '../../assets/salesList'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
-import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore'
+import { collection, collectionGroup, doc, getDoc, getDocs, query, where } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 
 const AddSaleScreen = () => {
@@ -54,18 +54,27 @@ const AddSaleScreen = () => {
         }
     }
 
-   /*  const findTable = async () => {
-        let currentSale :any[] = []
-        let docRef = collection(db, `empresas`, `${AuthContext.currentUser.id}`, 'sales')
-        const saleInfo = await getDocs(query(docRef, where("numTable", "==", tableNumber.toString())))
+    const findTable = async () => {
+       /*  let currentSale :any[] = []
+        let docRef = collectionGroup(db, `${AuthContext.currentUser.id}.sales`)
+        const saleInfo = await getDocs(query(docRef, where("numTable", "==", tableNumber)))
         .then((res)=> {
-            console.log('res ', res)
+            console.log('res ', res.docs.map(item => item.data()))
             res.docs.forEach(item => currentSale.push(item))
         })
         .catch(err => console.log(err.message))
-        console.log('current sale', currentSale)
+        console.log('current sale', currentSale) */
+        let docRef = doc(db, `empresas`, `${AuthContext.currentUser.id}`)
+        const currentSale = await getDoc(docRef)
+        .then(res => {
+            let data = res.data()
+            return data?.sales.filter((item :sale) => item.numTable == tableNumber)
+        })
+        console.log(currentSale)
+        /* */
+
         setSale(currentSale.length == 1 ? (sale: sale) => ({ ...sale, ...currentSale[0] }) : currentSale)
-    } */
+    }
 
     /* const findSale = () => {
 
@@ -162,6 +171,7 @@ const AddSaleScreen = () => {
                     className='is-info ml-2'
                     disabled={sale.numTable ? true : false}
                     /* onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)} */
+                    onClick={findTable}
                     text='Buscar'
                 />
 

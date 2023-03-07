@@ -1,18 +1,59 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '../Button/Button';
+import { doc, getDoc } from 'firebase/firestore';
+import { useAuthContext } from '../../utils/contexts/AuthProvider';
+import { useOrderContext } from '../../utils/contexts/OrderContext';
+import { db } from '../../utils/firebase/firebase';
 
 export default function SaleAccordion(props :any) {
-  const [expanded, setExpanded] = React.useState<string | false>(false);
+
+  const [expanded, setExpanded] = useState<string | false>(false);
+  const [itemList, setItemList] = useState<itemType[]>([])
+  const AuthContext = useAuthContext()
+  const orderContext = useOrderContext()
+
+  interface itemType {
+      numItem: number;
+      item: string;
+      itemValue: string
+  }
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
+
+     const getItems = async () => {
+        if (AuthContext.currentUser.id == '') return false
+        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
+        let data = await getDoc(docRef)
+            .then(res => res.data()?.items)
+        setItemList(data)
+    }
+
+    const getItemText = (typeParam: string, value: number | undefined) => {
+        if (AuthContext.currentUser.id == '') return
+        if (!value) return
+        if (typeParam == "numItem") {
+            let index = itemList.findIndex((item :itemType) => item.numItem == value)
+            let text = (itemList[index]?.numItem < 10 ? '0' + itemList[index]?.numItem : itemList[index]?.numItem.toString()) + ' - ' + itemList[index]?.item + ' R$' + itemList[index]?.itemValue
+            return text
+        }
+        if (!itemList[value]) return ''
+        if (typeParam == "index") {
+            let text = (itemList[value]?.numItem < 10 ? '0' + itemList[value]?.numItem : itemList[value]?.numItem.toString()) + ' - ' + itemList[value]?.item + ' R$' + itemList[value]?.itemValue
+            return text
+        }
+    }
+
+    useEffect(() => {
+      getItems()
+    }, [])
 
 
 
@@ -35,7 +76,7 @@ export default function SaleAccordion(props :any) {
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              {sale.orders.map((item: String) => <p>{item}</p>)}
+              {sale.orders.map((item :number) => <p>{getItemText("numItem", item)}</p>)}
             </Typography>
             <div className='is-flex is-justify-content-flex-end'>
             <Typography>
