@@ -29,7 +29,7 @@ const AddSaleScreen = () => {
     interface itemType {
         numItem: number;
         item: string;
-        itemValue: string
+        itemValue: number
     }
 
     const getItems = async () => {
@@ -65,6 +65,7 @@ const AddSaleScreen = () => {
     }
 
     const findTable = () => {
+        console.log("find table")
         let salesIndex :number[] = []
         sales.forEach((item: sale, index: number) => {
             if(item.numTable == tableNumber){
@@ -84,6 +85,7 @@ const AddSaleScreen = () => {
     }
 
     const findSale = () => {
+        console.log("find sale")
         let salesIndex :any = []
         sales.forEach((item: sale, index: number) => {
             if(item.numSale == saleNumber){
@@ -100,6 +102,7 @@ const AddSaleScreen = () => {
     }
 
     const findCostumer = () => {
+        console.log("find costumer")
 
         let salesIndex :number[] = []
         sales.forEach((item: sale, index: number) => {
@@ -118,7 +121,18 @@ const AddSaleScreen = () => {
     }
 
     const setOrder = () => {
-        if(typeof saleIndex == 'number') sales[saleIndex].orders.push(orderContext.currentOrder)
+        if(typeof saleIndex == 'number' && orderContext.currentOrder != undefined) {
+            let oldValue = sales[saleIndex].totalValue
+            let newValue = 0
+            itemList.forEach(item => {
+                if(item.numItem == orderContext.currentOrder){
+                    newValue = item.itemValue
+                }
+            })
+            console.log(oldValue, newValue, oldValue + newValue, orderContext.currentOrder)
+            sales[saleIndex].totalValue += newValue
+            sales[saleIndex].orders.push(orderContext.currentOrder)
+        }
         setAlert(<Alert severity="success" >Pedido registrado!</Alert>)
         orderContext.setCurrentOrder(0)
     }
@@ -162,6 +176,10 @@ const AddSaleScreen = () => {
         console.log("sales: ", sales)
         console.log("saleIndex: ", saleIndex)
     }, [sale, saleIndex, sales])
+/* 
+    useEffect(() => {
+        getTotalValue()
+    }, [sales[saleIndex].orders]) */
 
     return (
         <>
@@ -231,6 +249,7 @@ const AddSaleScreen = () => {
                             {sales[saleIndex].numSale ? 'Comanda ' + sales[saleIndex].numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
                         {sales[saleIndex].orders && sales[saleIndex].orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
+                        <p className='mt-3 title is-5'> Total: {sales[saleIndex].totalValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</p>
                     </div>
                 }
 

@@ -9,6 +9,7 @@
 main{
   min-height: 150vh;
   max-height: auto;
+  overflow-y: visible;
 }
 
 .lightThemed{

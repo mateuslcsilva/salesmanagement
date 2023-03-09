@@ -4,6 +4,10 @@ section{
     overflow: visible;
 }
 
+#itemListInput{
+    cursor: pointer;
+}
+
 #itemList{
     width: 100%;
     background-color: #FFF !important;
@@ -32,16 +36,25 @@ section{
 }
 
 #itemList.active{
-    height: 120px;
+    height: 220px;
     border: 1px solid #3e8ed0;
     padding: 10px;
     overflow-y: scroll;
-    position: absolute;
     transition: .3s ease;
+    margin-bottom: 15px;
 }
 
 #itemList.active .item-btn:hover{
     background-color: #3e8ed0;
     color: #FFF;
     cursor: pointer;
+}
+
+@keyframes positionAlternate {
+    from{
+        position: relative;
+    }
+    to{
+        position: absolute;
+    }
 }

@@ -10,7 +10,7 @@ import { NewSaleScreen } from './Routes/NewSaleScreen/NewSaleScreen'
 import AddSaleScreen from './Routes/AddSaleScreen/AddSaleScreen';
 import { UpdateSaleScreen } from './Routes/UpdateSaleScreen/UpdateSaleScreen';
 import CheckOutScreen from './Routes/CheckOutScreen/CheckOutScreen';
-import Extract from './Routes/Extract/Extract'
+import { Extract } from './Routes/Extract/Extract'
 import App from './App'
 import './index.css'
 import '../node_modules/bulma/css/bulma.min.css'

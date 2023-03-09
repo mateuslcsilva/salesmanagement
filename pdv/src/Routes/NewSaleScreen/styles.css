@@ -2,7 +2,7 @@
     margin-top: 7vh;
     width:80%;
     height: auto;
-    overflow-y: hidden;
+    overflow-y: visible;
     animation: growin-up .1s ease-in-out;
 }
 

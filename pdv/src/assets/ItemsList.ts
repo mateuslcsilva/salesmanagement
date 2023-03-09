@@ -62,4 +62,13 @@ const subirItemList = async () => {
     .catch(err => console.log(err.message))
 }
 
-subirItemList() */
+subirItemList()
+ */
+const deletarVendas = async () => {
+    await updateDoc(doc(db, "empresas", "b"), {
+        sales: []
+    }).then(res => console.log(res))
+    .catch(err => console.log(err.message))
+}
+
+deletarVendas()

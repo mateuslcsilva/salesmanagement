@@ -70,7 +70,7 @@ export const LoginScreen = () => {
         if (res) setAuthContext.setCurrentUser({ id: res.id, userName: res.users[0].username})
         return setVisible(false);
       }) 
-      
+      return
     }
 
     //signup shit
@@ -82,11 +82,12 @@ export const LoginScreen = () => {
           password: signUpValues.password,
         }],
         items: [],
-        sales: []
+        sales: [],
+        salesHistory: []
     }
 
-    const collectionRef = collection(db, signUpValues.workplace)
-    const docRef = await setDoc(doc(collectionRef), newInfo)
+    const collectionRef = collection(db, "empresas")
+    const docRef = await setDoc(doc(collectionRef, signUpValues.workplace), newInfo)
       .then(response => {
         setVisible(false)
         /* toast.success('Conta criada com sucesso!'); */

@@ -70,7 +70,7 @@ const ItemsListInput = (props: any) => {
                 className={props.className + ' input'}
                 placeholder={props.placeholder}
                 onChange={props.onChange}
-                onClick={() => setItemListActive(true)}
+                onClick={() => setItemListActive(itemListActive => !itemListActive)}
                 value={getItemText("numItem", orderContext.currentOrder)}
                 disabled={props.disabled}
             />

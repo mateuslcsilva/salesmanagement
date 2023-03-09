@@ -17,8 +17,8 @@ export const NewSaleScreen = () => {
 
     const [itemList, setItemList] = useState<itemType[]>([])
     const [currentUserId, setCurrentUserId] = useState<string>()
-    const [tableNumber, setTableNumber] = useState(0)
-    const [saleNumber, setSaleNumber] = useState(0)
+    const [tableNumber, setTableNumber] = useState<number>(0)
+    const [saleNumber, setSaleNumber] = useState<number>(0)
     const [costumerName, setCostumerName] = useState('')
     const [currentOrder, setCurrentOrder] = useState<number>(0)
     const [alert, setAlert] = useState(<p></p>)
@@ -58,6 +58,7 @@ export const NewSaleScreen = () => {
     }
 
     const setTable = async () => {
+        console.log(AuthContext.currentUser.id)
         if (saleNumber == 0) return false
 
         let alert = ""
@@ -91,13 +92,13 @@ export const NewSaleScreen = () => {
     }
 
     const setOrder = () => {
+        if(currentOrder == 0) return window.alert("Por favor, selecione item novamente!")
         let updatedSale = {
             orders: [...sale.orders, currentOrder],
         }
 
         setSale(sale => ({ ...sale, ...updatedSale }))
         setAlert(<Alert severity="success" >Pedido registrado!</Alert>)
-        getTotalValue()
         setCurrentOrder(0)
     }
 
@@ -133,6 +134,10 @@ export const NewSaleScreen = () => {
         console.log(sale)
     }, [sale])
 
+    useEffect(() => {  
+        getTotalValue()
+    }, [sale.orders])
+
     useEffect(() => {
         const clearAlert = setTimeout(() => {
             setAlert(<p></p>)
@@ -162,7 +167,7 @@ export const NewSaleScreen = () => {
                     label="Mesa"
                     variant="outlined"
                     size="small"
-                    onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : e.target.value)}
+                    onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
                     value={tableNumber < 1 ? '' : tableNumber}
                     style={{ 'width': '105px' }}
                     className='mr-2 align-right-sla'
@@ -184,7 +189,7 @@ export const NewSaleScreen = () => {
                     label="Comanda*"
                     variant="outlined"
                     size="small"
-                    onChange={(e: any) => setSaleNumber(isNaN(e.target.value) ? 0 : e.target.value)}
+                    onChange={(e: any) => setSaleNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
                     value={saleNumber < 1 ? '' : saleNumber}
                     style={{ 'width': '105px' }}
                     className='mr-2'
@@ -218,6 +223,7 @@ export const NewSaleScreen = () => {
                             {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
                         {sale.orders && sale.orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
+                        <p className='mt-3 title is-5'> Total: {sale.totalValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</p>
                     </div>
                 }
 

@@ -41,12 +41,14 @@ export default function SaleAccordion(props :any) {
         if (!value) return
         if (typeParam == "numItem") {
             let index = itemList.findIndex((item :itemType) => item.numItem == value)
-            let text = (itemList[index]?.numItem < 10 ? '0' + itemList[index]?.numItem : itemList[index]?.numItem.toString()) + ' - ' + itemList[index]?.item + ' R$' + itemList[index]?.itemValue
+            //@ts-ignore
+            let text = (itemList[index]?.numItem < 10 ? '0' + itemList[index]?.numItem : itemList[index]?.numItem.toString()) + ' - ' + itemList[index]?.item + '- ' + itemList[index]?.itemValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
             return text
         }
         if (!itemList[value]) return ''
         if (typeParam == "index") {
-            let text = (itemList[value]?.numItem < 10 ? '0' + itemList[value]?.numItem : itemList[value]?.numItem.toString()) + ' - ' + itemList[value]?.item + ' R$' + itemList[value]?.itemValue
+          //@ts-ignore
+            let text = (itemList[value]?.numItem < 10 ? '0' + itemList[value]?.numItem : itemList[value]?.numItem.toString()) + ' - ' + itemList[value]?.item + ' - ' + itemList[value]?.itemValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
             return text
         }
     }
@@ -77,17 +79,18 @@ export default function SaleAccordion(props :any) {
           <AccordionDetails>
             <Typography>
               {sale.orders.map((item :number) => <p>{getItemText("numItem", item)}</p>)}
+              <p className='mt-3 title is-5' style={{'textAlign' : 'end'}}> Total: {sale.totalValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</p>
             </Typography>
             <div className='is-flex is-justify-content-flex-end'>
             <Typography>
-              <Button 
+              {!props.hiddeButton && <Button 
               text={<i className="bi bi-box-arrow-up title is-4 has-text-white"></i>} 
               className={'is-info'} 
               onClick={() => {
                 props.selectedSale(sale)
                 props.selectedIndex(--index)
               }}
-              />
+              />}
             </Typography>
             </div>
           </AccordionDetails>
