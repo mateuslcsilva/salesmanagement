@@ -88,7 +88,9 @@ export default function SaleAccordion(props :any) {
               className={'is-info'} 
               onClick={() => {
                 props.selectedSale(sale)
-                props.selectedIndex(--index)
+                if(props.selectedIndex){
+                  props.selectedIndex(--index)
+                }
               }}
               />}
             </Typography>

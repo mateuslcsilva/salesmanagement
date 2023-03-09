@@ -106,7 +106,7 @@ const AddSaleScreen = () => {
 
         let salesIndex :number[] = []
         sales.forEach((item: sale, index: number) => {
-            if(item.costumerName == costumerName){
+            if(item.costumerName?.toLowerCase() == costumerName?.toLowerCase()){
                 salesIndex.push(index)
             }
         })
@@ -185,8 +185,6 @@ const AddSaleScreen = () => {
         <>
             <div className='div' id='div1'>
                 <h3 className='title is-3 mt-3'>ACRESCENTAR ITEM</h3>
-
-
                 <TextField
                     id="outlined-basic"
                     label="Mesa"
@@ -236,9 +234,9 @@ const AddSaleScreen = () => {
 
                 <Button
                     onClick={setOrder}
+                    disabled={Array.isArray(sale) || !sale.numTable || orderContext.currentOrder == 0 ? true : false}
                     className='is-info mt-5 mb-5'
                     text='Acrescentar item'
-                    disabled={Array.isArray(sale) || !sale.numTable || orderContext.currentOrder == 0 ? true : false}
                 />
                 {
                     ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && (typeof saleIndex == "number")) &&

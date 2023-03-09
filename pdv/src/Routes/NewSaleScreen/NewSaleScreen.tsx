@@ -67,7 +67,7 @@ export const NewSaleScreen = () => {
             let sales = res.data()?.sales
             if(sales){
                 sales.forEach((sale :sale) => {
-                    if(!sale.closed && sale.numSale == saleNumber) {
+                    if(sale.numSale == saleNumber) {
                         alert = "Essa comanda já está em uso!"
                     }
                 })
