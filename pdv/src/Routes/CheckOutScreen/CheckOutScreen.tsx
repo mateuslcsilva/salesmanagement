@@ -140,6 +140,7 @@ export const CheckOutScreen = () => {
                     label="Mesa"
                     variant="outlined"
                     size="small"
+                    autoComplete='off'
                     onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : e.target.value)}
                     value={tableNumber < 1 ? '' : tableNumber}
                     style={{ 'width': '105px' }}
@@ -151,6 +152,7 @@ export const CheckOutScreen = () => {
                     label="Nome"
                     variant="outlined"
                     size="small"
+                    autoComplete='off'
                     onChange={(e: any) => setCostumerName(e.target.value)}
                     value={costumerName}
                     style={{ 'width': '105px' }}
@@ -162,6 +164,7 @@ export const CheckOutScreen = () => {
                     label="Comanda"
                     variant="outlined"
                     size="small"
+                    autoComplete='off'
                     onChange={(e: any) => setSaleNumber(isNaN(e.target.value) ? 0 : e.target.value)}
                     value={saleNumber < 1 ? '' : saleNumber}
                     style={{ 'width': '105px' }}

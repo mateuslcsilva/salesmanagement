@@ -158,7 +158,7 @@ export const NewSaleScreen = () => {
                     label="Mesa"
                     variant="outlined"
                     size="small"
-                    autoComplete='false'
+                    autoComplete='off'
                     onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
                     value={tableNumber < 1 ? '' : tableNumber}
                     style={{ 'width': '105px' }}
@@ -170,7 +170,7 @@ export const NewSaleScreen = () => {
                     label="Nome"
                     variant="outlined"
                     size="small"
-                    autoComplete='false'
+                    autoComplete='off'
                     onChange={(e: any) => setCostumerName(e.target.value)}
                     value={costumerName}
                     style={{ 'width': '105px' }}
@@ -182,7 +182,7 @@ export const NewSaleScreen = () => {
                     label="Comanda*"
                     variant="outlined"
                     size="small"
-                    autoComplete='false'
+                    autoComplete='off'
                     onChange={(e: any) => setSaleNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
                     value={saleNumber < 1 ? '' : saleNumber}
                     style={{ 'width': '105px' }}
