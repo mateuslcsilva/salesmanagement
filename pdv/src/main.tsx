@@ -18,7 +18,7 @@ import { AuthProvider } from './utils/contexts/AuthProvider';
 import { OrderProvider } from './utils/contexts/OrderContext';
 
 //TODO: FAZER UM CONTEXT PRA TRAZER OS SEGUINTES DADOS PRA CÁ: ID, DADOS DE USUÁRIO
-
+ 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <AuthProvider>
