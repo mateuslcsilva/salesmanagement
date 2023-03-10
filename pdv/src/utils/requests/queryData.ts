@@ -4,7 +4,7 @@ import { arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where }
 export const queryData = async (queryType: string, whereParam: string, value: any) => {
   switch (queryType) {
     case 'accountInfo':
-      const accountInfo = await getDocs(query(collection(db, "empresas"), where(`${whereParam}`, "==", value)))
+      const accountInfo = await getDocs(query(collection(db, "empresas"), where(`${whereParam}`, "==", value.toLowerCase())))
         .then(response => {
           if (response.size > 1) return 'Existe mais de uma empresa com esse nome, entre em contato com o suporte!!' //todo: testar
           if (response.size < 1) {

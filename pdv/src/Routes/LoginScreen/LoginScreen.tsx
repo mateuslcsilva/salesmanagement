@@ -64,10 +64,10 @@ export const LoginScreen = () => {
       const accountInfo = await queryData('accountInfo', 'name', signInValues.userWorkplace)
       .then( res => {
         if (typeof (res) == "string") return alert(res)
-        let user = res?.users?.find((user: any) => user.email == signInValues.userEmail)
+        let user = res?.users?.find((user: any) => user.email.toLowerCase() == signInValues.userEmail.toLowerCase())
         if (!user) return alert("Conta não encontrada!")
         if (user.password != signInValues.userPassword) return toast.error("Senha Incorreta!")
-        if (res) setAuthContext.setCurrentUser({ id: res.id, userName: res.users[0].username})
+        if (res) setAuthContext.setCurrentUser({ id: res.id, userName: res.users[0].username, workplaceName: res.name})
         return setVisible(false);
       }) 
       return
@@ -75,10 +75,10 @@ export const LoginScreen = () => {
 
     //signup shit
     let newInfo = {
-        name: signUpValues.workplace,
+        name: signUpValues.workplace.toLowerCase(),
         users: [{
-          username: signUpValues.username,
-          email: signUpValues.email,
+          username: signUpValues.username.toLowerCase(),
+          email: signUpValues.email.toLowerCase(),
           password: signUpValues.password,
         }],
         items: [],
@@ -96,25 +96,6 @@ export const LoginScreen = () => {
         /* toast.error(err.message) */
       });
   };
-
-  /*   useEffect(() => {
-      console.log(signUpValues)
-    }, [signUpValues]) */
-
-  const getData2 = async () => {
-    const doc = await getDocs(query(collection(db, "empresas"), where("workplace.name", "==", 'fdsafdas')))
-      .then(response => {
-        console.log(response.docs.map(item => item.id))
-        console.log(response.docs.map(item => item.data()))
-      })
-  }
-
-  const getData = async () => {
-    let docRef = doc(db, "empresas", "nkBcZEjwowS2MFNovdeB")
-    let data = await getDoc(docRef)
-      .then(response => console.log(response.data()))
-      .catch(err => console.log(err.message))
-  }
 
   return (
     <div>

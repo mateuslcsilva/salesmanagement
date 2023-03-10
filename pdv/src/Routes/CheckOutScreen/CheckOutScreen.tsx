@@ -73,35 +73,34 @@ export const CheckOutScreen = () => {
 
     const findTable = () => {
         let currentSale = sales.filter(sale => sale.numTable == tableNumber)
-        if(currentSale.length < 1) return window.alert("Ocorreu um erro, tente recarregar a página!")
+        if (currentSale.length < 1) return window.alert("Ocorreu um erro, tente recarregar a página!")
         setSale(currentSale.length == 1 ? currentSale[0] : currentSale)
     }
 
     const findSale = () => {
         let currentSale = sales.filter(sale => sale.numSale == saleNumber)
-        if(currentSale.length < 1) return window.alert("Ocorreu um erro, tente recarregar a página!")
+        if (currentSale.length < 1) return window.alert("Ocorreu um erro, tente recarregar a página!")
         setSale(currentSale[0])
     }
 
     const findCostumer = () => {
         let currentSale = sales.filter(sale => sale.costumerName?.toLocaleLowerCase() == costumerName.toLocaleLowerCase())
-        if(currentSale.length < 1) return window.alert("Ocorreu um erro, tente recarregar a página!")
+        if (currentSale.length < 1) return window.alert("Ocorreu um erro, tente recarregar a página!")
         setSale(currentSale.length == 1 ? currentSale[0] : currentSale)
     }
 
     const closeSale = async () => {
         if (Array.isArray(sale) || typeof salesHistory == "undefined") return
-        sale.paymentMethod = selected
-        let closedSale = [sale]
+        sale.paymentMethod = paymentMethods
         await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
             sales: sales.filter(sale2 => sale2.numSale !== sale.numSale),
-            salesHistory: [...salesHistory, ...closedSale]
+            salesHistory: arrayUnion(sale)
         }).then(res => {
             getItems()
             clear()
         }
         )
-            .catch(err => console.log(err.message))
+        .catch(err => console.log("Erro ao subir informações: ", err.message))
     }
 
     const clear = () => {
@@ -131,12 +130,6 @@ export const CheckOutScreen = () => {
     useEffect(() => {
         getItems()
     }, [])
-
-    useEffect(() => {
-        console.log("sale: ", sale)
-        console.log("sales: ", sales)
-        console.log("saleIndex: ", saleIndex)
-    }, [sale, saleIndex, sales])
 
     return (
         <>
@@ -224,9 +217,7 @@ export const CheckOutScreen = () => {
                             <Dropdown.Item key="Visa Débito" color='default'>Visa Débito</Dropdown.Item>
                             <Dropdown.Item key="Master Crédito" color='default'>Master Crédito</Dropdown.Item>
                             <Dropdown.Item key="Master Débito" color='default'>Master Débito</Dropdown.Item>
-                            <Dropdown.Item key="Dinheiro" color="default">
-                                Dinheiro
-                            </Dropdown.Item>
+                            <Dropdown.Item key="Dinheiro" color="default">Dinheiro</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
 

@@ -7,7 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { NewSaleScreen } from './Routes/NewSaleScreen/NewSaleScreen'
-import AddSaleScreen from './Routes/AddSaleScreen/AddSaleScreen';
+import { AddSaleScreen } from './Routes/AddSaleScreen/AddSaleScreen';
 import { UpdateSaleScreen } from './Routes/UpdateSaleScreen/UpdateSaleScreen';
 import { CheckOutScreen } from './Routes/CheckOutScreen/CheckOutScreen';
 import { Extract } from './Routes/Extract/Extract'

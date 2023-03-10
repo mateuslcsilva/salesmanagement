@@ -2,23 +2,21 @@ import React, { useEffect, useState } from 'react'
 import './styles.css'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
-import { Accordion, Alert, TextField } from '@mui/material'
+import { Alert, TextField } from '@mui/material'
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { sale } from '../../types/sale/sale'
-import { salesList } from '../../assets/salesList'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
-import { collection, collectionGroup, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 
-const AddSaleScreen = () => {
+export const AddSaleScreen = () => {
 
     const [itemList, setItemList] = useState<itemType[]>([])
     const [currentUserId, setCurrentUserId] = useState<string>()
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
     const [costumerName, setCostumerName] = useState('')
-    const [currentOrder, setCurrentOrder] = useState<number | undefined>()
     const [saleIndex, setSaleIndex] = useState<number[] | number>()
     const [sale, setSale] = useState<sale | sale[]>({} as sale)
     const [alert, setAlert] = useState(<p></p>)
@@ -48,32 +46,32 @@ const AddSaleScreen = () => {
         if (typeParam == "numItem") {
             let index = itemList.findIndex(item => item.numItem == value)
             //@ts-ignore
-            let text = (itemList[index]?.numItem < 10 ? '0' + itemList[index]?.numItem : itemList[index]?.numItem.toString()) + ' - ' + itemList[index]?.item + ' ' + itemList[index]?.itemValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}) 
+            let text = (itemList[index]?.numItem < 10 ? '0' + itemList[index]?.numItem : itemList[index]?.numItem.toString()) + ' - ' + itemList[index]?.item + ' ' + itemList[index]?.itemValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
             return text
         }
         if (!itemList[value]) return ''
         if (typeParam == "index") {
             //@ts-ignore
-            let text = (itemList[value]?.numItem < 10 ? '0' + itemList[value]?.numItem : itemList[value]?.numItem.toString()) + ' - ' + itemList[value]?.item + ' ' + itemList[value]?.itemValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+            let text = (itemList[value]?.numItem < 10 ? '0' + itemList[value]?.numItem : itemList[value]?.numItem.toString()) + ' - ' + itemList[value]?.item + ' ' + itemList[value]?.itemValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
             return text
         }
     }
 
-    const getSelectedIndex = (index :number) => {
-        if(Array.isArray(saleIndex) && saleIndex[index]) return setSaleIndex(saleIndex[index])
+    const getSelectedIndex = (index: number) => {
+        if (Array.isArray(saleIndex) && saleIndex[index]) return setSaleIndex(saleIndex[index])
         window.alert("Erro ao obter venda.")
     }
 
     const findTable = () => {
         console.log("find table")
-        let salesIndex :number[] = []
+        let salesIndex: number[] = []
         sales.forEach((item: sale, index: number) => {
-            if(item.numTable == tableNumber){
+            if (item.numTable == tableNumber) {
                 salesIndex.push(index)
             }
         })
-        setSaleIndex(salesIndex.length > 1? salesIndex : salesIndex[0])
-        let currentSale :sale[] = []
+        setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
+        let currentSale: sale[] = []
         sales.forEach((sale: sale, index: number) => {
             if (salesIndex.includes(index)) {
                 currentSale.push(sale)
@@ -81,21 +79,21 @@ const AddSaleScreen = () => {
         })
         console.log("currentSale: ", currentSale)
 
-        setSale(currentSale.length == 1 ? {...sale, ...currentSale[0]} : currentSale)
+        setSale(currentSale.length == 1 ? { ...sale, ...currentSale[0] } : currentSale)
     }
 
     const findSale = () => {
         console.log("find sale")
-        let salesIndex :any = []
+        let salesIndex: any = []
         sales.forEach((item: sale, index: number) => {
-            if(item.numSale == saleNumber){
+            if (item.numSale == saleNumber) {
                 salesIndex.push(index)
             }
         })
 
-        if(salesIndex.length == 1) salesIndex = salesIndex[0]
-    
-        if(Array.isArray(salesIndex)) return window.alert("Ocorreu um erro, por favor contate o desenvolvedor!")
+        if (salesIndex.length == 1) salesIndex = salesIndex[0]
+
+        if (Array.isArray(salesIndex)) return window.alert("Ocorreu um erro, por favor contate o desenvolvedor!")
 
         setSaleIndex(salesIndex)
         setSale(sales[salesIndex])
@@ -104,14 +102,14 @@ const AddSaleScreen = () => {
     const findCostumer = () => {
         console.log("find costumer")
 
-        let salesIndex :number[] = []
+        let salesIndex: number[] = []
         sales.forEach((item: sale, index: number) => {
-            if(item.costumerName?.toLowerCase() == costumerName?.toLowerCase()){
+            if (item.costumerName?.toLowerCase() == costumerName?.toLowerCase()) {
                 salesIndex.push(index)
             }
         })
-        setSaleIndex(salesIndex.length > 1? salesIndex : salesIndex[0])
-        let currentSale :sale[] = []
+        setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
+        let currentSale: sale[] = []
         sales.forEach((sale: sale, index: number) => {
             if (salesIndex.includes(index)) {
                 currentSale.push(sale)
@@ -121,11 +119,11 @@ const AddSaleScreen = () => {
     }
 
     const setOrder = () => {
-        if(typeof saleIndex == 'number' && orderContext.currentOrder != undefined) {
+        if (typeof saleIndex == 'number' && orderContext.currentOrder != undefined) {
             let oldValue = sales[saleIndex].totalValue
             let newValue = 0
             itemList.forEach(item => {
-                if(item.numItem == orderContext.currentOrder){
+                if (item.numItem == orderContext.currentOrder) {
                     newValue = item.itemValue
                 }
             })
@@ -133,25 +131,25 @@ const AddSaleScreen = () => {
             sales[saleIndex].totalValue += newValue
             sales[saleIndex].orders.push(orderContext.currentOrder)
         }
-        setAlert(<Alert severity="success" >Pedido registrado!</Alert>)
+        setAlert(<Alert severity="success">Pedido registrado!</Alert>)
         orderContext.setCurrentOrder(0)
     }
 
     const updateSales = async () => {
         await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
             sales: sales
-      }).then(res => console.log(res))
-      .catch(err => console.log(err.message))
-      clear()
+        }).then(res => console.log(res))
+            .catch(err => console.log(err.message))
+        clear()
     }
 
     const clear = () => {
         setSale({} as sale)
-        setCurrentOrder(undefined)
         setSaleIndex([])
         setSaleNumber(0)
         setTableNumber(0)
         setCostumerName('')
+        orderContext.setCurrentOrder(0)
         setAlert(<p></p>)
     }
 
@@ -171,16 +169,6 @@ const AddSaleScreen = () => {
         getItems()
     }, [])
 
-    useEffect(() => {
-        console.log("sale: ", sale)
-        console.log("sales: ", sales)
-        console.log("saleIndex: ", saleIndex)
-    }, [sale, saleIndex, sales])
-/* 
-    useEffect(() => {
-        getTotalValue()
-    }, [sales[saleIndex].orders]) */
-
     return (
         <>
             <div className='div' id='div1'>
@@ -190,6 +178,7 @@ const AddSaleScreen = () => {
                     label="Mesa"
                     variant="outlined"
                     size="small"
+                    autoComplete='false'
                     onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : e.target.value)}
                     value={tableNumber < 1 ? '' : tableNumber}
                     style={{ 'width': '105px' }}
@@ -201,6 +190,7 @@ const AddSaleScreen = () => {
                     label="Nome"
                     variant="outlined"
                     size="small"
+                    autoComplete='false'
                     onChange={(e: any) => setCostumerName(e.target.value)}
                     value={costumerName}
                     style={{ 'width': '105px' }}
@@ -212,6 +202,7 @@ const AddSaleScreen = () => {
                     label="Comanda"
                     variant="outlined"
                     size="small"
+                    autoComplete='false'
                     onChange={(e: any) => setSaleNumber(isNaN(e.target.value) ? 0 : e.target.value)}
                     value={saleNumber < 1 ? '' : saleNumber}
                     style={{ 'width': '105px' }}
@@ -247,20 +238,20 @@ const AddSaleScreen = () => {
                             {sales[saleIndex].numSale ? 'Comanda ' + sales[saleIndex].numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
                         {sales[saleIndex].orders && sales[saleIndex].orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
-                        <p className='mt-3 title is-5'> Total: {sales[saleIndex].totalValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</p>
+                        {sales[saleIndex].orders?.length > 0 && <p className='mt-3 title is-5'> Total: {sales[saleIndex].totalValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>}
                     </div>
                 }
 
                 {Array.isArray(sale) &&
                     <div>
-                        <SaleAccordion sale={sale} selectedSale={(selectedSale: sale) => setSale(selectedSale)} selectedIndex={getSelectedIndex}/>
+                        <SaleAccordion sale={sale} selectedSale={(selectedSale: sale) => setSale(selectedSale)} selectedIndex={getSelectedIndex} />
                     </div>
                 }
 
                 {alert}
 
                 <div className='btn-limpar-centered mt-5'>
-                <Button
+                    <Button
                         onClick={updateSales}
                         disabled={Array.isArray(sale) || !sale.numTable ? true : false}
                         text='Salvar'
@@ -272,5 +263,3 @@ const AddSaleScreen = () => {
         </>
     )
 }
-
-export default AddSaleScreen

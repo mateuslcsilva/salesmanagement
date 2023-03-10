@@ -6,7 +6,6 @@ import {  Alert, TextField } from '@mui/material'
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { Checkbox } from '@nextui-org/react'
 import { sale } from '../../types/sale/sale'
-import { salesList } from '../../assets/salesList'
 
 export const UpdateSaleScreen = () => {
 
@@ -19,9 +18,8 @@ export const UpdateSaleScreen = () => {
     const [selected, setSelected] = useState<string[]>([]);
     const [alert, setAlert] = useState(<p></p>)
     const [action, setAction] = useState(0)
-    const [sales, setSales] = useState(salesList)
 
-    const findTable = () => {
+    /* const findTable = () => {
         let currentSale: any = []
         sales.forEach((sale) => {
             if (sale.numTable == tableNumber) {
@@ -58,7 +56,7 @@ export const UpdateSaleScreen = () => {
         sale.numTable = newTableNumber
         clear()
         setAlert(<Alert severity="success" className='fading-out'>Pronto, mesa alterada!</Alert>)
-    }
+    } */
 
     const deleteItems = () => {
 /*         const selectedToNumber: any[] = selected.map(item => Number(item))
@@ -141,6 +139,7 @@ export const UpdateSaleScreen = () => {
                     label="Mesa"
                     variant="outlined"
                     size="small"
+                    autoComplete='false'
                     onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : e.target.value)}
                     value={tableNumber < 1 ? '' : tableNumber}
                     style={{ 'width': '105px' }}
@@ -152,6 +151,7 @@ export const UpdateSaleScreen = () => {
                     label="Nome"
                     variant="outlined"
                     size="small"
+                    autoComplete='false'
                     onChange={(e: any) => setCostumerName(e.target.value)}
                     value={costumerName}
                     style={{ 'width': '105px' }}
@@ -163,6 +163,7 @@ export const UpdateSaleScreen = () => {
                     label="Comanda"
                     variant="outlined"
                     size="small"
+                    autoComplete='false'
                     onChange={(e: any) => setSaleNumber(isNaN(e.target.value) ? 0 : e.target.value)}
                     value={saleNumber < 1 ? '' : saleNumber}
                     style={{ 'width': '105px' }}
@@ -173,7 +174,7 @@ export const UpdateSaleScreen = () => {
                 <Button
                     className='is-info ml-2 mb-5'
                     disabled={sale.numTable? true : false}
-                    onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)}
+                    /* onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)} */
                     text='Buscar'
                 />
 
@@ -255,6 +256,7 @@ export const UpdateSaleScreen = () => {
                                 label="Mesa"
                                 variant="outlined"
                                 size="small"
+                                autoComplete='false'
                                 onChange={(e: any) => setNewTableNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
                                 value={newTableNumber < 1 ? '' : newTableNumber}
                                 style={{ 'width': '105px' }}
@@ -263,7 +265,7 @@ export const UpdateSaleScreen = () => {
                             <Button
                                 className='is-info ml-2 mb-5'
                                 disabled={newTableNumber == 0 ? true : false}
-                                onClick={changeNumTable}
+                                /* onClick={changeNumTable} */
                                 text='Alterar'
                             />
                         </div>
@@ -283,6 +285,7 @@ export const UpdateSaleScreen = () => {
                                 label="Comanda"
                                 variant="outlined"
                                 size="small"
+                                autoComplete='false'
                                 onChange={(e: any) => setNewSaleNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
                                 value={newSaleNumber < 1 ? '' : newSaleNumber}
                                 style={{ 'width': '105px' }}

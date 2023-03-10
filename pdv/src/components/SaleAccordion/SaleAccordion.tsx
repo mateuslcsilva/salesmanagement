@@ -83,9 +83,11 @@ export default function SaleAccordion(props :any) {
             </Typography>
             <div className='is-flex is-justify-content-flex-end'>
             <Typography>
-              {!props.hiddeButton && <Button 
+              {
+              !props.hiddeButton && 
+              <Button 
               text={<i className="bi bi-box-arrow-up title is-4 has-text-white"></i>} 
-              className={'is-info'} 
+              className={'is-info mt-2'} 
               onClick={() => {
                 props.selectedSale(sale)
                 if(props.selectedIndex){

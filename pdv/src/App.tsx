@@ -10,33 +10,33 @@ function App() {
   const [theme, setTheme] = useState('lightThemed')
 
 
-    const localStorageManagement = () => {    
-      let storagedTheme = localStorage.getItem('theme') 
-    setTheme(storagedTheme? storagedTheme : 'lightThemed')
+  const localStorageManagement = () => {
+    let storagedTheme = localStorage.getItem('theme')
+    setTheme(storagedTheme ? storagedTheme : 'lightThemed')
   }
 
   useEffect(() => {
-    let storagedTheme = localStorage.getItem('theme') 
-    setTheme(storagedTheme? storagedTheme : 'lightThemed')
+    let storagedTheme = localStorage.getItem('theme')
+    setTheme(storagedTheme ? storagedTheme : 'lightThemed')
   }, [])
 
   return (
     <main className={theme}>
       <LoginScreen />
-      <Fab  
-      aria-label="add" 
-      className='mt-2 ml-2' 
-      onClick={theme == 'lightThemed' ? 
-      () => {setTheme('darkThemed'); localStorage.setItem('theme', 'darkThemed')} 
-      : 
-      () => {setTheme('lightThemed'); localStorage.setItem('theme', 'lightThemed')} }
+      <Fab
+        aria-label="add"
+        className='mt-2 ml-2'
+        onClick={theme == 'lightThemed' ?
+          () => { setTheme('darkThemed'); localStorage.setItem('theme', 'darkThemed') }
+          : //TERNARY ALERT!!!
+          () => { setTheme('lightThemed'); localStorage.setItem('theme', 'lightThemed') }}
       >
-      {
-      theme != 'lightThemed' ? 
-      <i className="bi bi-brightness-high title is-4 mt-5"></i> 
-      : 
-      <i className="bi bi-moon-fill"></i>
-      }
+        {
+          theme != 'lightThemed' ?
+            <i className="bi bi-brightness-high title is-4 mt-5"></i>
+            : //TERNARY ALERT!!!
+            <i className="bi bi-moon-fill"></i>
+        }
       </Fab>
 
       <section className='section'>
@@ -44,12 +44,7 @@ function App() {
           <NavBarButtons />
           <Outlet />
         </div>
-
-
-
       </section>
-
-
     </main>
   )
 }

@@ -5,10 +5,9 @@ import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
 import { Accordion, Alert, TextField } from '@mui/material'
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { sale } from '../../types/sale/sale'
-import { salesList } from '../../assets/salesList'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
-import { collection, collectionGroup, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore'
+import { doc, getDoc} from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 
 export const Extract = () => {

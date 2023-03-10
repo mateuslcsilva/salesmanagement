@@ -2,7 +2,8 @@ import React, { useContext, useState } from 'react'
 
 let initialUserObj = {
     id: '',
-    userName: ''
+    userName: '',
+    workplaceName: ''
 }
 
 type typeUserObj = typeof initialUserObj

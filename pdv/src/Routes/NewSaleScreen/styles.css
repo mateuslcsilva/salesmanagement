@@ -3,7 +3,6 @@
     width:80%;
     height: auto;
     overflow-y: visible;
-    animation: growin-up .1s ease-in-out;
 }
 
 .div > *{
@@ -23,26 +22,4 @@
     display: flex;
     justify-content: center; 
     gap: 15px;
-}
-
-.fading-out{
-    animation: fading-out 5.2s ease;
-}
-
-@keyframes fading-out {
-    from{
-        opacity: 1;
-    }
-    to{
-        opacity: 0;
-    }
-}
-
-@keyframes growin-up {
-    from{
-        height: 0;
-    }
-    to{
-        height: auto;
-    }
 }

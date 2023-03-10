@@ -8,7 +8,7 @@ import './styles.css'
 const ItemsListInput = (props: any) => {
     const AuthContext = useAuthContext()
     const orderContext = useOrderContext()
-    const [selectedItem, setSelectedItem] = useState<number>(1)
+    const [currentOrder, setCurrentOrder] = useState<string>()
     const [itemList, setItemList] = useState<itemType[]>([])
     const [currentUserId, setCurrentUserId] = useState<string>()
     const [itemListActive, setItemListActive] = useState<boolean>(false)
@@ -28,17 +28,16 @@ const ItemsListInput = (props: any) => {
     }
 
     const selectItem = (numItem: number) => {
-        setSelectedItem(numItem)
         orderContext.setCurrentOrder(numItem)
         setItemListActive(false)
     }
 
     const getItemText = (typeParam :string, value :number | undefined) => {
-        if(AuthContext.currentUser.id == '') return
-        if(value == undefined) return
+        if(AuthContext.currentUser.id == '') return 
+        if(value == undefined) return 
         if (typeParam == "numItem"){
             let index = itemList.findIndex(item => item.numItem == value)
-            if(index < 0) return
+            if(index < 0) return ""
             let text = (itemList[index]?.numItem < 10 ? '0' + itemList[index]?.numItem : itemList[index]?.numItem.toString()) + ' - ' + itemList[index]?.item + ' - ' +  itemList[index]?.itemValue.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})
             return text
         }
@@ -50,16 +49,16 @@ const ItemsListInput = (props: any) => {
     }
 
     useEffect(() => {
-        console.log(selectedItem)
-    }, [selectedItem])
-
-    useEffect(() => {
         setCurrentUserId(AuthContext.currentUser.id)
     }, [AuthContext.currentUser.id])
 
     useEffect(() => {
         getItems()
     }, [currentUserId])
+
+    useEffect(() => {
+        setCurrentOrder(getItemText("numItem", orderContext.currentOrder))
+    }, [orderContext.currentOrder])
 
     return (
         <section>
@@ -71,7 +70,7 @@ const ItemsListInput = (props: any) => {
                 placeholder={props.placeholder}
                 onChange={props.onChange}
                 onClick={() => setItemListActive(itemListActive => !itemListActive)}
-                value={getItemText("numItem", orderContext.currentOrder)}
+                value={currentOrder}
                 disabled={props.disabled}
             />
 
