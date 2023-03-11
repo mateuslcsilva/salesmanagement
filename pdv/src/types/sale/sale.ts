@@ -5,7 +5,7 @@ export interface sale {
     orders: number[],
     date: string,
     time: string,
-    paymentMethod: string,
+    paymentMethod: string | undefined,
     totalValue: number,
     loggedUser: string
 }

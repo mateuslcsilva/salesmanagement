@@ -6,17 +6,17 @@
   box-sizing: border-box;
 }
 
-main{
+.main{
   min-height: 150vh;
   max-height: auto;
   overflow-y: visible;
 }
 
-.lightThemed{
+.main.lightThemed{
   background-color: #f2f2f2;
 }
 
-.darkThemed{
+.main.darkThemed{
   background-color: #273050;
 }
 
@@ -53,4 +53,5 @@ input:disabled{
   align-items: center;
   background-color: #ffffff;
   min-height: fit-content;
+  z-index: 1;
 }

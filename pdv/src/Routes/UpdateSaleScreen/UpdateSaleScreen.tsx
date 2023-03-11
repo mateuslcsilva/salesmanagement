@@ -1,114 +1,240 @@
-import React, { ReactComponentElement, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './styles.css'
 import Button from '../../components/Button/Button'
-import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
-import {  Alert, TextField } from '@mui/material'
+import { Alert, TextField } from '@mui/material'
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { Checkbox } from '@nextui-org/react'
 import { sale } from '../../types/sale/sale'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { useAuthContext } from '../../utils/contexts/AuthProvider'
+import { useOrderContext } from '../../utils/contexts/OrderContext'
+import { db } from '../../utils/firebase/firebase'
+import { ConfirmationModal } from '../../components/ConfirmationModal/ConfirmationModal'
 
 export const UpdateSaleScreen = () => {
 
+    const [itemList, setItemList] = useState<itemType[]>([])
+    const [currentUserId, setCurrentUserId] = useState<string>()
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
     const [costumerName, setCostumerName] = useState('')
-    const [newTableNumber, setNewTableNumber] = useState(0)
-    const [newSaleNumber, setNewSaleNumber] = useState(0)
-    const [sale, setSale] = useState<sale>({} as sale)
-    const [selected, setSelected] = useState<string[]>([]);
+    const [saleIndex, setSaleIndex] = useState<number[] | number>()
+    const [sale, setSale] = useState<sale | sale[]>({} as sale)
     const [alert, setAlert] = useState(<p></p>)
+    const [sales, setSales] = useState([] as sale[])
+    const [selected, setSelected] = useState<Array<string> | undefined>([])
+    const [newTableNumber, setNewTableNumber] = useState<number>(0)
+    const [newSaleNumber, setNewSaleNumber] = useState<number>(0)
     const [action, setAction] = useState(0)
+    const [visible, setVisible] = useState(false);
+    const [permission, setPermission] = useState(false)
+    const AuthContext = useAuthContext()
 
-    /* const findTable = () => {
-        let currentSale: any = []
-        sales.forEach((sale) => {
-            if (sale.numTable == tableNumber) {
+    interface itemType {
+        numItem: number;
+        item: string;
+        itemValue: number
+    }
+
+    const handler = () => setVisible(true);
+    const closeHandler = () => setVisible(false);
+
+    const getItems = async () => {
+        if (AuthContext.currentUser.id == '') return false
+        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
+        let data = await getDoc(docRef)
+            .then(res => {
+                setItemList(res.data()?.items)
+                setSales(res.data()?.sales)
+            })
+    }
+
+    const getItemText = (typeParam: string, value: number | undefined) => {
+        if (AuthContext.currentUser.id == '') return
+        if (!value) return
+        if (typeParam == "numItem") {
+            let index = itemList.findIndex(item => item.numItem == value)
+            //@ts-ignore
+            let text = (itemList[index]?.numItem < 10 ? '0' + itemList[index]?.numItem : itemList[index]?.numItem.toString()) + ' - ' + itemList[index]?.item + ' ' + itemList[index]?.itemValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+            return text
+        }
+        if (!itemList[value]) return ''
+        if (typeParam == "index") {
+            //@ts-ignore
+            let text = (itemList[value]?.numItem < 10 ? '0' + itemList[value]?.numItem : itemList[value]?.numItem.toString()) + ' - ' + itemList[value]?.item + ' ' + itemList[value]?.itemValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+            return text
+        }
+    }
+
+    const getSelectedIndex = (index: number) => {
+        if (Array.isArray(saleIndex) && saleIndex[index]) return setSaleIndex(saleIndex[index])
+        window.alert("Erro ao obter venda.")
+    }
+
+    const findTable = () => {
+        let salesIndex: number[] = []
+        sales.forEach((item: sale, index: number) => {
+            if (item.numTable == tableNumber) {
+                salesIndex.push(index)
+            }
+        })
+        setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
+        let currentSale: sale[] = []
+        sales.forEach((sale: sale, index: number) => {
+            if (salesIndex.includes(index)) {
                 currentSale.push(sale)
             }
         })
-        setSale(currentSale.length == 1 ? (sale: sale) => ({ ...sale, ...currentSale[0] }) : currentSale)
-        setAlert(<p></p>)
+        if(salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+
+        setSale(currentSale.length == 1 ? { ...sale, ...currentSale[0] } : currentSale)
     }
 
     const findSale = () => {
-        let currentSale: any
-        sales.forEach((sale) => {
-            if (sale.numSale == saleNumber) {
-                currentSale = sale
+        let salesIndex: any = []
+        sales.forEach((item: sale, index: number) => {
+            if (item.numSale == saleNumber) {
+                salesIndex.push(index)
             }
         })
-        setSale((sale: sale) => ({ ...sale, ...currentSale }))
-        setAlert(<p></p>)
+
+        if (salesIndex.length == 1) salesIndex = salesIndex[0]
+        if(salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+        if (Array.isArray(salesIndex)) return window.alert("Ocorreu um erro, por favor contate o desenvolvedor!")
+
+        setSaleIndex(salesIndex)
+        setSale(sales[salesIndex])
     }
 
     const findCostumer = () => {
-        let currentCostumer: any = []
-        sales.forEach((sale) => {
-            if (sale.costumerName.toLowerCase() == costumerName.toLowerCase()) {
-                currentCostumer.push(sale)
+        let salesIndex: number[] = []
+        sales.forEach((item: sale, index: number) => {
+            if (item.costumerName?.toLowerCase().trim() == costumerName?.toLowerCase().trim()) {
+                salesIndex.push(index)
             }
         })
-        setSale(currentCostumer.length == 1 ? (sale: sale) => ({ ...sale, ...currentCostumer[0] }) : currentCostumer)
-        setAlert(<p></p>)
+        if(salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+        setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
+        let currentSale: sale[] = []
+        sales.forEach((sale: sale, index: number) => {
+            if (salesIndex.includes(index)) {
+                currentSale.push(sale)
+            }
+        })
+        setSale(currentSale.length == 1 ? currentSale[0] : currentSale)
     }
 
-    const changeNumTable = () => {
-        sale.numTable = newTableNumber
-        clear()
-        setAlert(<Alert severity="success" className='fading-out'>Pronto, mesa alterada!</Alert>)
-    } */
-
     const deleteItems = () => {
-/*         const selectedToNumber: any[] = selected.map(item => Number(item))
-        selectedToNumber.reverse()
-        let deletedItems :string[] = []
-        selectedToNumber.forEach((item) => {
-            let deletedItem = sale.orders.splice(item, 1)
-            deletedItems = [...deletedItems, ...deletedItem]
-        })
-        clear()
-        setAlert(<Alert severity="success" className='fading-out'>Pronto, pedidos excluídos!</Alert>)
-        return deletedItems */
-        return
+        let selectedItems = selected?.map(item => Number(item))
+        if (typeof saleIndex == "number") {
+            selectedItems?.forEach((item) => {
+                sales[saleIndex].orders.splice(item, 1)
+            })
+            let totalValue = 0
+            sales[saleIndex].orders?.map(order => {
+                let item = itemList.find(item => item.numItem == order)
+                if (item) totalValue += Number(item.itemValue)
+            })
+            sales[saleIndex].totalValue = totalValue
+            updateSales()
+            clear()
+            setAlert(<Alert severity="success">Pronto, pedidos excluídos!</Alert>)
+        }
     }
 
     const transferringOrders = () => {
-        /* const deletedItems = deleteItems()
-        const currentSale = sales.find(sale => sale.numSale == newSaleNumber)
-        if(currentSale) {
-            currentSale.orders = [...currentSale?.orders, ...deletedItems]
-            setSale((sale: sale) => ({ ...sale, ...currentSale}))
-            console.log(currentSale)
-        } else{
+        if (selected == undefined || typeof saleIndex != "number") return
+        if (selected.length == sales[saleIndex].orders.length) {
+            let confirm = window.confirm("Isso irá excluir a comanda, clique confirmar para continuar.")
+            if (!confirm) return
+        }
+        const selectedItems = selected?.map(order => Number(order))
+        const currentSale = sales.findIndex(sale => sale.numSale == newSaleNumber)
+        let deletedItems = sales[saleIndex].orders.filter((order: number, index: number) => selectedItems.includes(index))
+        console.log("deleted items", deletedItems)
+
+        selectedItems?.sort().reverse().forEach((item) => {
+            sales[saleIndex].orders.splice(item, 1)
+        })
+        let totalValue = 0
+        sales[saleIndex].orders?.map(order => {
+            let item = itemList.find(item => item.numItem == order)
+            if (item) totalValue += Number(item.itemValue)
+        })
+        sales[saleIndex].totalValue = totalValue
+
+        if (sales[saleIndex].orders.length == 0) sales.splice(saleIndex, 1)
+
+        if (currentSale > 0) {
+
+            sales[currentSale].orders = [...sales[currentSale]?.orders, ...deletedItems]
+            let totalValueCurrentSale = 0
+            sales[currentSale].orders?.map(order => {
+                let item = itemList.find(item => item.numItem == order)
+                if (item) totalValueCurrentSale += Number(item.itemValue)
+            })
+            sales[currentSale].totalValue = totalValueCurrentSale
+        } else {
             let current = new Date
             let currentDay = current.getDate().toString().length < 2 ? '0' + current.getDate() : current.getDate()
             let currentMonth = current.getMonth().toString().length < 2 ? '0' + (current.getMonth() + 1) : (current.getMonth() + 1)
             let currentDate = currentDay + '/' + currentMonth + '/' + current.getFullYear()
-            let currentTime = current.getHours() + ':' + current.getMinutes()
-            let updatedSale = {
-                numTable: 0,
+            let currentTime = current.getHours() + ':' + (current.getMinutes() < 10 ? "0" + current.getMinutes() : current.getMinutes())
+            const updatedSale = {
+                numTable: "Não informado",
                 numSale: newSaleNumber,
-                costumerName: '',
                 orders: deletedItems,
+                costumerName: "Não informado",
                 date: currentDate,
-                time: currentTime
+                time: currentTime,
+                loggedUser: AuthContext.currentUser.userName,
+                totalValue: 0
             }
-            setSale(sale => ({ ...sale, ...updatedSale }))
-            console.log(updatedSale)
+            let totalValue = 0
+            updatedSale.orders?.map(order => {
+                let item = itemList.find(item => item.numItem == order)
+                if (item) totalValue += Number(item.itemValue)
+            })
+            updatedSale.totalValue = totalValue
+            //@ts-ignore
+            sales.push(updatedSale)
         }
+        updateSales()
         clear()
-        setAlert(<Alert severity="success" className='fading-out'>Pronto, pedidos transferidos!</Alert>) */
+        setAlert(<Alert severity="success">Pronto, pedidos transferidos!</Alert>)
+    }
+
+    const changeNumTable = () => {
+        if (typeof saleIndex == "number") sales[saleIndex].numTable = newTableNumber
+        updateSales()
+        clear()
+        setAlert(<Alert severity="success">Pronto, número da mesa alterada!</Alert>)
+    }
+
+    const deleteSale = () => {
+        let confirm = window.confirm("Deseja realmente excluir a comanda?")
+        if (!confirm || typeof saleIndex != "number") return
+        sales.splice(saleIndex, 1)
+        updateSales()
+        clear()
+        setAlert(<Alert severity="success">Pronto, comanda excluída!</Alert>)
+    }
+
+    const updateSales = async () => {
+        await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
+            sales: sales
+        }).then(res => console.log(res))
+            .catch(err => console.log(err.message))
+        clear()
     }
 
     const clear = () => {
         setSale({} as sale)
+        setSaleIndex([])
+        setAction(0)
         setSaleNumber(0)
         setTableNumber(0)
         setCostumerName('')
-        setAlert(<p></p>)
-        setNewTableNumber(0)
-        setNewSaleNumber(0)
-        setAction(0)
         setSelected([])
     }
 
@@ -120,19 +246,47 @@ export const UpdateSaleScreen = () => {
         return () => clearTimeout(clearAlert)
     })
 
-   useEffect(() => {
-            console.log(sale)
-        }, [sale])
-        
     useEffect(() => {
-        console.log(newSaleNumber)
-    }, [newSaleNumber])
+        setCurrentUserId(AuthContext.currentUser.id)
+    }, [AuthContext.currentUser.id])
+
+    useEffect(() => {
+        getItems()
+    }, [])
+
+    useEffect(() => {
+        if(!permission) return
+        switch (action) {
+            case 0:
+                deleteSale()
+                break
+            case 1:
+                deleteItems()
+                break
+            case 2:
+                changeNumTable()
+                break
+            case 3:
+                transferringOrders()
+                break
+        }
+    }, [permission])
+
+    useEffect(() => {
+        console.log("sales: ", sales)
+        console.log("sale: ", sale)
+        console.log("saleIndex: ", saleIndex)
+        console.log("selected: ", selected)
+        console.log("permission: ", permission)
+    }, [sale, saleIndex, sales, selected, permission])
+
 
 
 
     return (
         <>
             <div className='div' id='div1'>
+                <ConfirmationModal handler={handler} closeHandler={closeHandler} visible={visible} setPermission={setPermission} setAlert={setAlert} />
                 <h3 className='title is-3 mt-3'>ALTERAR PEDIDO</h3>
                 <TextField
                     id="outlined-basic"
@@ -140,10 +294,11 @@ export const UpdateSaleScreen = () => {
                     variant="outlined"
                     size="small"
                     autoComplete='off'
+                    disabled={Array.isArray(sale) || sale.numSale ? true : false}
                     onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : e.target.value)}
                     value={tableNumber < 1 ? '' : tableNumber}
                     style={{ 'width': '105px' }}
-                    className='mr-2'
+                    className='mr-2 mb-5'
                 />
 
                 <TextField
@@ -152,6 +307,7 @@ export const UpdateSaleScreen = () => {
                     variant="outlined"
                     size="small"
                     autoComplete='off'
+                    disabled={Array.isArray(sale) || sale.numSale ? true : false}
                     onChange={(e: any) => setCostumerName(e.target.value)}
                     value={costumerName}
                     style={{ 'width': '105px' }}
@@ -164,6 +320,7 @@ export const UpdateSaleScreen = () => {
                     variant="outlined"
                     size="small"
                     autoComplete='off'
+                    disabled={Array.isArray(sale) || sale.numSale ? true : false}
                     onChange={(e: any) => setSaleNumber(isNaN(e.target.value) ? 0 : e.target.value)}
                     value={saleNumber < 1 ? '' : saleNumber}
                     style={{ 'width': '105px' }}
@@ -172,9 +329,9 @@ export const UpdateSaleScreen = () => {
                 />
 
                 <Button
-                    className='is-info ml-2 mb-5'
-                    disabled={sale.numTable? true : false}
-                    /* onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)} */
+                    className='is-info ml-2'
+                    disabled={Array.isArray(sale) || sale.numSale ? true : false}
+                    onClick={saleNumber ? findSale : (tableNumber ? findTable : findCostumer)}
                     text='Buscar'
                 />
 
@@ -182,20 +339,21 @@ export const UpdateSaleScreen = () => {
                 {alert}
 
                 {
-                    ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && !Array.isArray(sale)) &&
-                    <div className='saleInfo mb-3'>
+                    ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && (typeof saleIndex == "number")) &&
+                    <div className='saleInfo mb-3 mt-5'>
                         <p className='title is-5'>
-                            {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
-                            {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
-                            {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
+                            {sales[saleIndex].numTable ? 'Mesa: ' + sales[saleIndex].numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
+                            {sales[saleIndex].costumerName ? 'Cliente: ' + sales[saleIndex].costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
+                            {sales[saleIndex].numSale ? 'Comanda ' + sales[saleIndex].numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                        {/* {sale.orders && sale.orders.map((item: string, index :number) => <p key={index}>{item}</p>)} */}
+                        {sales[saleIndex].orders && sales[saleIndex].orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
+                        {sales[saleIndex].orders?.length > 0 && <p className='mt-3 title is-5'> Total: {sales[saleIndex].totalValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>}
                     </div>
                 }
 
                 {Array.isArray(sale) &&
                     <div>
-                        <SaleAccordion sale={sale} selectedSale={(selectedSale: sale) => setSale((sale: sale) => ({ ...sale, ...selectedSale }))} />
+                        <SaleAccordion sale={sale} selectedSale={(selectedSale: sale) => setSale(selectedSale)} selectedIndex={getSelectedIndex} />
                     </div>
                 }
 
@@ -204,26 +362,26 @@ export const UpdateSaleScreen = () => {
                         onClick={() => setAction(1)}
                         className='is-info mt-5 mb-5'
                         text='Excluir Pedido'
-                        disabled={!sale.numTable|| Array.isArray(sale) || action != 0 ? true : false}
+                        disabled={saleIndex == undefined || Array.isArray(saleIndex) ? true : false}
                     />
                     <Button
                         onClick={() => setAction(2)}
                         className='is-info mt-5 mb-5'
                         text='Mudar Mesa'
-                        disabled={!sale.numTable|| Array.isArray(sale) || action != 0 ? true : false}
+                        disabled={saleIndex == undefined || Array.isArray(saleIndex) ? true : false}
                     />
                     <Button
                         onClick={() => setAction(3)}
                         className='is-info mt-5 mb-5'
                         text='Migrar Pedidos'
-                        disabled={!sale.numTable|| Array.isArray(sale) || action != 0 ? true : false}
+                        disabled={saleIndex == undefined || Array.isArray(saleIndex) ? true : false}
                     />
 
                     <Button
-                        onClick={() => setAction(4)}
+                        onClick={handler}
                         className='is-info mt-5 mb-5'
                         text='Excluir Comanda'
-                        disabled={!sale.numTable|| Array.isArray(sale) || action != 0 ? true : false}
+                        disabled={saleIndex == undefined || Array.isArray(saleIndex) ? true : false}
                     />
                 </div>
 
@@ -237,13 +395,14 @@ export const UpdateSaleScreen = () => {
                                 value={selected}
                                 onChange={setSelected}
                             >
-                                {/* {sale.orders.map((order: string, index: number) => <Checkbox value={index.toString()} className={selected.includes(index.toString()) ? 'strike' : ''}>{order}</Checkbox>)} */}
+                                {/* @ts-ignore */}
+                                {sales[saleIndex].orders.map((order: number, index: number) => <Checkbox value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
                             </Checkbox.Group>
                             <div className='is-flex is-justify-content-flex-end mt-5 mb-5'>
                                 <Button
                                     className='is-danger ml-2 mb-5'
-                                    disabled={selected.length < 1 ? true : false}
-                                    onClick={deleteItems}
+                                    disabled={selected == undefined || selected.length < 1 ? true : false}
+                                    onClick={handler}
                                     text='Excluir pedido'
                                 />
                             </div>
@@ -265,44 +424,47 @@ export const UpdateSaleScreen = () => {
                             <Button
                                 className='is-info ml-2 mb-5'
                                 disabled={newTableNumber == 0 ? true : false}
-                                /* onClick={changeNumTable} */
+                                onClick={handler}
                                 text='Alterar'
                             />
-                        </div> 
+                        </div>
                     }
                     {action == 3 &&
-                        <div className='is-flex is-justify-content-center mb-5 mt-5'>
+                        <div className='is-flex is-justify-content-space-around mb-5 mt-5'>
                             <Checkbox.Group
-                                label="Selecione o pedido a ser excluído:"
+                                label="Selecione o pedido a ser transferido:"
                                 color="error"
                                 value={selected}
                                 onChange={setSelected}
                             >
-                                {/* {sale.orders.map((order: string, index: number) => <Checkbox value={index.toString()} className={selected.includes(index.toString()) ? 'strike' : ''}>{order}</Checkbox>)} */}
+                                {/* @ts-ignore */}
+                                {sales[saleIndex].orders.map((order: number, index: number) => <Checkbox value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
                             </Checkbox.Group>
-                            <TextField
-                                id="outlined-basic"
-                                label="Comanda"
-                                variant="outlined"
-                                size="small"
-                                autoComplete='off'
-                                onChange={(e: any) => setNewSaleNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
-                                value={newSaleNumber < 1 ? '' : newSaleNumber}
-                                style={{ 'width': '105px' }}
-                                className='mr-2'
-                            />
-                            <Button
-                                className='is-info ml-2 mb-5'
-                                disabled={newSaleNumber == 0 || selected.length < 1 ? true : false}
-                                onClick={transferringOrders}
-                                text='Transferir pedidos'
-                            />
+                            <div>
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Comanda"
+                                    variant="outlined"
+                                    size="small"
+                                    autoComplete='off'
+                                    onChange={(e: any) => setNewSaleNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
+                                    value={newSaleNumber < 1 ? '' : newSaleNumber}
+                                    style={{ 'width': '105px' }}
+                                    className='mr-2'
+                                />
+                                <Button
+                                    className='is-info ml-2 mb-5'
+                                    disabled={newSaleNumber == 0 || selected == undefined || selected.length < 1 ? true : false}
+                                    onClick={handler}
+                                    text='Transferir pedidos'
+                                />
+                            </div>
                         </div>
                     }
                 </div>
 
                 <div className='btn-limpar-centered mt-5'>
-                    <Button onClick={clear} disabled={(sale.numTable == 0 || Array.isArray(sale)) ? true : false} text='Limpar' />
+                    <Button onClick={clear} disabled={saleIndex == undefined ? true : false} text='Limpar' />
                 </div>
             </div>
         </>

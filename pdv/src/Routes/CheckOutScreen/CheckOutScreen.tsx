@@ -66,26 +66,21 @@ export const CheckOutScreen = () => {
         }
     }
 
-    const getSelectedIndex = (index: number) => {
-        if (Array.isArray(saleIndex) && saleIndex[index]) return setSaleIndex(saleIndex[index])
-        window.alert("Erro ao obter venda.")
-    }
-
     const findTable = () => {
         let currentSale = sales.filter(sale => sale.numTable == tableNumber)
-        if (currentSale.length < 1) return window.alert("Ocorreu um erro, tente recarregar a página!")
+        if (currentSale.length < 1) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
         setSale(currentSale.length == 1 ? currentSale[0] : currentSale)
     }
 
     const findSale = () => {
         let currentSale = sales.filter(sale => sale.numSale == saleNumber)
-        if (currentSale.length < 1) return window.alert("Ocorreu um erro, tente recarregar a página!")
+        if (currentSale.length < 1) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
         setSale(currentSale[0])
     }
 
     const findCostumer = () => {
-        let currentSale = sales.filter(sale => sale.costumerName?.toLocaleLowerCase() == costumerName.toLocaleLowerCase())
-        if (currentSale.length < 1) return window.alert("Ocorreu um erro, tente recarregar a página!")
+        let currentSale = sales.filter(sale => sale.costumerName?.toLocaleLowerCase().trim() == costumerName.toLocaleLowerCase().trim())
+        if (currentSale.length < 1) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
         setSale(currentSale.length == 1 ? currentSale[0] : currentSale)
     }
 

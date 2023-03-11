@@ -4,10 +4,11 @@ import './App.css'
 import NavBarButtons from '../src/Routes/NavBarButtons/NavBarButtons'
 import { LoginScreen } from '../src/Routes/LoginScreen/LoginScreen'
 import { Fab, ThemeProvider } from '@mui/material'
+import { SideBar } from './components/SideBar/SideBar'
 
 function App() {
-
   const [theme, setTheme] = useState('lightThemed')
+  const [sideBar, setSideBar] = useState(false)
 
 
   const localStorageManagement = () => {
@@ -21,9 +22,9 @@ function App() {
   }, [])
 
   return (
-    <main className={theme}>
+    <main className={`main ${theme}`}>
       <LoginScreen />
-      <Fab
+      {/* <Fab
         aria-label="add"
         className='mt-2 ml-2'
         onClick={theme == 'lightThemed' ?
@@ -37,7 +38,9 @@ function App() {
             : //TERNARY ALERT!!!
             <i className="bi bi-moon-fill"></i>
         }
-      </Fab>
+      </Fab> */}
+
+      <SideBar setSideBar={setSideBar} />
 
       <section className='section'>
         <div className='divContainer'>

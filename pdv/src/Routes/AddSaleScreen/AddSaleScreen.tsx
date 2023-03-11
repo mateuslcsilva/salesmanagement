@@ -70,6 +70,7 @@ export const AddSaleScreen = () => {
                 salesIndex.push(index)
             }
         })
+        if(salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
         setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
         let currentSale: sale[] = []
         sales.forEach((sale: sale, index: number) => {
@@ -77,7 +78,6 @@ export const AddSaleScreen = () => {
                 currentSale.push(sale)
             }
         })
-        console.log("currentSale: ", currentSale)
 
         setSale(currentSale.length == 1 ? { ...sale, ...currentSale[0] } : currentSale)
     }
@@ -92,7 +92,7 @@ export const AddSaleScreen = () => {
         })
 
         if (salesIndex.length == 1) salesIndex = salesIndex[0]
-
+        if(salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
         if (Array.isArray(salesIndex)) return window.alert("Ocorreu um erro, por favor contate o desenvolvedor!")
 
         setSaleIndex(salesIndex)
@@ -104,10 +104,11 @@ export const AddSaleScreen = () => {
 
         let salesIndex: number[] = []
         sales.forEach((item: sale, index: number) => {
-            if (item.costumerName?.toLowerCase() == costumerName?.toLowerCase()) {
+            if (item.costumerName?.toLocaleLowerCase().trim() == costumerName?.toLocaleLowerCase().trim()) {
                 salesIndex.push(index)
             }
         })
+        if(salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
         setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
         let currentSale: sale[] = []
         sales.forEach((sale: sale, index: number) => {

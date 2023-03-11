@@ -80,6 +80,7 @@ export const LoginScreen = () => {
           username: signUpValues.username.toLowerCase(),
           email: signUpValues.email.toLowerCase(),
           password: signUpValues.password,
+          userType: "master"
         }],
         items: [],
         sales: [],
