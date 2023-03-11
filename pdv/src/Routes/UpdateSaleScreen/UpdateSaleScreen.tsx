@@ -268,7 +268,7 @@ export const UpdateSaleScreen = () => {
                                 /* onClick={changeNumTable} */
                                 text='Alterar'
                             />
-                        </div>
+                        </div> 
                     }
                     {action == 3 &&
                         <div className='is-flex is-justify-content-center mb-5 mt-5'>
