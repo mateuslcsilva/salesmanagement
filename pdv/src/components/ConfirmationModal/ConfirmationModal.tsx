@@ -38,6 +38,7 @@ export const ConfirmationModal = (props :propsType) =>  {
             }
         })
         props.closeHandler()
+        setPassword("")
     }
 
 

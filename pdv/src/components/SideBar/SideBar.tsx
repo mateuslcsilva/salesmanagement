@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import "./styles.css"
 import logo from '../../assets/fav-icon.png'
+import { useAuthContext } from '../../utils/contexts/AuthProvider'
 
 export const SideBar = (props: any) => {
     const [open, setOpen] = useState(false)
+    const AuthContext = useAuthContext()
 
     const handleSideBar = () => {
         setOpen(!open)
-        props.setSideBar(open)
+        props.setSideBar(!open)
     }
 
     return (
@@ -20,7 +22,7 @@ export const SideBar = (props: any) => {
                         </span>
                         <div className="div text header-text">
                             <span className="name">Simpls Software</span>
-                            <span className="profession">Software de Gestão</span>
+                            <span className="profession">{AuthContext.currentUser.userName}</span>
                         </div>
                     </div>
                     <span className=" toggle" onClick={handleSideBar}>
@@ -48,27 +50,27 @@ export const SideBar = (props: any) => {
                             </li>
                             <li className="nav-link">
                                 <a href="#">
-                                    <i className="bi bi-wallet2"></i>
-                                    <span className="text nav-text">Fluxo de Caixa</span>
-                                </a>
-                            </li>
-                            <li className="nav-link">
-                                <a href="#">
-                                    <i className="bi bi-bar-chart"></i>
-                                    <span className="text nav-text">Relatórios de Venda</span>
-                                </a>
-                            </li>
-                            <li className="nav-link">
-                                <a href="#">
                                     <i className="bi bi-clipboard-data"></i>
                                     <span className="text nav-text">Dashboards</span>
+                                </a>
+                            </li>
+                            <li className="nav-link">
+                                <a href="#">
+                                <i className="bi bi-people"></i>
+                                    <span className="text nav-text">Gerenciar Usuários</span>
+                                </a>
+                            </li>
+                            <li className="nav-link">
+                                <a href="#">
+                                <i className="bi bi-pencil-square"></i>
+                                    <span className="text nav-text">Gerenciar Itens</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                     <div className="bottom-content">
                         <hr />
-                        <li className="mode">
+                        <li className="mode" onClick={props.setTheme()}>
                             <div className="moon-sun">
                                 <i className="bi bi-moon moon"></i>
                                 <i className="bi bi-brightness-high sun"></i>

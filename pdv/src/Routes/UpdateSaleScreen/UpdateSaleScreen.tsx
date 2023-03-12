@@ -146,33 +146,36 @@ export const UpdateSaleScreen = () => {
         if (selected == undefined || typeof saleIndex != "number") return
         if (selected.length == sales[saleIndex].orders.length) {
             let confirm = window.confirm("Isso irá excluir a comanda, clique confirmar para continuar.")
-            if (!confirm) return
+            if (!confirm) return setPermission(false)
         }
         const selectedItems = selected?.map(order => Number(order))
         const currentSale = sales.findIndex(sale => sale.numSale == newSaleNumber)
         let deletedItems = sales[saleIndex].orders.filter((order: number, index: number) => selectedItems.includes(index))
-        console.log("deleted items", deletedItems)
 
         selectedItems?.sort().reverse().forEach((item) => {
             sales[saleIndex].orders.splice(item, 1)
         })
         let totalValue = 0
+        console.log("here")
         sales[saleIndex].orders?.map(order => {
             let item = itemList.find(item => item.numItem == order)
             if (item) totalValue += Number(item.itemValue)
         })
         sales[saleIndex].totalValue = totalValue
 
-        if (sales[saleIndex].orders.length == 0) sales.splice(saleIndex, 1)
+        console.log("here")
+        console.log(currentSale)
 
         if (currentSale > 0) {
 
+            console.log(currentSale, sales[currentSale], sales[currentSale]?.orders, deletedItems)
             sales[currentSale].orders = [...sales[currentSale]?.orders, ...deletedItems]
             let totalValueCurrentSale = 0
             sales[currentSale].orders?.map(order => {
                 let item = itemList.find(item => item.numItem == order)
                 if (item) totalValueCurrentSale += Number(item.itemValue)
             })
+            console.log("here")
             sales[currentSale].totalValue = totalValueCurrentSale
         } else {
             let current = new Date
@@ -190,6 +193,7 @@ export const UpdateSaleScreen = () => {
                 loggedUser: AuthContext.currentUser.userName,
                 totalValue: 0
             }
+            console.log("here")
             let totalValue = 0
             updatedSale.orders?.map(order => {
                 let item = itemList.find(item => item.numItem == order)
@@ -199,6 +203,7 @@ export const UpdateSaleScreen = () => {
             //@ts-ignore
             sales.push(updatedSale)
         }
+        if (sales[saleIndex].orders.length == 0) sales.splice(saleIndex, 1)
         updateSales()
         clear()
         setAlert(<Alert severity="success">Pronto, pedidos transferidos!</Alert>)
@@ -271,17 +276,6 @@ export const UpdateSaleScreen = () => {
                 break
         }
     }, [permission])
-
-    useEffect(() => {
-        console.log("sales: ", sales)
-        console.log("sale: ", sale)
-        console.log("saleIndex: ", saleIndex)
-        console.log("selected: ", selected)
-        console.log("permission: ", permission)
-    }, [sale, saleIndex, sales, selected, permission])
-
-
-
 
     return (
         <>

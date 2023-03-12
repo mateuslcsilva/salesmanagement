@@ -1,20 +1,20 @@
 .btns{
     width: 100%;
-    padding: -20px;
+    padding: -20px -40px;
     margin: -2.1%;
     transform: translateX(-2.12%);
     white-space: nowrap;
     background: rgb(62,142,208);
-    background: linear-gradient(180deg, rgba(62,142,208,1) 63%, rgba(255,255,255,1) 100%);
+    background: linear-gradient(180deg, rgba(62,142,208,1) 63%, var(--div-color) 100%);
     border-radius: 10px 10px 0 0 ;
 }
 
 .btnselect{
     width: 20.913%;
-    padding: 12px 24px !important;
+    padding: 12px !important;
     white-space: nowrap;
     background-color: #3e8ed0;
-    margin-right: -1px;
+    margin-right: -1.2px;
     border: none;
     font: 600 12pt white;
     color: white;
@@ -27,6 +27,11 @@
     color: #3e8ed0;
     border: none;
     border-radius: 10px 10px 0 0 ; 
+}
+
+.main.darkThemed .btnselect.active{
+    transition: 0.4s ease;
+    background: var(--div-color);
 }
 
 .rounded-right{

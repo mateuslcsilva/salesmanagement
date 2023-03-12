@@ -10,7 +10,7 @@
     /* ====> COLORS <==== */
     --body-color: #e4e9f7;
     --sidebar-color: #fff;
-    --primary-color: #695cfe;
+    --primary-color: #3488ce;
     --primary-color-light: #f6f5ff;
     --toggle-color: #ddd;
     --text-color: #707070;
@@ -22,10 +22,6 @@
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
   }
-
-  section{
-    z-index: 99;
-  }
   
   nav {
     height: 100vh;
@@ -34,7 +30,7 @@
     z-index: 1;
   }
   
-  nav.dark {
+  .main.darkThemed nav {
     --body-color: #18191a;
     --sidebar-color: #242526;
     --primary-color: #3a3b3c;
@@ -210,7 +206,7 @@
   }
   
   .sidebar .menu-bar {
-    height: calc(100% - 50px);
+    height: calc(100% - 130px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -251,11 +247,11 @@
     opacity: 1;
   }
   
-  body.dark .menu-bar .mode i.sun {
+  .main.darkThemed .menu-bar .mode i.sun {
     opacity: 1;
   }
   
-  body.dark .menu-bar .mode i.moon {
+  .main.darkThemed .menu-bar .mode i.moon {
     opacity: 0;
   }
   
@@ -292,13 +288,17 @@
     transition: var(--tran-02);
   }
   
-  body.dark .switch::before {
+  .main.darkThemed .switch::before {
     left: 23px;
   }
   
   @media (max-width: 1400px) {
     .sidebar li {
       margin-top: 10px;
+    }
+
+    .sidebar .menu-bar {
+      height: calc(100% - 105px);
     }
   }
   

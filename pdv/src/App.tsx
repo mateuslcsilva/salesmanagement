@@ -7,47 +7,35 @@ import { Fab, ThemeProvider } from '@mui/material'
 import { SideBar } from './components/SideBar/SideBar'
 
 function App() {
-  const [theme, setTheme] = useState('lightThemed')
+  const [darkTheme, setDarkTheme] = useState(true)
   const [sideBar, setSideBar] = useState(false)
 
 
   const localStorageManagement = () => {
     let storagedTheme = localStorage.getItem('theme')
-    setTheme(storagedTheme ? storagedTheme : 'lightThemed')
+    if(storagedTheme) setDarkTheme(true) 
+  }
+
+  const setTheme = () => {
+    console.log("here")
+    setDarkTheme(theme => !theme)
   }
 
   useEffect(() => {
-    let storagedTheme = localStorage.getItem('theme')
-    setTheme(storagedTheme ? storagedTheme : 'lightThemed')
+    localStorageManagement()
   }, [])
 
   return (
-    <main className={`main ${theme}`}>
+    <main className={`main ${darkTheme ? 'darkThemed' : 'lightThemed'}`}>
       <LoginScreen />
-      {/* <Fab
-        aria-label="add"
-        className='mt-2 ml-2'
-        onClick={theme == 'lightThemed' ?
-          () => { setTheme('darkThemed'); localStorage.setItem('theme', 'darkThemed') }
-          : //TERNARY ALERT!!!
-          () => { setTheme('lightThemed'); localStorage.setItem('theme', 'lightThemed') }}
-      >
-        {
-          theme != 'lightThemed' ?
-            <i className="bi bi-brightness-high title is-4 mt-5"></i>
-            : //TERNARY ALERT!!!
-            <i className="bi bi-moon-fill"></i>
-        }
-      </Fab> */}
+      <SideBar setSideBar={setSideBar} theme={darkTheme} setTheme={() => setTheme} />
 
-      <SideBar setSideBar={setSideBar} />
-
-      <section className='section'>
-        <div className='divContainer'>
+      <div className='section'>
+        <div className={sideBar == true ? "divContainer side-bar" : "divContainer"}>
           <NavBarButtons />
           <Outlet />
         </div>
-      </section>
+      </div>
     </main>
   )
 }

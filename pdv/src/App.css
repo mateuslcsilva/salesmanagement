@@ -6,18 +6,22 @@
   box-sizing: border-box;
 }
 
+:root{
+  --body-color: #f2f2f2;
+  --div-color: #FFF;
+}
+
 .main{
   min-height: 150vh;
   max-height: auto;
   overflow-y: visible;
-}
-
-.main.lightThemed{
-  background-color: #f2f2f2;
+  background-color: var(--body-color);
+  transition: 0.4s ease;
 }
 
 .main.darkThemed{
-  background-color: #273050;
+  --body-color: #18191a;
+  --div-color: #d2d2d2;
 }
 
 input:disabled{
@@ -51,7 +55,15 @@ input:disabled{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff;
+  background-color: var(--div-color);
   min-height: fit-content;
   z-index: 1;
+  transition: 0.4s ease;
+}
+
+.divContainer.side-bar{
+  width: 65vw !important;
+  margin-left: 270px !important;
+  padding: 2.6vh;
+  transition: 0.4s ease;
 }

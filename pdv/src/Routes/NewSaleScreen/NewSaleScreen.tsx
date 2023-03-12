@@ -60,19 +60,19 @@ export const NewSaleScreen = () => {
         console.log(AuthContext.currentUser.id)
         if (saleNumber == 0) return false
 
-        let alert = ""
+        let alert = <p></p>
         await getDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`))
             .then(res => {
                 let sales = res.data()?.sales
                 if (sales) {
                     sales.forEach((sale: sale) => {
                         if (sale.numSale == saleNumber) {
-                            alert = "Essa comanda já está em uso!"
+                            alert = <Alert severity="warning">Essa comanda já está em uso!</Alert>
                         }
                     })
                 }
             })
-        if (alert) return window.alert(alert)
+        if (alert) return setAlert(alert)
         let current = new Date
         let currentDay = current.getDate().toString().length < 2 ? '0' + current.getDate() : current.getDate()
         let currentMonth = current.getMonth().toString().length < 2 ? '0' + (current.getMonth() + 1) : (current.getMonth() + 1)
