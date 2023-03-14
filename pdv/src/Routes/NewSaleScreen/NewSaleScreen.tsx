@@ -151,37 +151,35 @@ export const NewSaleScreen = () => {
         getItems()
     }, [currentUserId])
 
+    useEffect(() => console.log(tableNumber), [tableNumber])
+
     return (
         <>
             <div className='div' id='div1'>
                 <h3 className='title is-3 mt-3'>ABRIR COMANDA</h3>
-
                 <InputSearchSale
                     label="Mesa"
                     marginBot={true}
                     sale={sale}
-                    tableNumber={tableNumber}
-                    set={setTableNumber}
+                    value={tableNumber}
+                    set={setTableNumber}   
                 />
-
                 <InputSearchSale
                     label="Nome"
                     marginBot={true}
                     sale={sale}
-                    tableNumber={costumerName}
+                    value={costumerName}
                     set={setCostumerName}
                     string={true}
                 />
-
                 <InputSearchSale
                     label="Comanda"
                     marginBot={true}
                     sale={sale}
-                    tableNumber={saleNumber}
+                    value={saleNumber}
                     set={setSaleNumber}
                     autoFocus
                 />
-
                 <Button
                     className='is-info ml-2 mb-5'
                     disabled={sale.numSale ? true : false}
@@ -202,7 +200,7 @@ export const NewSaleScreen = () => {
                     disabled={!sale.numSale || orderContext.currentOrder == 0 ? true : false}
                 />
                 {saleNumber > 0 &&
-                    <div className='saleInfo mb-3'>
+                    <div className='saleInfo mb-3 primary-text'>
                         <p className='title is-5'>
                             {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
                             {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}

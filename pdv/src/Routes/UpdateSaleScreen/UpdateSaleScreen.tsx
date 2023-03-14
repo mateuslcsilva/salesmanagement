@@ -322,7 +322,7 @@ export const UpdateSaleScreen = () => {
 
                 {
                     ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && (typeof saleIndex == "number")) &&
-                    <div className='saleInfo mb-3 mt-5'>
+                    <div className='saleInfo mb-3 mt-5 primary-text'>
                         <p className='title is-5'>
                             {sales[saleIndex].numTable ? 'Mesa: ' + sales[saleIndex].numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
                             {sales[saleIndex].costumerName ? 'Cliente: ' + sales[saleIndex].costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
@@ -392,16 +392,13 @@ export const UpdateSaleScreen = () => {
                     }
                     {action == 2 &&
                         <div className='is-flex is-justify-content-center mb-5 mt-5'>
-                            <TextField
-                                id="outlined-basic"
-                                label="Mesa"
-                                variant="outlined"
-                                size="small"
-                                autoComplete='off'
-                                onChange={(e: any) => setNewTableNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
-                                value={newTableNumber < 1 ? '' : newTableNumber}
-                                style={{ 'width': '105px' }}
-                                className='mr-2'
+                            <InputSearchSale
+                                label="Mesa "
+                                marginBot={true}
+                                sale={sale}
+                                value={newTableNumber}
+                                set={setNewTableNumber}
+                                nonDisabled
                             />
                             <Button
                                 className='is-info ml-2 mb-5'
@@ -423,17 +420,14 @@ export const UpdateSaleScreen = () => {
                                 {sales[saleIndex].orders.map((order: number, index: number) => <Checkbox value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
                             </Checkbox.Group>
                             <div>
-                                <TextField
-                                    id="outlined-basic"
-                                    label="Comanda"
-                                    variant="outlined"
-                                    size="small"
-                                    autoComplete='off'
-                                    onChange={(e: any) => setNewSaleNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
-                                    value={newSaleNumber < 1 ? '' : newSaleNumber}
-                                    style={{ 'width': '105px' }}
-                                    className='mr-2'
-                                />
+                            <InputSearchSale
+                                label="Comanda "
+                                marginBot={true}
+                                sale={sale}
+                                value={newSaleNumber}
+                                set={setNewSaleNumber}
+                                nonDisabled
+                            />
                                 <Button
                                     className='is-info ml-2 mb-5'
                                     disabled={newSaleNumber == 0 || selected == undefined || selected.length < 1 ? true : false}

@@ -1,4 +1,53 @@
-#mesa{
-    width: 7.59vh;
-    justify-content: end;
-}
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  
+  .search-sale-div{
+    display: inline-flex;
+    flex-direction: column;
+    max-width: 100px;
+    margin-right: 25px;
+  }
+  
+  .search-sale-input{
+    background-color: var(--div-color);
+    border: none;
+    outline: 1px solid var(--outline-color);
+    color: var(--outline-color);
+    height: 40px;
+    border-radius: 3px;
+    padding: 0 5px;
+    font-size: 12pt;
+    transition: 0.2s ease-out;
+  }
+
+  .align-right{
+    text-align: right;
+  }
+  
+  .search-sale-label{
+    max-width: fit-content;
+    padding: 0 7px;
+    background-color: var(--div-color);
+    color: #3e8ed0;
+    cursor: text;
+    transition: 0.2s ease-out;
+    font-size: 14pt;
+    font-weight: 400;
+    width: 7vw;
+  }
+  
+  .search-sale-input:focus, .search-sale-input:valid{
+    outline: 2px solid #3e8ed0;
+  }
+  
+  .search-sale-input:empty ~ .search-sale-label{
+    transform: translate(0%, -115%);
+    color: var(--outline-color);
+  }
+  
+  .search-sale-input:focus ~ .search-sale-label,
+  .search-sale-input:valid ~ .search-sale-label{
+    transform: translate(-2%, -200%) scale(0.8);
+    color: #3e8ed0;
+  }

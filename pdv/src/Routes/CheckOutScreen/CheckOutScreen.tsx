@@ -10,6 +10,7 @@ import { db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { queryData } from '../../utils/requests/queryData'
+import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale';
 
 export const CheckOutScreen = () => {
 
@@ -130,40 +131,29 @@ export const CheckOutScreen = () => {
         <>
             <div className='div' id='div1'>
                 <h3 className='title is-3 mt-3'>FECHAR COMANDA</h3>
-                <TextField
-                    id="outlined-basic"
+                <InputSearchSale
                     label="Mesa"
-                    variant="outlined"
-                    size="small"
-                    autoComplete='off'
-                    onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : e.target.value)}
-                    value={tableNumber < 1 ? '' : tableNumber}
-                    style={{ 'width': '105px' }}
-                    className='mr-2'
+                    marginBot={true}
+                    sale={sale}
+                    value={tableNumber}
+                    set={setTableNumber}
                 />
 
-                <TextField
-                    id="outlined-basic-string"
+                <InputSearchSale
                     label="Nome"
-                    variant="outlined"
-                    size="small"
-                    autoComplete='off'
-                    onChange={(e: any) => setCostumerName(e.target.value)}
+                    marginBot={true}
+                    sale={sale}
                     value={costumerName}
-                    style={{ 'width': '105px' }}
-                    className='mr-2'
+                    set={setCostumerName}
+                    string={true}
                 />
 
-                <TextField
-                    id="outlined-basic"
+                <InputSearchSale
                     label="Comanda"
-                    variant="outlined"
-                    size="small"
-                    autoComplete='off'
-                    onChange={(e: any) => setSaleNumber(isNaN(e.target.value) ? 0 : e.target.value)}
-                    value={saleNumber < 1 ? '' : saleNumber}
-                    style={{ 'width': '105px' }}
-                    className='mr-2'
+                    marginBot={true}
+                    sale={sale}
+                    value={saleNumber}
+                    set={setSaleNumber}
                     autoFocus
                 />
 
@@ -176,7 +166,7 @@ export const CheckOutScreen = () => {
 
                 {
                     ((!Array.isArray(sale))) && sale && sale.numSale &&
-                    <div className='saleInfo mb-3'>
+                    <div className='saleInfo mb-3  primary-text'>
                         <p className='title is-5'>
                             {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
                             {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
@@ -200,12 +190,13 @@ export const CheckOutScreen = () => {
 
                     <Dropdown>
                         <Dropdown.Button
-                            light
+                        light
+                        css={{"color" : "var(--primary-text-color)"}}
                         >{paymentMethods}</Dropdown.Button>
                         <Dropdown.Menu
                             aria-label="Static Actions"
                             variant="solid"
-                            className='border rounded text-bg-light'
+                            className='border rounded '
                             disallowEmptySelection
                             selectionMode="single"
                             selectedKeys={selected}

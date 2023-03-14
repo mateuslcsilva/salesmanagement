@@ -9,6 +9,7 @@ import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
+import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale'
 
 export const AddSaleScreen = () => {
 
@@ -170,44 +171,35 @@ export const AddSaleScreen = () => {
         getItems()
     }, [])
 
+    useEffect(() => console.log(saleNumber) , [saleNumber])
+
     return (
         <>
             <div className='div' id='div1'>
                 <h3 className='title is-3 mt-3'>ACRESCENTAR ITEM</h3>
-                <TextField
-                    id="outlined-basic"
+                <InputSearchSale
                     label="Mesa"
-                    variant="outlined"
-                    size="small"
-                    autoComplete='off'
-                    onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : e.target.value)}
-                    value={tableNumber < 1 ? '' : tableNumber}
-                    style={{ 'width': '105px' }}
-                    className='mr-2'
+                    marginBot={true}
+                    sale={sale}
+                    value={tableNumber}
+                    set={setTableNumber}
                 />
 
-                <TextField
-                    id="outlined-basic-string"
+                <InputSearchSale
                     label="Nome"
-                    variant="outlined"
-                    size="small"
-                    autoComplete='off'
-                    onChange={(e: any) => setCostumerName(e.target.value)}
+                    marginBot={true}
+                    sale={sale}
                     value={costumerName}
-                    style={{ 'width': '105px' }}
-                    className='mr-2'
+                    set={setCostumerName}
+                    string={true}
                 />
 
-                <TextField
-                    id="outlined-basic"
+                <InputSearchSale
                     label="Comanda"
-                    variant="outlined"
-                    size="small"
-                    autoComplete='off'
-                    onChange={(e: any) => setSaleNumber(isNaN(e.target.value) ? 0 : e.target.value)}
-                    value={saleNumber < 1 ? '' : saleNumber}
-                    style={{ 'width': '105px' }}
-                    className='mr-2'
+                    marginBot={true}
+                    sale={sale}
+                    value={saleNumber}
+                    set={setSaleNumber}
                     autoFocus
                 />
 
@@ -232,7 +224,7 @@ export const AddSaleScreen = () => {
                 />
                 {
                     ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && (typeof saleIndex == "number")) &&
-                    <div className='saleInfo mb-3'>
+                    <div className='saleInfo mb-3 primary-text'>
                         <p className='title is-5'>
                             {sales[saleIndex].numTable ? 'Mesa: ' + sales[saleIndex].numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
                             {sales[saleIndex].costumerName ? 'Cliente: ' + sales[saleIndex].costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
