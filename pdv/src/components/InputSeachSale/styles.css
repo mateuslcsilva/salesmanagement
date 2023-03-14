@@ -21,6 +21,15 @@
     transition: 0.2s ease-out;
   }
 
+  .search-sale-input:disabled{
+    outline: 1px solid #c2c2c299;
+    color: #c2c2c299;
+  }
+
+  .search-sale-input:disabled ~ .search-sale-label{
+    color: #c2c2c299 !important;
+  }
+
   .align-right{
     text-align: right;
   }

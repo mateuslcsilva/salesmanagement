@@ -184,7 +184,7 @@ export const UpdateSaleScreen = () => {
             let currentMonth = current.getMonth().toString().length < 2 ? '0' + (current.getMonth() + 1) : (current.getMonth() + 1)
             let currentDate = currentDay + '/' + currentMonth + '/' + current.getFullYear()
             let currentTime = current.getHours() + ':' + (current.getMinutes() < 10 ? "0" + current.getMinutes() : current.getMinutes())
-            const updatedSale = {
+            let updatedSale = {
                 numTable: "Não informado",
                 numSale: newSaleNumber,
                 orders: deletedItems,
@@ -211,7 +211,13 @@ export const UpdateSaleScreen = () => {
     }
 
     const changeNumTable = () => {
-        if (typeof saleIndex == "number") sales[saleIndex].numTable = newTableNumber
+        
+        console.log(newTableNumber)
+        if (tableNumber < 0) return
+        if (typeof saleIndex == "number") {
+            console.log(newTableNumber)
+            sales[saleIndex].numTable = Number(newTableNumber)
+        }
         updateSales()
         clear()
         setAlert(<Alert severity="success">Pronto, número da mesa alterada!</Alert>)
@@ -241,7 +247,10 @@ export const UpdateSaleScreen = () => {
         setSaleNumber(0)
         setTableNumber(0)
         setCostumerName('')
+        setNewTableNumber(0)
+        setNewSaleNumber(0)
         setSelected([])
+        setPermission(false)
     }
 
     useEffect(() => {
@@ -270,13 +279,21 @@ export const UpdateSaleScreen = () => {
                 deleteItems()
                 break
             case 2:
+                console.log("here")
                 changeNumTable()
                 break
             case 3:
                 transferringOrders()
                 break
+            default:
+                return
         }
     }, [permission])
+
+    useEffect(() => {
+        console.log(newTableNumber)
+        console.log("permission: ", permission)
+    }, [newTableNumber, permission])
 
     return (
         <>
@@ -360,7 +377,10 @@ export const UpdateSaleScreen = () => {
                     />
 
                     <Button
-                        onClick={handler}
+                        onClick={() => {
+                            setAction(0)
+                            handler()
+                        }}
                         className='is-info mt-5 mb-5'
                         text='Excluir Comanda'
                         disabled={saleIndex == undefined || Array.isArray(saleIndex) ? true : false}
@@ -420,14 +440,14 @@ export const UpdateSaleScreen = () => {
                                 {sales[saleIndex].orders.map((order: number, index: number) => <Checkbox value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
                             </Checkbox.Group>
                             <div>
-                            <InputSearchSale
-                                label="Comanda "
-                                marginBot={true}
-                                sale={sale}
-                                value={newSaleNumber}
-                                set={setNewSaleNumber}
-                                nonDisabled
-                            />
+                                <InputSearchSale
+                                    label="Comanda "
+                                    marginBot={true}
+                                    sale={sale}
+                                    value={newSaleNumber}
+                                    set={setNewSaleNumber}
+                                    nonDisabled
+                                />
                                 <Button
                                     className='is-info ml-2 mb-5'
                                     disabled={newSaleNumber == 0 || selected == undefined || selected.length < 1 ? true : false}

@@ -54,8 +54,17 @@
   color: #FFF;
 }
 
-input:disabled {
+input:disabled{
   border: 1px solid rgba(128, 128, 128, 0.363) !important;
+}
+
+input:disabled,
+input:disabled ~ label {
+  cursor: not-allowed !important;
+}
+
+input:disabled::placeholder{
+  color: rgba(128, 128, 128, 0.363) !important;
 }
 
 .hidden {

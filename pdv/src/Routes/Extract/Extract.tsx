@@ -65,6 +65,7 @@ export const Extract = () => {
     useEffect(() => {
         getOcupiedTables()
         getTotalValue()
+        console.log(sales)
     }, [sales])
 
     return (
