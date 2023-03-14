@@ -12,13 +12,16 @@ function App() {
 
 
   const localStorageManagement = () => {
-    let storagedTheme = localStorage.getItem('theme')
-    if(storagedTheme) setDarkTheme(true) 
+    let storagedTheme = localStorage.getItem('darkTheme')
+    console.log(storagedTheme)
+    if(storagedTheme == "dark") setDarkTheme(true) 
   }
 
   const setTheme = () => {
-    console.log("here")
     setDarkTheme(theme => !theme)
+    if(darkTheme && localStorage.getItem("darkTheme")) return localStorage.removeItem("darkTheme") 
+    localStorage.setItem("darkTheme", "dark")
+    console.log(localStorage.getItem("darkTheme"))
   }
 
   useEffect(() => {

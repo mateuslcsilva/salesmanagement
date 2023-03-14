@@ -11,6 +11,7 @@ import { queryData } from '../../utils/requests/queryData'
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { useOrderContext } from '../../utils/contexts/OrderContext'
+import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale'
 
 
 export const NewSaleScreen = () => {
@@ -72,7 +73,8 @@ export const NewSaleScreen = () => {
                     })
                 }
             })
-        if (alert) return setAlert(alert)
+            .catch(err => console.log(err.message))
+        if (alert.type != "p") return setAlert(alert)
         let current = new Date
         let currentDay = current.getDate().toString().length < 2 ? '0' + current.getDate() : current.getDate()
         let currentMonth = current.getMonth().toString().length < 2 ? '0' + (current.getMonth() + 1) : (current.getMonth() + 1)
@@ -153,40 +155,30 @@ export const NewSaleScreen = () => {
         <>
             <div className='div' id='div1'>
                 <h3 className='title is-3 mt-3'>ABRIR COMANDA</h3>
-                <TextField
-                    id="outlined-basic"
+
+                <InputSearchSale
                     label="Mesa"
-                    variant="outlined"
-                    size="small"
-                    autoComplete='off'
-                    onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
-                    value={tableNumber < 1 ? '' : tableNumber}
-                    style={{ 'width': '105px' }}
-                    className='mr-2 align-right-sla'
+                    marginBot={true}
+                    sale={sale}
+                    tableNumber={tableNumber}
+                    set={setTableNumber}
                 />
 
-                <TextField
-                    id="outlined-basic-string"
+                <InputSearchSale
                     label="Nome"
-                    variant="outlined"
-                    size="small"
-                    autoComplete='off'
-                    onChange={(e: any) => setCostumerName(e.target.value)}
-                    value={costumerName}
-                    style={{ 'width': '105px' }}
-                    className='mr-2'
+                    marginBot={true}
+                    sale={sale}
+                    tableNumber={costumerName}
+                    set={setCostumerName}
+                    string={true}
                 />
 
-                <TextField
-                    id="outlined-basic"
-                    label="Comanda*"
-                    variant="outlined"
-                    size="small"
-                    autoComplete='off'
-                    onChange={(e: any) => setSaleNumber(isNaN(e.target.value) ? 0 : Number(e.target.value))}
-                    value={saleNumber < 1 ? '' : saleNumber}
-                    style={{ 'width': '105px' }}
-                    className='mr-2'
+                <InputSearchSale
+                    label="Comanda"
+                    marginBot={true}
+                    sale={sale}
+                    tableNumber={saleNumber}
+                    set={setSaleNumber}
                     autoFocus
                 />
 

@@ -1,17 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Fahkwang:wght@400;500;600;700&family=Mitr:wght@200;300;400;500;600;700&family=Prompt:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap');
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css");
 
-*{
+* {
   font-family: 'DM Sans', sans-serif;
   box-sizing: border-box;
 }
 
-:root{
+:root {
   --body-color: #f2f2f2;
   --div-color: #FFF;
+  /* ====> COLORS <==== */
+  --body-color: #e4e9f7;
+  --sidebar-color: #fff;
+  --primary-color: #3488ce;
+  --primary-color-light: #f6f5ff;
+  --toggle-color: #ddd;
+  --text-color: #707070;
+  --primary-text-color: #fff;
+
+  /* ====> TRANSITION <==== */
+  --tran-02: all 0.2s ease;
+  --tran-03: all 0.3s ease;
+  --tran-04: all 0.4s ease;
+  --tran-05: all 0.5s ease;
 }
 
-.main{
+.main.darkThemed {
+  --body-color: #252525;
+  --div-color: #555454;
+  --body-color: #18191a;
+  --sidebar-color: #242526;
+  --primary-color: #3a3b3c;
+  --primary-color-light: #3a3b3c;
+  --toggle-color: #fff;
+  --text-color: #ccc;
+  --primary-text-color: #695cfe;
+}
+
+.main {
   min-height: 150vh;
   max-height: auto;
   overflow-y: visible;
@@ -19,34 +45,36 @@
   transition: 0.4s ease;
 }
 
-.main.darkThemed{
-  --body-color: #18191a;
-  --div-color: #d2d2d2;
+.main.darkThemed h3,
+.main.darkThemed h2,
+.main.darkThemed .white-text,
+.main.darkThemed span {
+  color: #FFF;
 }
 
-input:disabled{
+input:disabled {
   border: 1px solid rgba(128, 128, 128, 0.363) !important;
 }
 
-.hidden{
+.hidden {
   opacity: 0;
 }
 
-.visible{
+.visible {
   opacity: 1;
 }
 
-.section{
+.section {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.button{
+.button {
   font-weight: 600;
 }
 
-.divContainer{
+.divContainer {
   border-radius: 5px;
   width: 75vw;
   padding: 3vh;
@@ -61,7 +89,7 @@ input:disabled{
   transition: 0.4s ease;
 }
 
-.divContainer.side-bar{
+.divContainer.side-bar {
   width: 65vw !important;
   margin-left: 270px !important;
   padding: 2.6vh;

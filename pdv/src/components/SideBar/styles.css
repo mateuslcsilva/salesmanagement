@@ -5,40 +5,6 @@
     font-family: "DM Sans", sans-serif;
     /* font-family: 'Prompt', sans-serif; */
   }
- 
-  :root {
-    /* ====> COLORS <==== */
-    --body-color: #e4e9f7;
-    --sidebar-color: #fff;
-    --primary-color: #3488ce;
-    --primary-color-light: #f6f5ff;
-    --toggle-color: #ddd;
-    --text-color: #707070;
-    --primary-text-color: #fff;
-  
-    /* ====> TRANSITION <==== */
-    --tran-02: all 0.2s ease;
-    --tran-03: all 0.3s ease;
-    --tran-04: all 0.4s ease;
-    --tran-05: all 0.5s ease;
-  }
-  
-  nav {
-    height: 100vh;
-    background: var(--body-color);
-    transition: var(--tran-04);
-    z-index: 1;
-  }
-  
-  .main.darkThemed nav {
-    --body-color: #18191a;
-    --sidebar-color: #242526;
-    --primary-color: #3a3b3c;
-    --primary-color-light: #3a3b3c;
-    --toggle-color: #fff;
-    --text-color: #ccc;
-    --primary-text-color: #695cfe;
-  }
   
   /* ====> REUSABLE CSS <==== */
   
@@ -105,6 +71,7 @@
   
   .sidebar header {
     position: relative;
+    margin-top: -35px;
   }
   
   .sidebar .image-text img {
@@ -120,6 +87,7 @@
   header .image-text .header-text {
     display: flex;
     flex-direction: column;
+    transform: translateY(-150px);
   }
   
   .header-text .name {
@@ -300,5 +268,11 @@
     .sidebar .menu-bar {
       height: calc(100% - 105px);
     }
+  }
+
+  header .image-text .header-text {
+    display: flex;
+    flex-direction: column;
+    transform: translateY(-15px);
   }
   

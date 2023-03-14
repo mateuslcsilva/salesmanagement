@@ -10,6 +10,7 @@ import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { db } from '../../utils/firebase/firebase'
 import { ConfirmationModal } from '../../components/ConfirmationModal/ConfirmationModal'
+import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale'
 
 export const UpdateSaleScreen = () => {
 
@@ -85,7 +86,7 @@ export const UpdateSaleScreen = () => {
                 currentSale.push(sale)
             }
         })
-        if(salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+        if (salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
 
         setSale(currentSale.length == 1 ? { ...sale, ...currentSale[0] } : currentSale)
     }
@@ -99,7 +100,7 @@ export const UpdateSaleScreen = () => {
         })
 
         if (salesIndex.length == 1) salesIndex = salesIndex[0]
-        if(salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+        if (salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
         if (Array.isArray(salesIndex)) return window.alert("Ocorreu um erro, por favor contate o desenvolvedor!")
 
         setSaleIndex(salesIndex)
@@ -113,7 +114,7 @@ export const UpdateSaleScreen = () => {
                 salesIndex.push(index)
             }
         })
-        if(salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+        if (salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
         setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
         let currentSale: sale[] = []
         sales.forEach((sale: sale, index: number) => {
@@ -260,7 +261,7 @@ export const UpdateSaleScreen = () => {
     }, [])
 
     useEffect(() => {
-        if(!permission) return
+        if (!permission) return
         switch (action) {
             case 0:
                 deleteSale()
@@ -282,43 +283,30 @@ export const UpdateSaleScreen = () => {
             <div className='div' id='div1'>
                 <ConfirmationModal handler={handler} closeHandler={closeHandler} visible={visible} setPermission={setPermission} setAlert={setAlert} />
                 <h3 className='title is-3 mt-3'>ALTERAR PEDIDO</h3>
-                <TextField
-                    id="outlined-basic"
+
+                <InputSearchSale
                     label="Mesa"
-                    variant="outlined"
-                    size="small"
-                    autoComplete='off'
-                    disabled={Array.isArray(sale) || sale.numSale ? true : false}
-                    onChange={(e: any) => setTableNumber(isNaN(e.target.value) ? 0 : e.target.value)}
-                    value={tableNumber < 1 ? '' : tableNumber}
-                    style={{ 'width': '105px' }}
-                    className='mr-2 mb-5'
+                    marginBot={true}
+                    sale={sale}
+                    value={tableNumber}
+                    set={setTableNumber}
                 />
 
-                <TextField
-                    id="outlined-basic-string"
+                <InputSearchSale
                     label="Nome"
-                    variant="outlined"
-                    size="small"
-                    autoComplete='off'
-                    disabled={Array.isArray(sale) || sale.numSale ? true : false}
-                    onChange={(e: any) => setCostumerName(e.target.value)}
+                    marginBot={true}
+                    sale={sale}
                     value={costumerName}
-                    style={{ 'width': '105px' }}
-                    className='mr-2'
+                    set={setCostumerName}
+                    string={true}
                 />
 
-                <TextField
-                    id="outlined-basic"
+                <InputSearchSale
                     label="Comanda"
-                    variant="outlined"
-                    size="small"
-                    autoComplete='off'
-                    disabled={Array.isArray(sale) || sale.numSale ? true : false}
-                    onChange={(e: any) => setSaleNumber(isNaN(e.target.value) ? 0 : e.target.value)}
-                    value={saleNumber < 1 ? '' : saleNumber}
-                    style={{ 'width': '105px' }}
-                    className='mr-2'
+                    marginBot={true}
+                    sale={sale}
+                    value={saleNumber}
+                    set={setSaleNumber}
                     autoFocus
                 />
 

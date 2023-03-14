@@ -25,6 +25,7 @@ export const SignIn = (props :any) => {
               aria-label="userWorkplace"
               value={props.userWorkplace}
               onChange={props.handleSignInChange}
+               css={{"color": "#FFF"}}
             />
             <Input
               clearable
@@ -50,6 +51,7 @@ export const SignIn = (props :any) => {
               aria-label="userPassword"
               value={props.userPassword}
               onChange={props.handleSignInChange}
+              css={{"color": "#FFF"}}
             />
             <Row justify="space-between">
               <Checkbox>

@@ -22,7 +22,8 @@ export const SideBar = (props: any) => {
                         </span>
                         <div className="div text header-text">
                             <span className="name">Simpls Software</span>
-                            <span className="profession">{AuthContext.currentUser.userName}</span>
+                            <span className="workplace">{AuthContext.currentUser.workplaceName}</span>
+                            <span className="user">{AuthContext.currentUser.userName}</span>
                         </div>
                     </div>
                     <span className=" toggle" onClick={handleSideBar}>
