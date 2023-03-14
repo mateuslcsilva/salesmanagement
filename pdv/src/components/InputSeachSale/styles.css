@@ -13,7 +13,7 @@
     background-color: var(--div-color);
     border: none;
     outline: 1px solid var(--outline-color);
-    color: var(--outline-color);
+    color: var(--primary-text-color);
     height: 40px;
     border-radius: 3px;
     padding: 0 5px;

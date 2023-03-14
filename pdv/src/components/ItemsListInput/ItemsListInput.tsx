@@ -74,7 +74,7 @@ const ItemsListInput = (props: any) => {
                 disabled={props.disabled}
             />
 
-            <div id='itemList' className={itemListActive? "active" : ""}>
+            <div id='itemList' className={itemListActive? "active primary-text" : "primary-text"}>
                 {itemList.map((item: any, index: number): any => {
                     return (
                         <button className="item-btn" onClick={(e) => selectItem(item.numItem)} key={index} id={item.numItem}>

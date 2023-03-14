@@ -6,11 +6,18 @@ section{
 
 #itemListInput{
     cursor: pointer;
+    border: 1px solid var(--input-border-color);
+    color: var(--primary-text-color);
+    background-color: var(--div-color) !important;
+}
+
+#itemListInput::placeholder{
+    color: var(--outline-color);
 }
 
 #itemList{
     width: 100%;
-    background-color: #FFF !important;
+    background-color: var(--div-color) !important;
     border: none;
     overflow: hidden;
     height: 0;
@@ -27,7 +34,7 @@ section{
     text-align: start;
     outline: none;
     border: none;
-    background-color: #FFF;
+    background-color: var(--div-color);
     font-family: inherit;
     font-size: 14pt;
     font-weight: 500;
@@ -37,7 +44,7 @@ section{
 
 #itemList.active{
     height: 220px;
-    border: 1px solid #3e8ed0;
+    border: 1px solid var(--input-border-color);
     padding: 10px;
     overflow-y: scroll;
     transition: .3s ease;
@@ -46,7 +53,7 @@ section{
 
 #itemList.active .item-btn:hover{
     background-color: #3e8ed0;
-    color: #FFF;
+    color: #FFF !important;
     cursor: pointer;
 }
 
