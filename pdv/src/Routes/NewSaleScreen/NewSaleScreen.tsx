@@ -74,7 +74,10 @@ export const NewSaleScreen = () => {
                 }
             })
             .catch(err => console.log(err.message))
-        if (alert.type != "p") return setAlert(alert)
+        if (alert.type != "p") {
+            clear()
+            return setAlert(alert)
+        }
         let current = new Date
         let currentDay = current.getDate().toString().length < 2 ? '0' + current.getDate() : current.getDate()
         let currentMonth = current.getMonth().toString().length < 2 ? '0' + (current.getMonth() + 1) : (current.getMonth() + 1)
