@@ -71,7 +71,10 @@ export const AddSaleScreen = () => {
                 salesIndex.push(index)
             }
         })
-        if(salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+        if(salesIndex.length == 0) {
+            clear()
+            return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+        }
         setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
         let currentSale: sale[] = []
         sales.forEach((sale: sale, index: number) => {
@@ -93,7 +96,10 @@ export const AddSaleScreen = () => {
         })
 
         if (salesIndex.length == 1) salesIndex = salesIndex[0]
-        if(salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+        if(salesIndex.length == 0) {
+            clear()
+            return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+        }
         if (Array.isArray(salesIndex)) return window.alert("Ocorreu um erro, por favor contate o desenvolvedor!")
 
         setSaleIndex(salesIndex)
@@ -109,7 +115,10 @@ export const AddSaleScreen = () => {
                 salesIndex.push(index)
             }
         })
-        if(salesIndex.length == 0) return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+        if(salesIndex.length == 0) {
+            clear()
+            return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+        }
         setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
         let currentSale: sale[] = []
         sales.forEach((sale: sale, index: number) => {
@@ -213,7 +222,7 @@ export const AddSaleScreen = () => {
                 <ItemsListInput
                     className='is-info mt-5'
                     placeholder="00 - Nome do Pedido"
-                    disabled={!sale || Array.isArray(sale) ? true : false}
+                    disabled={Array.isArray(sale) || !sale.numSale? true : false}
                 />
 
                 <Button
