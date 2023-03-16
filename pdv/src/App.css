@@ -134,15 +134,15 @@ input:disabled::placeholder{
 }
 
 .dark-theme-modal{
-  box-shadow: none;
+  box-shadow: none !important;
   background-color: #3c3c3c !important;
 }
 
 .dark-theme-modal *{
-  color: #f2f2f2;
+  color: #f2f2f2 !important;
 }
 
 .dark-theme-modal .switch-action-button{
-  background-color: transparent;
-  outline: 2px solid #f2f2f2;
+  background-color: transparent !important;
+  outline: 2px solid #f2f2f2 !important;
 }
