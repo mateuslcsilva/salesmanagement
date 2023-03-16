@@ -1,14 +1,58 @@
-.items-div{
-    display: flex;
-    justify-content: space-between;
+hr{
+    background-color: var(--outline-color) !important;
 }
 
-.items-div p{
+.items-div {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.items-div p {
     width: 200px;
     text-align: start;
 }
 
-.items-div p:nth-child(2n - 1){
+.items-div p:nth-child(2n - 1) {
     width: 50px;
     text-align: center;
+}
+
+.items-div div {
+    display: flex;
+    gap: 5px;
+}
+
+.items-div div button {
+    all: unset;
+    cursor: pointer;
+    transition: .2s ease;
+    color: var(--primary-text-color);
+}
+
+.items-div div button:hover {
+    transform: translateY(-1px);
+}
+
+.items-container {
+    width: 580px;
+    padding: 0 15px;
+    max-height: 300px;
+    overflow-y: scroll
+}
+
+.items-container::-webkit-scrollbar{
+    background-color: #30303070 !important;
+    width: 10px;
+    border-radius: 15px;
+    transform: translateX(5px);
+}
+
+.items-container::-webkit-scrollbar-thumb{
+    background-color: #303030;
+    border-radius: 15px;
+}
+
+.items-container::-webkit-scrollbar-thumb:active{
+    background-color: #252525;
 }

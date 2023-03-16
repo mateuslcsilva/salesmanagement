@@ -9,10 +9,11 @@ export const OrdinaryInput = (props: any) => {
                 <input 
                 type={`${props.string ? "text" : "number"}`} 
                 id={`input${props.label}`} 
-                className={`ordinary-input-input ${props.string ? "input-text" : ""}`} 
+                className={`ordinary-input-input ${props.large ? "input-text" : ""}`} 
                 autoComplete='off'
-                onChange={(e: any) => props.set(e.target.value)}
+                onChange={props.handleItemInfoChange}
                 value={props.value < 1 ? '' : props.value}
+                name={props.name}
                 required 
                 
                 />

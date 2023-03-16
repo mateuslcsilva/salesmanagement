@@ -40,11 +40,28 @@
 }
 
 .main {
-  min-height: 150vh;
+  min-height: 100svh;
   max-height: auto;
   overflow-y: visible;
   background-color: var(--body-color);
   transition: 0.4s ease;
+}
+
+::-webkit-scrollbar{
+  background-color: #30303070 !important;
+  width: 10px;
+  height: 600px !important;
+  border-radius: 15px;
+  transform: translateX(5px);
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: #303030;
+  border-radius: 15px;
+}
+
+::-webkit-scrollbar-thumb:active{
+  background-color: #252525;
 }
 
 .main.darkThemed h3,

@@ -116,9 +116,9 @@ export const LoginScreen = () => {
         preventClose
         aria-labelledby="modal-title"
         open={visible}
-        onClose={() => setVisible(false)}/* 
-        css={{"backgroundColor" : "#121212"}} */
+        onClose={() => setVisible(false)}
         className={darkTheme ? "dark-theme-modal" : ""}
+        blur
       >
         <Modal.Header>
           <Col>
