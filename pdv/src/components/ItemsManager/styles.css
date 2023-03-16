@@ -35,10 +35,10 @@ hr{
 }
 
 .items-container {
-    width: 580px;
-    padding: 0 15px;
-    max-height: 300px;
-    overflow-y: scroll
+    width: 580px !important;
+    padding: 0 15px !important;
+    max-height: 300px !important;
+    overflow-y: scroll !important;
 }
 
 .items-container::-webkit-scrollbar{
