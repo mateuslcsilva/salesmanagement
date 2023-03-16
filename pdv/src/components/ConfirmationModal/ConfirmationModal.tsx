@@ -49,6 +49,7 @@ export const ConfirmationModal = (props :propsType) =>  {
         aria-labelledby="modal-title"
         open={props.visible}
         onClose={props.closeHandler}
+        className={document.querySelector('.main')?.classList.contains('darkThemed') ? "dark-theme-modal" : ""}
       >
         <Modal.Header>
           <Text id="modal-title" size={18}>
@@ -70,7 +71,7 @@ export const ConfirmationModal = (props :propsType) =>  {
             />
         </Modal.Body>
         <Modal.Footer>
-          <Button auto flat color="error" onPress={props.closeHandler}>
+          <Button auto flat color="error" onPress={props.closeHandler} className="switch-action-button">
             Cancelar
           </Button>
           <Button auto onPress={confirmPermission}>

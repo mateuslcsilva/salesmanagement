@@ -68,8 +68,8 @@ export const UpdateSaleScreen = () => {
     }
 
     const getSelectedIndex = (index: number) => {
-        if (Array.isArray(saleIndex) && saleIndex[index]) return setSaleIndex(saleIndex[index])
-        window.alert("Erro ao obter venda.")
+        if (Array.isArray(saleIndex) && saleIndex[index] != undefined) return setSaleIndex(saleIndex[index])
+        window.alert("Erro ao obter a venda, por favor, informe o desenvolvedor!")
     }
 
     const findTable = () => {

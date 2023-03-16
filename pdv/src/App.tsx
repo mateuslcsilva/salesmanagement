@@ -5,15 +5,25 @@ import NavBarButtons from '../src/Routes/NavBarButtons/NavBarButtons'
 import { LoginScreen } from '../src/Routes/LoginScreen/LoginScreen'
 import { Fab, ThemeProvider } from '@mui/material'
 import { SideBar } from './components/SideBar/SideBar'
+import { ItemsManager } from './components/ItemsManager/ItemsManager'
+import { UsersManager } from './components/UsersManager/UsersManager'
 
 function App() {
-  const [darkTheme, setDarkTheme] = useState(true)
+  const [darkTheme, setDarkTheme] = useState(false)
   const [sideBar, setSideBar] = useState(false)
+  const [itemVisible, setItemVisible] = useState(false);
+  const [usersVisible, setUsersVisible] = useState(false);
+
+  const itemHandler = () => setItemVisible(true);
+  const closeItemHandler = () => setItemVisible(false);
+  const usersHandler = () => setUsersVisible(true);
+  const closeUsersHandler = () => setUsersVisible(false);
 
 
   const localStorageManagement = () => {
     let storagedTheme = localStorage.getItem('darkTheme')
-    console.log(storagedTheme)
+    let storageSideBarState = localStorage.getItem('sideBar')
+    if(storageSideBarState == "open") setSideBar(true)
     if(storagedTheme == "dark") setDarkTheme(true) 
   }
 
@@ -21,7 +31,12 @@ function App() {
     setDarkTheme(theme => !theme)
     if(darkTheme && localStorage.getItem("darkTheme")) return localStorage.removeItem("darkTheme") 
     localStorage.setItem("darkTheme", "dark")
-    console.log(localStorage.getItem("darkTheme"))
+  }
+
+  const setSideBarStorage = () => {
+    setSideBar(sideBar => !sideBar)
+    if(sideBar && localStorage.getItem("sideBar")) return localStorage.removeItem("sideBar") 
+    localStorage.setItem("sideBar", "open")
   }
 
   useEffect(() => {
@@ -31,7 +46,9 @@ function App() {
   return (
     <main className={`main ${darkTheme ? 'darkThemed' : 'lightThemed'}`}>
       <LoginScreen />
-      <SideBar setSideBar={setSideBar} theme={darkTheme} setTheme={() => setTheme} />
+      <SideBar sideBar={sideBar} setSideBar={setSideBarStorage} theme={darkTheme} setTheme={setTheme} itemHandler={itemHandler} usersHandler={usersHandler} />
+      <ItemsManager visible={itemVisible} closeItemHandler={closeItemHandler} />
+      <UsersManager visible={usersVisible} closeUsersHandler={closeUsersHandler} />
 
       <div className='section'>
         <div className={sideBar == true ? "divContainer side-bar" : "divContainer"}>

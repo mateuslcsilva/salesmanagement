@@ -1,0 +1,14 @@
+.items-div{
+    display: flex;
+    justify-content: space-between;
+}
+
+.items-div p{
+    width: 200px;
+    text-align: start;
+}
+
+.items-div p:nth-child(2n - 1){
+    width: 50px;
+    text-align: center;
+}

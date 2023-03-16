@@ -60,6 +60,10 @@ const ItemsListInput = (props: any) => {
         setCurrentOrder(getItemText("numItem", orderContext.currentOrder))
     }, [orderContext.currentOrder])
 
+    useEffect(() => {
+        setItemListActive(false)
+    }, [props.disabled])
+
     return (
         <section>
             <input

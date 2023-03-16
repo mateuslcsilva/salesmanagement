@@ -115,3 +115,17 @@ input:disabled::placeholder{
 .primary-text button{
   color: var(--primary-text-color) !important;
 }
+
+.dark-theme-modal{
+  box-shadow: none;
+  background-color: #3c3c3c;
+}
+
+.dark-theme-modal *{
+  color: #f2f2f2;
+}
+
+.dark-theme-modal .switch-action-button{
+  background-color: transparent;
+  outline: 2px solid #f2f2f2;
+}

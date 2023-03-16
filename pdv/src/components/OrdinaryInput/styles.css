@@ -1,0 +1,83 @@
+:root{
+    --primary-text-color: #000;
+    --outline-color: #4e4e4eaa;
+    --div-color: #FFF;
+}
+
+.dark-theme-modal{
+    --outline-color: #f2f2f2;
+    --div-color: #3c3c3c;
+    --primary-text-color: #f2f2f2;
+}
+
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  
+  .ordinary-input-div{
+    display: inline-flex;
+    flex-direction: column;
+    max-width: 100px;
+    margin-right: 25px;
+  }
+
+  .ordinary-input-div:has(.input-text){
+    max-width: 250px;
+  }
+  
+  .ordinary-input-input{
+    background-color: var(--div-color);
+    border: none;
+    outline: 1px solid var(--outline-color);
+    color: var(--primary-text-color);
+    height: 40px;
+    border-radius: 3px;
+    padding: 0 5px;
+    font-size: 12pt;
+    transition: 0.2s ease-out;
+  }
+
+  .main.darkThemed .ordinary-input-input{
+    background-color: red;
+  }
+
+  .ordinary-input-input:disabled{
+    outline: 1px solid #c2c2c299;
+    color: #c2c2c299;
+  }
+
+  .ordinary-input-input:disabled ~ .ordinary-input-label{
+    color: #c2c2c299 !important;
+  }
+
+  .input-text{
+    text-align: right;
+    width: 250px;
+  }
+  
+  .ordinary-input-label{
+    max-width: fit-content;
+    padding: 0 7px;
+    background-color: var(--div-color);
+    color: #3e8ed0;
+    cursor: text;
+    transition: 0.2s ease-out;
+    font-size: 14pt;
+    font-weight: 400;
+    width: 7vw;
+  }
+  
+  .ordinary-input-input:focus, .ordinary-input-input:valid{
+    outline: 2px solid #3e8ed0;
+  }
+  
+  .ordinary-input-input:empty ~ .ordinary-input-label{
+    transform: translate(0%, -115%);
+    color: var(--outline-color);
+  }
+  
+  .ordinary-input-input:focus ~ .ordinary-input-label,
+  .ordinary-input-input:valid ~ .ordinary-input-label{
+    transform: translate(-2%, -200%) scale(0.8);
+    color: #3e8ed0;
+  }

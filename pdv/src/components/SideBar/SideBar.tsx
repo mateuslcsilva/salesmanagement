@@ -12,6 +12,10 @@ export const SideBar = (props: any) => {
         props.setSideBar(!open)
     }
 
+    useEffect(() => {
+        setOpen(props.sideBar)
+    }, [props.sideBar])
+
     return (
         <section>
             <nav className={open == false ? "sidebar close" : "sidebar"}>
@@ -22,8 +26,8 @@ export const SideBar = (props: any) => {
                         </span>
                         <div className="div text header-text">
                             <span className="name">Simpls Software</span>
-                            <span className="workplace">{AuthContext.currentUser.workplaceName}</span>
-                            <span className="user">{AuthContext.currentUser.userName}</span>
+                            <span className="workplace">{AuthContext.currentUser.workplaceName ? AuthContext.currentUser.workplaceName : "."}</span>
+                            <span className="user">{AuthContext.currentUser.userName ? AuthContext.currentUser.userName : "."}</span>
                         </div>
                     </div>
                     <span className=" toggle" onClick={handleSideBar}>
@@ -56,13 +60,13 @@ export const SideBar = (props: any) => {
                                 </a>
                             </li>
                             <li className="nav-link">
-                                <a href="#">
+                                <a href="#" onClick={() => props.usersHandler()}>
                                 <i className="bi bi-people"></i>
                                     <span className="text nav-text">Gerenciar Usuários</span>
                                 </a>
                             </li>
                             <li className="nav-link">
-                                <a href="#">
+                                <a href="#" onClick={() => props.itemHandler()}>
                                 <i className="bi bi-pencil-square"></i>
                                     <span className="text nav-text">Gerenciar Itens</span>
                                 </a>
@@ -71,7 +75,7 @@ export const SideBar = (props: any) => {
                     </div>
                     <div className="bottom-content">
                         <hr />
-                        <li className="mode" onClick={props.setTheme()}>
+                        <li className="mode" onClick={() => props.setTheme()}>
                             <div className="moon-sun">
                                 <i className="bi bi-moon moon"></i>
                                 <i className="bi bi-brightness-high sun"></i>

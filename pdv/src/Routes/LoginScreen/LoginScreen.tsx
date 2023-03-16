@@ -1,4 +1,5 @@
 import React, { useReducer, useState, useEffect, useContext } from "react";
+import './styles.css'
 import {
   Modal,
   Button,
@@ -17,11 +18,11 @@ import { queryData } from "../../utils/requests/queryData";
 import { useAuthContext } from "../../utils/contexts/AuthProvider";
 
 export const LoginScreen = () => {
-
   const initialSignUpState = {} as initialSignUp;
 
   const initialSignInState = {} as initialSignIn;
 
+  const [darkTheme, setDarkTheme] = useState(false)
   const [signUpValues, setSignUpValues] = useReducer(
     (currentValues: initialSignUp, newValues: initialSignUp) => {
       return { ...currentValues, ...newValues };
@@ -98,13 +99,26 @@ export const LoginScreen = () => {
       });
   };
 
+  const localStorageManagement = () => {
+    let storagedTheme = localStorage.getItem('darkTheme')
+    console.log(storagedTheme)
+    if(storagedTheme == "dark") setDarkTheme(true) 
+  }
+
+  useEffect(() => {
+    localStorageManagement()
+  }, [])
+
+
   return (
     <div>
       <Modal
         preventClose
         aria-labelledby="modal-title"
         open={visible}
-        onClose={() => setVisible(false)}
+        onClose={() => setVisible(false)}/* 
+        css={{"backgroundColor" : "#121212"}} */
+        className={darkTheme ? "dark-theme-modal" : ""}
       >
         <Modal.Header>
           <Col>
@@ -130,6 +144,7 @@ export const LoginScreen = () => {
             auto
             flat
             color="primary"
+            className="switch-action-button"
             onClick={() => setHasAccount(!hasAccount)}
           >
             {hasAccount ? "Cadastrar" : "Entrar"}
