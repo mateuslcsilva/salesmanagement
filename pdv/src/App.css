@@ -135,7 +135,7 @@ input:disabled::placeholder{
 
 .dark-theme-modal{
   box-shadow: none;
-  background-color: #3c3c3c;
+  background-color: #3c3c3c !important;
 }
 
 .dark-theme-modal *{
