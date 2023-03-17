@@ -34,11 +34,8 @@ input[type=number]::-webkit-inner-spin-button {
     border-radius: 3px;
     padding: 0 5px;
     font-size: 12pt;
-    transition: 0.2s ease-out;
-  }
-
-  .main.darkThemed .ordinary-input-input{
-    background-color: red;
+    transition: 0.2s ease-out !important;
+    text-align: right;
   }
 
   .ordinary-input-input:disabled{
@@ -50,9 +47,9 @@ input[type=number]::-webkit-inner-spin-button {
     color: #c2c2c299 !important;
   }
 
-  .input-text{
-    text-align: right;
+  .ordinary-input-input.input-text{
     width: 250px;
+    text-align: left;
   }
   
   .ordinary-input-label{
@@ -79,5 +76,5 @@ input[type=number]::-webkit-inner-spin-button {
   .ordinary-input-input:focus ~ .ordinary-input-label,
   .ordinary-input-input:valid ~ .ordinary-input-label{
     transform: translate(-2%, -200%) scale(0.8);
-    color: #3e8ed0;
+    color: #3e8ed0 !important;
   }

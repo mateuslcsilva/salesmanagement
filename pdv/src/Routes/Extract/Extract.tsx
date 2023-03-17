@@ -9,6 +9,7 @@ import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { doc, getDoc} from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
+import { itemType } from '../../types/itemType/itemType'
 
 export const Extract = () => {
 
@@ -19,12 +20,6 @@ export const Extract = () => {
     const [sales, setSales] = useState([] as sale[])
     const AuthContext = useAuthContext()
     const orderContext = useOrderContext()
-
-    interface itemType {
-        numItem: number;
-        item: string;
-        itemValue: string
-    }
 
     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false

@@ -8,6 +8,10 @@ hr{
     position: relative;
 }
 
+.items-div:hover *{
+    color: #3e8ed0!important;
+}
+
 .items-div p {
     width: 200px;
     text-align: start;

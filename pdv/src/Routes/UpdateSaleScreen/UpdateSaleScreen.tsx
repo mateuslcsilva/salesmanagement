@@ -11,6 +11,7 @@ import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { db } from '../../utils/firebase/firebase'
 import { ConfirmationModal } from '../../components/ConfirmationModal/ConfirmationModal'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale'
+import { itemType } from '../../types/itemType/itemType'
 
 export const UpdateSaleScreen = () => {
 
@@ -30,12 +31,6 @@ export const UpdateSaleScreen = () => {
     const [visible, setVisible] = useState(false);
     const [permission, setPermission] = useState(false)
     const AuthContext = useAuthContext()
-
-    interface itemType {
-        numItem: number;
-        item: string;
-        itemValue: number
-    }
 
     const handler = () => setVisible(true);
     const closeHandler = () => setVisible(false);

@@ -4,6 +4,7 @@ import { Alert, TextField } from '@mui/material'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
 import { sale } from '../../types/sale/sale'
+import { itemType } from '../../types/itemType/itemType'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
@@ -25,12 +26,6 @@ export const NewSaleScreen = () => {
     const [sale, setSale] = useState<sale>({} as sale)
     const AuthContext = useAuthContext()
     const orderContext = useOrderContext()
-
-    interface itemType {
-        numItem: number;
-        item: string;
-        itemValue: string
-    }
 
     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false

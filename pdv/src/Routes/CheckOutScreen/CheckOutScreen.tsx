@@ -11,6 +11,7 @@ import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { queryData } from '../../utils/requests/queryData'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale';
+import { itemType } from '../../types/itemType/itemType';
 
 export const CheckOutScreen = () => {
 
@@ -32,12 +33,6 @@ export const CheckOutScreen = () => {
         () => Array.from(selected).join("").replaceAll("_", " "),
         [selected]
     );
-
-    interface itemType {
-        numItem: number;
-        item: string;
-        itemValue: string
-    }
 
     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false

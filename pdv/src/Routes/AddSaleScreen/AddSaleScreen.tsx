@@ -10,6 +10,7 @@ import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale'
+import { itemType } from '../../types/itemType/itemType'
 
 export const AddSaleScreen = () => {
 
@@ -24,12 +25,6 @@ export const AddSaleScreen = () => {
     const [sales, setSales] = useState([] as sale[])
     const AuthContext = useAuthContext()
     const orderContext = useOrderContext()
-
-    interface itemType {
-        numItem: number;
-        item: string;
-        itemValue: number
-    }
 
     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false

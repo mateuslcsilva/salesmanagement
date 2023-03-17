@@ -1,4 +1,5 @@
-import { Modal, Col, Spacer, Text, Row, Tooltip } from '@nextui-org/react'
+import { Modal, Col, Spacer, Text, Row } from '@nextui-org/react'
+import Tooltip from '@mui/material/Tooltip'
 import './styles.css'
 import Button from '../../components/Button/Button'
 import React, { useEffect, useReducer, useState } from 'react'
@@ -7,7 +8,8 @@ import { OrdinaryInput } from '../OrdinaryInput/OrdinaryInput'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
-import { initialSignIn } from '../../types/Login/loginTypes'
+import { itemType } from '../../types/itemType/itemType'
+import { Alert } from '@mui/material'
 
 export const ItemsManager = (props: any) => {
 
@@ -15,6 +17,7 @@ export const ItemsManager = (props: any) => {
 
     const AuthContext = useAuthContext()
     const [itemList, setItemList] = useState<Array<itemType>>([])
+    const [alert, setAlert] = useState(<p></p>)
     const [itemInfo, setItemInfo] = useReducer(
         (currentValues: itemType, newValues: itemType) => {
           return { ...currentValues, ...newValues }
@@ -30,12 +33,6 @@ export const ItemsManager = (props: any) => {
         setItemInfo({ ...itemInfo, ...newValues });
       };
 
-    interface itemType {
-        numItem: number;
-        item: string;
-        itemValue: number
-    }
-
     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false
         let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
@@ -46,8 +43,14 @@ export const ItemsManager = (props: any) => {
     }
 
     const addItem = async () => {
-        const convert = {numItem: Number(itemInfo.numItem), itemValue: Number(itemInfo.itemValue)}
+        if (itemList.find(item => item.itemRef == itemInfo.itemRef)) return setAlert(<Alert severity="error" >Referência já cadastrada!</Alert>)
+        //@ts-ignore
+        const convert = { itemRef: Number(itemInfo.itemRef), itemValue: typeof itemInfo.itemValue == "number" ? itemInfo.itemValue : Number(itemInfo.itemValue.replaceAll(',', '.')), numItem : itemList.map(item => item.numItem).sort((a, b) => a - b).at(-1) + 1}
         const newItem = [{...itemInfo, ...convert}]
+        if (newItem[0].itemValue >= Infinity || isNaN(newItem[0].itemValue)) {
+            setAlert(<Alert severity="error">Por favor, insira os dados novamente!</Alert>)
+            return clear()
+        }
         await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
             items: [...itemList, ...newItem]
         }).then(res => console.log(res))
@@ -73,9 +76,18 @@ export const ItemsManager = (props: any) => {
         setItemInfo({
             itemValue: 0,
             item: "",
-            numItem: 0
+            numItem: 0,
+            itemRef: 0
         })
     }
+
+    /* useEffect(() => {
+        const clearAlert = setTimeout(() => {
+            setAlert(<p></p>)
+        }, 5000)
+
+        return () => clearTimeout(clearAlert)
+    }) */
 
     useEffect(() => {
         getItems()
@@ -110,9 +122,9 @@ export const ItemsManager = (props: any) => {
                         <Row >
                             <OrdinaryInput
                                 label="Referência"
-                                name="numItem"
+                                name="itemRef"
                                 handleItemInfoChange={handleItemInfoChange}
-                                value={itemInfo.numItem}
+                                value={itemInfo.itemRef}
                             />
                             <OrdinaryInput
                                 label="Descrição"
@@ -133,10 +145,11 @@ export const ItemsManager = (props: any) => {
                                 onClick={addItem}
                                 className='is-success'
                                 text={<i className="bi bi-check-lg is-size-4"></i>}
-                            /* disabled={Array.isArray(sale) || !sale.numTable || (paymentMethods == "Forma de Pagamento") ? true : false} */
+                                disabled={!itemInfo.item || itemInfo.itemValue == 0 || itemInfo.itemRef == 0 ? true : false}
                             />
                         </Row>
                         <Spacer y={0.5} />
+                        {alert}
                         <hr />
                         <Spacer y={0.5} />
                         <Col className="items-container">
@@ -149,21 +162,21 @@ export const ItemsManager = (props: any) => {
                                 return (
                                     <>
                                         <div key={index} className="items-div">
-                                            <p>{item.numItem}</p>
+                                            <p>{item.itemRef}</p>
                                             <p>{item.item}</p>
                                             {/* @ts-ignore */}
                                             <p >{item.itemValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>
                                             <div>
-                                                <Tooltip color="primary" content="Alterar">
+                                                <Tooltip color="primary" title="Alterar">
                                                     <button onClick={() => editItem(item.numItem)}>
                                                         <i className="bi bi-pencil-square"></i>
                                                     </button>
                                                 </Tooltip>
-                                                <Tooltip content="Deletar">
                                                     <button onClick={() => deleteItem(item.numItem)}>
+                                                <Tooltip title="Deletar">
                                                         <i className="bi bi-trash3"></i>
-                                                    </button>
                                                 </Tooltip>
+                                                    </button>
                                             </div>
                                         </div>
                                     </>
