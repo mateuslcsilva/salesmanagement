@@ -107,6 +107,7 @@ export const ItemsManager = (props: any) => {
                 className={document.querySelector('.main')?.classList.contains('darkThemed') ? "dark-theme-modal" : ""}
                 width="650px"
                 blur
+                preventClose={itemInfo.itemRef || itemInfo.itemValue || itemInfo.item ? true : false}
             >
                 <Modal.Header>
                     <Col>

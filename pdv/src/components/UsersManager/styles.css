@@ -1,0 +1,90 @@
+:root{
+    --aciton-color: #3e8ed0;
+}
+
+hr{
+    background-color: var(--outline-color) !important;
+}
+
+.users-container {
+    width: 690px !important;
+    padding: 0 15px !important;
+    max-height: 300px !important;
+    overflow-y: scroll !important;
+}
+
+.users-container::-webkit-scrollbar{
+    background-color: #30303070 !important;
+    width: 10px;
+    border-radius: 15px;
+    transform: translateX(5px);
+}
+
+.users-container::-webkit-scrollbar-thumb{
+    background-color: #303030;
+    border-radius: 15px;
+}
+
+.users-container::-webkit-scrollbar-thumb:active{
+    background-color: #252525;
+}
+
+.users-div {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    transition: .1s ease;
+    margin-bottom: 1px;
+}
+
+.users-div::before{
+    content: "";
+    background-color: var(--aciton-color);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    height: 1px;
+    width: 0;
+    transition: 0.7s ease-in-out;
+}
+
+.users-div:hover.users-div::before{
+    left: 0;
+    width: 100%;
+    transition: 0.7s ease-in-out;
+}
+
+.users-div p {
+    width: 20px;
+    text-align: center;
+}
+
+.users-div p span{
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.users-div p span:hover{
+    transform: translateY(-1px);
+    transition: 0.2s ease;
+}
+
+.users-div div {
+    display: flex;
+    gap: 5px;
+}
+
+.users-div div button {
+    all: unset;
+    cursor: pointer;
+    transition: .2s ease;
+    color: var(--primary-text-color);
+}
+
+.users-div div button:hover {
+    transform: translateY(-1px);
+}
+
+.bi-trash3:hover{
+    --aciton-color: red !important;
+}

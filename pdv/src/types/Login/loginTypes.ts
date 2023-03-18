@@ -1,10 +1,11 @@
 export interface initialSignUp {
-    workplace: string;
+    workplace?: string;
     username: string;
     email: string;
     password: string;
-    repetedPassword: string;
-    hasConsented: boolean;
+    repetedPassword?: string;
+    userType: string;
+    hasConsented?: boolean;
   }
 
   export  interface initialSignIn {

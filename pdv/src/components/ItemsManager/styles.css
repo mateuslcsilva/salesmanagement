@@ -1,3 +1,7 @@
+:root{
+    --aciton-color: #3e8ed0;
+}
+
 hr{
     background-color: var(--outline-color) !important;
 }
@@ -6,10 +10,25 @@ hr{
     display: flex;
     justify-content: space-between;
     position: relative;
+    transition: .1s ease;
+    margin-bottom: 1px;
 }
 
-.items-div:hover *{
-    color: #3e8ed0!important;
+.items-div::before{
+    content: "";
+    background-color: var(--aciton-color);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    height: 1px;
+    width: 0;
+    transition: 0.7s ease-in-out;
+}
+
+.items-div:hover.items-div::before{
+    left: 0;
+    width: 100%;
+    transition: 0.7s ease-in-out;
 }
 
 .items-div p {
@@ -59,4 +78,8 @@ hr{
 
 .items-container::-webkit-scrollbar-thumb:active{
     background-color: #252525;
+}
+
+.bi-trash3:hover{
+    --aciton-color: red !important;
 }

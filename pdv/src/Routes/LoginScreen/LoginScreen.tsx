@@ -76,7 +76,7 @@ export const LoginScreen = () => {
 
     //signup shit
     let newInfo = {
-        name: signUpValues.workplace.toLowerCase(),
+        name: signUpValues.workplace?.toLowerCase(),
         users: [{
           username: signUpValues.username.toLowerCase(),
           email: signUpValues.email.toLowerCase(),
