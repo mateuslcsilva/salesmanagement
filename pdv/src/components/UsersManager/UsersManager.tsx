@@ -115,7 +115,7 @@ export const UsersManager = (props: any) => {
         className={document.querySelector('.main')?.classList.contains('darkThemed') ? "dark-theme-modal" : ""}
         width="800px"
         blur
-      /* preventClose={userInfo.itemRef || userInfo.itemValue || userInfo.item ? true : false} */
+        preventClose={userInfo.username || userInfo.userType || userInfo.password || userInfo.email ? true : false}
       >
         <Modal.Header>
           <Col>

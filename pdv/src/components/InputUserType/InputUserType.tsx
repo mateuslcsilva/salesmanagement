@@ -7,7 +7,7 @@ import './styles.css'
 
 export const InputUserType = (props: any) => {
     const [userTypeListActive, setUserTypeListActive] = useState<boolean>(false)
-    const [userTypes, setUserTypes] = useState(["Padrão", "Gerencia", "Master"])
+    const [userTypes, setUserTypes] = useState(["", "Padrão", "Gerencia", "Master"])
 
     useEffect(() => {
         setUserTypeListActive(false)
