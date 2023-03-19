@@ -10,6 +10,7 @@ import { db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { Alert } from '@mui/material'
 import { initialSignUp } from '../../types/Login/loginTypes'
+import { InputUserType } from '../InputUserType/InputUserType'
 
 export const UsersManager = (props: any) => {
   const initialuserInfo = {} as initialSignUp
@@ -25,7 +26,7 @@ export const UsersManager = (props: any) => {
     initialuserInfo
   )
 
-  const handleuserInfoChange = (event: {
+  const handleUserInfoChange = (event: {
     target: { name: string; value: string }
   }) => {
     const { name, value } = event.target
@@ -112,14 +113,14 @@ export const UsersManager = (props: any) => {
         open={props.visible}
         onClose={() => props.closeUsersHandler()}
         className={document.querySelector('.main')?.classList.contains('darkThemed') ? "dark-theme-modal" : ""}
-        width="750px"
+        width="800px"
         blur
       /* preventClose={userInfo.itemRef || userInfo.itemValue || userInfo.item ? true : false} */
       >
         <Modal.Header>
           <Col>
             <Text id="modal-title" size={22} transform="full-width">
-              Gerenciador de Itens
+              Gerenciador de Usuários
             </Text>
             <Spacer y={0.5} />
 
@@ -131,21 +132,25 @@ export const UsersManager = (props: any) => {
               <OrdinaryInput
                 label="Referência"
                 name="itemRef"
-                handleuserInfoChange={handleuserInfoChange}
+                handleUserInfoChange={handleUserInfoChange}
               /* value={userInfo.itemRef} */
               />
               <OrdinaryInput
                 label="Descrição"
                 name="item"
-                handleuserInfoChange={handleuserInfoChange}
+                handleUserInfoChange={handleUserInfoChange}
                 /* value={userInfo.item} */
                 string
                 large
               />
+              <InputUserType
+                userInfo={userInfo}
+                handleUserInfoChange={handleUserInfoChange}
+               />
               <OrdinaryInput
                 label="Valor"
                 name="itemValue"
-                handleuserInfoChange={handleuserInfoChange}
+                handleUserInfoChange={handleUserInfoChange}
                 /* value={userInfo.itemValue} */
                 string
               />

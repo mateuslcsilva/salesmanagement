@@ -1,0 +1,91 @@
+section{
+    position: relative;
+    z-index: 999;
+    overflow: visible;
+}
+
+.userTypesInput{
+    cursor: pointer;
+    outline: 1px solid var(--outline-color);
+    background-color: var(--div-color) !important;
+    width: 120px;
+    height: 40px;
+    border-radius: 3px;
+    padding: 7px;
+    font-size: 14pt !important;
+    margin-right: 25px;
+    overflow: hidden;
+}
+
+.userTypesInput p{
+    overflow: hidden;
+    text-overflow: ellipsis !important;
+    white-space: nowrap; 
+    color: #121212 !important;
+}
+
+.userTypesInput::placeholder{
+    color: var(--outline-color);
+}
+
+.userTypesInput.active-input{
+    outline: 2px solid #3e8ed0 !important;
+    color: var(--primary-text-color);
+}
+
+#userTypeList{
+    width: calc(100% - 25px);
+    background-color: var(--div-color) !important;
+    border: none;
+    overflow: hidden;
+    height: 0;
+    border-radius: 3px;
+    transition: .3s ease;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+}
+
+#userTypeList::-webkit-scrollbar{
+    display: none;
+}
+
+#userTypeList input[type=button]{
+    margin-bottom: 5px;
+    padding: 0 5px;
+    border-radius: 3px;
+    text-align: start;
+    outline: none;
+    border: none;
+    background-color: var(--div-color);
+    font-family: inherit;
+    font-size: 14pt;
+    font-weight: 500;
+    width: auto;
+    height: auto;
+    transition: 0.3s ease;
+}
+
+#userTypeList.active{
+    height: 100px;
+    outline: 1px solid #3e8ed0;
+    padding: 10px;
+    overflow-y: scroll;
+    transition: .3s ease;
+    margin-bottom: 15px;
+}
+
+#userTypeList.active .user-type-button:hover{
+    background-color: #3e8ed0;
+    color: #FFF !important;
+    cursor: pointer;
+}
+
+@keyframes positionAlternate {
+    from{
+        position: relative;
+    }
+    to{
+        position: absolute;
+    }
+}
