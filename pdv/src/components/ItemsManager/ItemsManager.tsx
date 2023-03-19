@@ -124,23 +124,23 @@ export const ItemsManager = (props: any) => {
                             <OrdinaryInput
                                 label="Referência"
                                 name="itemRef"
-                                handleItemInfoChange={handleItemInfoChange}
+                                handleChange={handleItemInfoChange}
                                 value={itemInfo.itemRef}
                             />
                             <OrdinaryInput
                                 label="Descrição"
                                 name="item"
-                                handleItemInfoChange={handleItemInfoChange}
+                                handleChange={handleItemInfoChange}
                                 value={itemInfo.item}
-                                string
+                                string="text"
                                 large
                             />
                             <OrdinaryInput
                                 label="Valor"
                                 name="itemValue"
-                                handleItemInfoChange={handleItemInfoChange}
+                                handleChange={handleItemInfoChange}
                                 value={itemInfo.itemValue}
-                                string
+                                string="text"
                             />
                             <Button
                                 onClick={addItem}

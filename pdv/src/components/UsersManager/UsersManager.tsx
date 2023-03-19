@@ -26,6 +26,8 @@ export const UsersManager = (props: any) => {
     initialuserInfo
   )
 
+  const emailValidation = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+
   const handleUserInfoChange = (event: {
     target: { name: string; value: string }
   }) => {
@@ -130,35 +132,39 @@ export const UsersManager = (props: any) => {
           <Col >
             <Row >
               <OrdinaryInput
-                label="Referência"
-                name="itemRef"
-                handleUserInfoChange={handleUserInfoChange}
-              /* value={userInfo.itemRef} */
+                label="Nome"
+                name="username"
+                handleChange={handleUserInfoChange}
+                value={userInfo.username}
+                string="text"
               />
               <OrdinaryInput
-                label="Descrição"
-                name="item"
-                handleUserInfoChange={handleUserInfoChange}
-                /* value={userInfo.item} */
-                string
+                label="Email"
+                name="email"
+                handleChange={handleUserInfoChange}
+                value={userInfo.email}
+                string="text"
                 large
+                align-right
+                invalid={userInfo.email && !emailValidation.test(userInfo.email) ? true : false}
               />
               <InputUserType
                 userInfo={userInfo}
                 handleUserInfoChange={handleUserInfoChange}
                />
               <OrdinaryInput
-                label="Valor"
-                name="itemValue"
-                handleUserInfoChange={handleUserInfoChange}
-                /* value={userInfo.itemValue} */
-                string
+                label="Senha"
+                name="password"
+                password = "password"
+                handleChange={handleUserInfoChange}
+                value={userInfo.password}
+                invalidPassword={userInfo.password && userInfo.password?.length < 8 ? true : false}
               />
               <Button
                 /* onClick={addItem} */
                 className='is-success'
                 text={<i className="bi bi-check-lg is-size-4"></i>}
-              /* disabled={!userInfo.item || userInfo.itemValue == 0 || userInfo.itemRef == 0 ? true : false} */
+              disabled={!userInfo.username || !userInfo.userType || !userInfo.email || !userInfo.password ? true : false}
               />
             </Row>
             <Spacer y={0.5} />

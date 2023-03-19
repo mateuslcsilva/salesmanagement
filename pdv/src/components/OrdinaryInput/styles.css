@@ -19,9 +19,10 @@ input[type=number]::-webkit-inner-spin-button {
     flex-direction: column;
     max-width: 105px;
     margin-right: 25px;
+    position: relative;
   }
 
-  .ordinary-input-div:has(.input-text){
+  .ordinary-input-div:has(.input-large){
     max-width: 250px;
   }
   
@@ -47,8 +48,12 @@ input[type=number]::-webkit-inner-spin-button {
     color: #c2c2c299 !important;
   }
 
-  .ordinary-input-input.input-text{
+  .ordinary-input-input.input-large{
     width: 250px;
+    text-align: left;
+  }
+
+  .ordinary-input-input.input-text{
     text-align: left;
   }
   
@@ -77,4 +82,24 @@ input[type=number]::-webkit-inner-spin-button {
   .ordinary-input-input:valid ~ .ordinary-input-label{
     transform: translate(-2%, -200%) scale(0.8);
     color: #3e8ed0 !important;
+  }
+  
+  .ordinary-input-input.invalid-input:focus, .ordinary-input-input.invalid-input:valid{
+    outline: 2px solid rgb(255, 68, 68);
+  }
+  
+  .ordinary-input-input.invalid-input:focus ~ .ordinary-input-label,
+  .ordinary-input-input.invalid-input:valid ~ .ordinary-input-label{
+    transform: translate(-2%, -200%) scale(0.8);
+    color: rgb(255, 68, 68)!important;
+  }
+
+  #invalid-email-alert,
+  #invalid-password-alert{
+    position: absolute;
+    right: 0;
+    bottom: 7px;
+    white-space: nowrap;
+    color: rgb(255, 68, 68) !important;
+    font-size: 9pt;
   }
