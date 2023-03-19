@@ -25,6 +25,7 @@ section{
     transition: .3s ease;
     display: flex;
     flex-direction: column;
+    position: absolute;
 }
 
 #itemList button{
