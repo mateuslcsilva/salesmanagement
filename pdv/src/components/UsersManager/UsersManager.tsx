@@ -39,13 +39,14 @@ export const UsersManager = (props: any) => {
   const getUsers = async () => {
     if (AuthContext.currentUser.id == '') return false
     let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
-    console.log(AuthContext.currentUser.userType)
+    console.log(AuthContext.currentUser)
     let data = await getDoc(docRef)
       .then(res => {
         let data = res.data()?.users
-        if(AuthContext.currentUser.userType.toLowerCase() == "padrão") setUserList(data.filter((user :initialSignUp )=> user.username == AuthContext.currentUser.userName))
-        if(AuthContext.currentUser.userType.toLowerCase() == "gerencia") setUserList(data.filter((user :initialSignUp )=> user.userType.toLowerCase() != "master"))
-        if(AuthContext.currentUser.userType.toLowerCase() == "master") setUserList(data)
+        console.log(data.filter((user :initialSignUp )=> user.username == AuthContext.currentUser.userName))
+        if(AuthContext.currentUser.userType.toLowerCase() == "padrão") return setUserList(data.filter((user :initialSignUp )=> user.username == AuthContext.currentUser.userName))
+        if(AuthContext.currentUser.userType.toLowerCase() == "gerencia") return setUserList(data.filter((user :initialSignUp )=> user.userType.toLowerCase() != "master"))
+        if(AuthContext.currentUser.userType.toLowerCase() == "master") return setUserList(data)
       })
   }
 
