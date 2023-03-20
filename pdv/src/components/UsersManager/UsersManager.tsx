@@ -39,41 +39,46 @@ export const UsersManager = (props: any) => {
   const getUsers = async () => {
     if (AuthContext.currentUser.id == '') return false
     let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
+    console.log(AuthContext.currentUser.userType)
     let data = await getDoc(docRef)
       .then(res => {
-        setUserList(res.data()?.users)
+        let data = res.data()?.users
+        if(AuthContext.currentUser.userType.toLowerCase() == "padrão") setUserList(data.filter((user :initialSignUp )=> user.username == AuthContext.currentUser.userName))
+        if(AuthContext.currentUser.userType.toLowerCase() == "gerencia") setUserList(data.filter((user :initialSignUp )=> user.userType.toLowerCase() != "master"))
+        if(AuthContext.currentUser.userType.toLowerCase() == "master") setUserList(data)
       })
   }
 
-  /* const addItem = async () => {
-      if (userList.find(item => item.itemRef == userInfo.itemRef)) return setAlert(<Alert severity="error" >Referência já cadastrada!</Alert>)
+  const addUser = async () => {
+    for (var key in userInfo) {
       //@ts-ignore
-      const convert = { itemRef: Number(userInfo.itemRef), itemValue: typeof userInfo.itemValue == "number" ? userInfo.itemValue : Number(userInfo.itemValue.replaceAll(',', '.')), numItem : userList.map(item => item.numItem).sort((a, b) => a - b).at(-1) + 1}
-      const newItem = [{...userInfo, ...convert}]
-      if (newItem[0].itemValue >= Infinity || isNaN(newItem[0].itemValue)) {
-          setAlert(<Alert severity="error">Por favor, insira os dados novamente!</Alert>)
-          return clear()
-      }
-      await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
-          items: [...userList, ...newItem]
-      }).then(res => console.log(res))
-          .catch(err => console.log(err.message))
-          getUsers()
-          clear()
+      if (userInfo[key].length < 1) return
+    }
+    const newUser = [userInfo]
+    await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
+      users: [...userList, ...newUser]
+    }).then(res => console.log(res))
+      .catch(err => console.log(err.message))
+    getUsers()
+    clear()
   }
-*/
-  /* const editItem = (ref :number) => {
-      setUserInfo(userList[userList.findIndex(item => item.numItem == ref)])
-      deleteItem(ref)
-  } */
 
-  /* const deleteItem = async (ref: number) => {
+  const editUser = (email :string) => {
+      setUserInfo(userList[userList.findIndex(user => user.email == email)])
+      deleteUser(email)
+  }
+
+  /*  
+    useEffect((console.log(itemList)) => {})
+  */
+
+  const deleteUser = async (email: string) => {
       await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
-          items: userList.filter(item => item.numItem != ref)
+          users: userList.filter(user => user.email != email)
       }).then(res => console.log(res))
           .catch(err => console.log(err.message))
           getUsers()
-  } */
+  }
 
   const toggleShowPassword = (password: string) => {
     //@ts-ignore
@@ -151,20 +156,20 @@ export const UsersManager = (props: any) => {
               <InputUserType
                 userInfo={userInfo}
                 handleUserInfoChange={handleUserInfoChange}
-               />
+              />
               <OrdinaryInput
                 label="Senha"
                 name="password"
-                password = "password"
+                password="password"
                 handleChange={handleUserInfoChange}
                 value={userInfo.password}
                 invalidPassword={userInfo.password && userInfo.password?.length < 8 ? true : false}
               />
               <Button
-                /* onClick={addItem} */
+                onClick={addUser}
                 className='is-success'
                 text={<i className="bi bi-check-lg is-size-4"></i>}
-              disabled={!userInfo.username || !userInfo.userType || !userInfo.email || !userInfo.password ? true : false}
+                disabled={!userInfo.username || !userInfo.userType || !userInfo.email || !userInfo.password ? true : false}
               />
             </Row>
             <Spacer y={0.5} />
@@ -186,7 +191,7 @@ export const UsersManager = (props: any) => {
                       <p style={{ "transform": "translateX(-50px)" }}>{user.email}</p>
                       <p style={{ "transform": "translateX(0px)" }}>{user.userType}</p>
                       <p
-                        style={{ "transform": "translateX(10px)", "width" : "40px" }}
+                        style={{ "transform": "translateX(10px)", "width": "40px" }}
                         className="is-flex is-justify-content-space-between"
                       >
                         {showPassword.includes(user.password) ? user.password : "********"}
@@ -196,11 +201,11 @@ export const UsersManager = (props: any) => {
                       </p>
                       <div>
                         <Tooltip color="primary" title="Alterar">
-                          <button /* onClick={() => editItem(item.numItem)} */>
+                          <button onClick={() => editUser(user.email)}>
                             <i className="bi bi-pencil-square"></i>
                           </button>
                         </Tooltip>
-                        <button /* onClick={() => deleteItem(item.numItem)} */>
+                        <button onClick={() => deleteUser(user.email)}>
                           <Tooltip title="Deletar">
                             <i className="bi bi-trash3"></i>
                           </Tooltip>

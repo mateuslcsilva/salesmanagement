@@ -68,7 +68,8 @@ export const LoginScreen = () => {
         let user = res?.users?.find((user: any) => user.email.toLowerCase() == signInValues.userEmail.toLowerCase())
         if (!user) return alert("Conta não encontrada!")
         if (user.password != signInValues.userPassword) return toast.error("Senha Incorreta!")
-        if (res) setAuthContext.setCurrentUser({ id: res.id, userName: res.users[0].username, workplaceName: res.workplaceName})
+        if (res) setAuthContext.setCurrentUser({ id: res.id, userName: res.users[0].username, workplaceName: res.workplaceName, userType: res.userType})
+        console.log({ id: res.id, userName: res.users[0].username, workplaceName: res.workplaceName, userType: res.userType})
         return setVisible(false);
       }) 
       return
