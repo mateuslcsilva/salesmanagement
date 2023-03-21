@@ -5,7 +5,7 @@ import Button from '../../components/Button/Button'
 import React, { useEffect, useReducer, useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 import { OrdinaryInput } from '../OrdinaryInput/OrdinaryInput'
-import { arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, doc, FieldValue, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { Alert } from '@mui/material'
@@ -17,6 +17,7 @@ export const UsersManager = (props: any) => {
 
   const AuthContext = useAuthContext()
   const [userList, setUserList] = useState<Array<initialSignUp>>([])
+  const [showedUserList, setShowedUserList] = useState<Array<initialSignUp>>([])
   const [alert, setAlert] = useState(<p></p>)
   const [showPassword, setShowPassword] = useState<Array<string>>([])
   const [userInfo, setUserInfo] = useReducer(
@@ -43,10 +44,10 @@ export const UsersManager = (props: any) => {
     let data = await getDoc(docRef)
       .then(res => {
         let data = res.data()?.users
-        console.log(data.filter((user :initialSignUp )=> user.username == AuthContext.currentUser.userName))
-        if(AuthContext.currentUser.userType.toLowerCase() == "padrão") return setUserList(data.filter((user :initialSignUp )=> user.username == AuthContext.currentUser.userName))
-        if(AuthContext.currentUser.userType.toLowerCase() == "gerencia") return setUserList(data.filter((user :initialSignUp )=> user.userType.toLowerCase() != "master"))
-        if(AuthContext.currentUser.userType.toLowerCase() == "master") return setUserList(data)
+        setUserList(data)
+        if(AuthContext.currentUser.userType.toLowerCase() == "padrão") return setShowedUserList(data.filter((user :initialSignUp )=> user.username == AuthContext.currentUser.userName))
+        if(AuthContext.currentUser.userType.toLowerCase() == "gerencia") return setShowedUserList(data.filter((user :initialSignUp )=> user.userType.toLowerCase() != "master"))
+        if(AuthContext.currentUser.userType.toLowerCase() == "master") return setShowedUserList(data)
       })
   }
 
@@ -58,7 +59,7 @@ export const UsersManager = (props: any) => {
     const newUser = [userInfo]
     await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
       users: arrayUnion(userInfo)
-    }).then(res => console.log(res))
+    }).then(res => console.log('here'))
       .catch(err => console.log(err.message))
     getUsers()
     clear()
@@ -76,7 +77,7 @@ export const UsersManager = (props: any) => {
   const deleteUser = async (email: string) => {
       await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
           users: userList.filter(user => user.email != email)
-      }).then(res => console.log(res))
+      }).then(res => console.log('finished'))
           .catch(err => console.log(err.message))
           getUsers()
   }
@@ -110,7 +111,8 @@ export const UsersManager = (props: any) => {
   }, [AuthContext.currentUser.id])
 
   useEffect(() => {
-    console.log(userList)
+    console.log("user list: ", userList)
+    console.log("showed user list: ", showedUserList)
     console.log("userInfo: ", userInfo)
   })
 
@@ -184,7 +186,7 @@ export const UsersManager = (props: any) => {
                 <Text b css={{ "transform": "translateX(-80px)" }}>Tipo de Usuário</Text>
                 <Text b css={{ "transform": "translateX(-130px)" }}>Senha</Text>
               </Row>
-              {userList.map((user, index: number) => {
+              {showedUserList.map((user, index: number) => {
                 return (
                   <>
                     <div key={index} className="users-div">
