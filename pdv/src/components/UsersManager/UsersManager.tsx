@@ -5,7 +5,7 @@ import Button from '../../components/Button/Button'
 import React, { useEffect, useReducer, useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 import { OrdinaryInput } from '../OrdinaryInput/OrdinaryInput'
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { Alert } from '@mui/material'
@@ -57,7 +57,7 @@ export const UsersManager = (props: any) => {
     }
     const newUser = [userInfo]
     await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
-      users: [...userList, ...newUser]
+      users: arrayUnion(userInfo)
     }).then(res => console.log(res))
       .catch(err => console.log(err.message))
     getUsers()

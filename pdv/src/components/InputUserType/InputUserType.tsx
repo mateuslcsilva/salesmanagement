@@ -1,13 +1,18 @@
-import { doc, getDoc } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { useAuthContext } from "../../utils/contexts/AuthProvider.js";
-import { useOrderContext } from "../../utils/contexts/OrderContext.js";
-import { db } from "../../utils/firebase/firebase.js";
 import './styles.css'
 
 export const InputUserType = (props: any) => {
+    const AuthContext = useAuthContext()
     const [userTypeListActive, setUserTypeListActive] = useState<boolean>(false)
-    const [userTypes, setUserTypes] = useState(["", "Padrão", "Gerencia", "Master"])
+    const [userTypes, setUserTypes] = useState<Array<string>>([""])
+
+    useEffect(() => {
+        let userType = AuthContext.currentUser.userType
+        if(userType.toLocaleLowerCase() == "padrão") setUserTypes(["", "Padrão"])
+        if(userType.toLocaleLowerCase() == "gerencia") setUserTypes(["", "Padrão", "Gerencia"])
+        if(userType.toLocaleLowerCase() == "master") setUserTypes(["", "Padrão", "Gerencia", "Master"])
+    }, [AuthContext.currentUser.id])
 
     useEffect(() => {
         setUserTypeListActive(false)
