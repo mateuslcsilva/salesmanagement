@@ -31,7 +31,7 @@ export const ConfirmationModal = (props :propsType) =>  {
         let users = await getUsers()
         //@ts-ignore
         users.forEach(user => {
-            if(user.password == password && user.userType == "Master" || "Gerencia") {
+            if(user.password == password && user.userType == "master") {
                 props.setPermission(true)
             } else{
                 props.setAlert(<Alert severity="error">Senha incorreta ou usuário sem permissão!</Alert>)
