@@ -113,10 +113,6 @@ export const CheckOutScreen = () => {
     }
 
     useEffect(() => {
-        console.log(sale)
-    }, [sale])
-
-    useEffect(() => {
         const clearAlert = setTimeout(() => {
             setAlert(<p></p>)
         }, 5000)

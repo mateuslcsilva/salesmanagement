@@ -53,7 +53,6 @@ export const NewSaleScreen = () => {
     }
 
     const setTable = async () => {
-        console.log(AuthContext.currentUser.id)
         if (saleNumber == 0) return false
 
         let alert = <p></p>
@@ -148,8 +147,6 @@ export const NewSaleScreen = () => {
     useEffect(() => {
         getItems()
     }, [currentUserId])
-
-    useEffect(() => console.log(tableNumber), [tableNumber])
 
     return (
         <>

@@ -38,12 +38,13 @@ section{
     background-color: var(--div-color) !important;
     border: none;
     overflow: hidden;
-    height: 0;
+    height: fit-content;
     border-radius: 3px;
     transition: .3s ease;
     display: flex;
     flex-direction: column;
     position: absolute;
+    top: 115%;
 }
 
 #userTypeList::-webkit-scrollbar{
@@ -64,15 +65,19 @@ section{
     width: auto;
     height: auto;
     transition: 0.3s ease;
+    height: 0;
 }
 
 #userTypeList.active{
-    height: 130px;
-    outline: 1px solid #3e8ed0;
+    outline: 2px solid #3e8ed0;
     padding: 10px;
     overflow-y: scroll;
     transition: .3s ease;
     margin-bottom: 15px;
+}
+
+#userTypeList.active .user-type-button{
+    height: 24px;
 }
 
 #userTypeList.active .user-type-button:hover{

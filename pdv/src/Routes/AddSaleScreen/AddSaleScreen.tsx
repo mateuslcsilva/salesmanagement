@@ -59,7 +59,6 @@ export const AddSaleScreen = () => {
     }
 
     const findTable = () => {
-        console.log("find table")
         let salesIndex: number[] = []
         sales.forEach((item: sale, index: number) => {
             if (item.numTable == tableNumber) {
@@ -82,7 +81,6 @@ export const AddSaleScreen = () => {
     }
 
     const findSale = () => {
-        console.log("find sale")
         let salesIndex: any = []
         sales.forEach((item: sale, index: number) => {
             if (item.numSale == saleNumber) {
@@ -102,7 +100,6 @@ export const AddSaleScreen = () => {
     }
 
     const findCostumer = () => {
-        console.log("find costumer")
 
         let salesIndex: number[] = []
         sales.forEach((item: sale, index: number) => {
@@ -133,7 +130,6 @@ export const AddSaleScreen = () => {
                     newValue = item.itemValue
                 }
             })
-            console.log(oldValue, newValue, oldValue + newValue, orderContext.currentOrder)
             sales[saleIndex].totalValue += newValue
             sales[saleIndex].orders.push(orderContext.currentOrder)
         }
@@ -144,8 +140,7 @@ export const AddSaleScreen = () => {
     const updateSales = async () => {
         await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
             sales: sales
-        }).then(res => console.log(res))
-            .catch(err => console.log(err.message))
+        })
         clear()
     }
 
@@ -174,8 +169,6 @@ export const AddSaleScreen = () => {
     useEffect(() => {
         getItems()
     }, [])
-
-    useEffect(() => console.log(saleNumber) , [saleNumber])
 
     return (
         <>

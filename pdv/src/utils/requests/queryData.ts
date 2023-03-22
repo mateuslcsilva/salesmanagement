@@ -36,14 +36,12 @@ export const queryData = async (queryType: string, whereParam: string, value: an
       case 'itemsUpdate':
         await updateDoc(doc(db, "empresas", value.id), {
             items: arrayUnion(value.item)
-      }).then(res => console.log(res))
-      .catch(err => console.log(err.message))
+      })
       break
       case 'saleUpdate':
         await updateDoc(doc(db, "empresas", value.id), {
             sales: arrayUnion(value.sale)
-      }).then(res => console.log(res))
-      .catch(err => console.log(err.message))
+      })
       break
   }
 

@@ -41,9 +41,7 @@ export const Extract = () => {
         let tables :number[] = []
         sales.forEach(sale => {
             if(typeof sale.numTable == 'number' && !tables.includes(sale.numTable)){
-                console.log(sale.numTable)
                 tables.push(sale.numTable)
-                console.log(tables)
             }
         })
         setOcuppiedTables(tables.length)
@@ -60,7 +58,6 @@ export const Extract = () => {
     useEffect(() => {
         getOcupiedTables()
         getTotalValue()
-        console.log(sales)
     }, [sales])
 
     return (

@@ -161,26 +161,19 @@ export const UpdateSaleScreen = () => {
             sales[saleIndex].orders.splice(item, 1)
         })
         let totalValue = 0
-        console.log("here")
         sales[saleIndex].orders?.map(order => {
             let item = itemList.find(item => item.numItem == order)
             if (item) totalValue += Number(item.itemValue)
         })
         sales[saleIndex].totalValue = totalValue
 
-        console.log("here")
-        console.log(currentSale)
-
         if (currentSale > 0) {
-
-            console.log(currentSale, sales[currentSale], sales[currentSale]?.orders, deletedItems)
             sales[currentSale].orders = [...sales[currentSale]?.orders, ...deletedItems]
             let totalValueCurrentSale = 0
             sales[currentSale].orders?.map(order => {
                 let item = itemList.find(item => item.numItem == order)
                 if (item) totalValueCurrentSale += Number(item.itemValue)
             })
-            console.log("here")
             sales[currentSale].totalValue = totalValueCurrentSale
         } else {
             let current = new Date
@@ -198,7 +191,6 @@ export const UpdateSaleScreen = () => {
                 loggedUser: AuthContext.currentUser.userName,
                 totalValue: 0
             }
-            console.log("here")
             let totalValue = 0
             updatedSale.orders?.map(order => {
                 let item = itemList.find(item => item.numItem == order)
@@ -215,11 +207,8 @@ export const UpdateSaleScreen = () => {
     }
 
     const changeNumTable = () => {
-        
-        console.log(newTableNumber)
         if (tableNumber < 0) return
         if (typeof saleIndex == "number") {
-            console.log(newTableNumber)
             sales[saleIndex].numTable = Number(newTableNumber)
         }
         updateSales()
@@ -239,8 +228,7 @@ export const UpdateSaleScreen = () => {
     const updateSales = async () => {
         await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
             sales: sales
-        }).then(res => console.log(res))
-            .catch(err => console.log(err.message))
+        })
         clear()
     }
 
@@ -283,7 +271,6 @@ export const UpdateSaleScreen = () => {
                 deleteItems()
                 break
             case 2:
-                console.log("here")
                 changeNumTable()
                 break
             case 3:
@@ -293,11 +280,6 @@ export const UpdateSaleScreen = () => {
                 return
         }
     }, [permission])
-
-    useEffect(() => {
-        console.log(newTableNumber)
-        console.log("permission: ", permission)
-    }, [newTableNumber, permission])
 
     return (
         <>

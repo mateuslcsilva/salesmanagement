@@ -53,8 +53,7 @@ export const ItemsManager = (props: any) => {
         }
         await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
             items: [...itemList, ...newItem]
-        }).then(res => console.log(res))
-            .catch(err => console.log(err.message))
+        })
             getItems()
             clear()
     }
@@ -67,8 +66,7 @@ export const ItemsManager = (props: any) => {
     const deleteItem = async (ref: number) => {
         await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
             items: itemList.filter(item => item.numItem != ref)
-        }).then(res => console.log(res))
-            .catch(err => console.log(err.message))
+        })
             getItems()
     }
 
@@ -91,12 +89,12 @@ export const ItemsManager = (props: any) => {
 
     useEffect(() => {
         getItems()
-    }, [AuthContext.currentUser.id])
+    }, [AuthContext.currentUser.id])/* 
 
     useEffect(() => {
         console.log(itemList)
         console.log("itemInfo: ", itemInfo)
-    })
+    }) */
 
     return (
         <div>

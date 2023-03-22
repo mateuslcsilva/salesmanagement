@@ -66,7 +66,6 @@ export const LoginScreen = () => {
       .then( res => {
         if (typeof (res) == "string") return alert(res)
         let user = res?.users?.find((user: any) => user.email.toLowerCase() == signInValues.userEmail.toLowerCase())
-        console.log(user)
         if (!user) return alert("Conta não encontrada!")
         if (user.password != signInValues.userPassword) return toast.error("Senha Incorreta!")
         if (res) setAuthContext.setCurrentUser({ id: res.id, userName: user.username, workplaceName: res.workplaceName, userType: user.userType})
@@ -102,7 +101,6 @@ export const LoginScreen = () => {
 
   const localStorageManagement = () => {
     let storagedTheme = localStorage.getItem('darkTheme')
-    console.log(storagedTheme)
     if(storagedTheme == "dark") setDarkTheme(true) 
   }
 

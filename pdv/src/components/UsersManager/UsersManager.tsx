@@ -40,7 +40,6 @@ export const UsersManager = (props: any) => {
   const getUsers = async () => {
     if (AuthContext.currentUser.id == '') return false
     let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
-    console.log(AuthContext.currentUser)
     let data = await getDoc(docRef)
       .then(res => {
         let data = res.data()?.users
@@ -59,8 +58,7 @@ export const UsersManager = (props: any) => {
     const newUser = [userInfo]
     await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
       users: arrayUnion(userInfo)
-    }).then(res => console.log('here'))
-      .catch(err => console.log(err.message))
+    })
     getUsers()
     clear()
   }
@@ -70,15 +68,10 @@ export const UsersManager = (props: any) => {
       deleteUser(email)
   }
 
-  /*  
-    useEffect((console.log(itemList)) => {})
-  */
-
   const deleteUser = async (email: string) => {
       await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
           users: userList.filter(user => user.email != email)
-      }).then(res => console.log('finished'))
-          .catch(err => console.log(err.message))
+      })
           getUsers()
   }
 
@@ -108,13 +101,13 @@ export const UsersManager = (props: any) => {
 
   useEffect(() => {
     getUsers()
-  }, [AuthContext.currentUser.id])
+  }, [AuthContext.currentUser.id])/* 
 
   useEffect(() => {
     console.log("user list: ", userList)
     console.log("showed user list: ", showedUserList)
     console.log("userInfo: ", userInfo)
-  })
+  }) */
 
   return (
     <div>
