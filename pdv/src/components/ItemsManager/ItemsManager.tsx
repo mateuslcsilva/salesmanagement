@@ -9,11 +9,11 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { itemType } from '../../types/itemType/itemType'
-import { Alert } from '@mui/material'
+import { Alert, getNativeSelectUtilityClasses } from '@mui/material'
 
 export const ItemsManager = (props: any) => {
 
-    const initialItemInfo = {} as itemType
+    const initialItemInfo = {active: true} as itemType
 
     const AuthContext = useAuthContext()
     const [itemList, setItemList] = useState<Array<itemType>>([])
@@ -43,9 +43,9 @@ export const ItemsManager = (props: any) => {
     }
 
     const addItem = async () => {
-        if (itemList.find(item => item.itemRef == itemInfo.itemRef)) return setAlert(<Alert severity="error" >Referência já cadastrada!</Alert>)
+        if (itemList.find(item => item.active && item.itemRef == itemInfo.itemRef)) return setAlert(<Alert severity="error" >Referência já cadastrada!</Alert>)
         //@ts-ignore
-        const convert = { itemRef: Number(itemInfo.itemRef), itemValue: typeof itemInfo.itemValue == "number" ? itemInfo.itemValue : Number(itemInfo.itemValue.replaceAll(',', '.')), numItem : itemList.map(item => item.numItem).sort((a, b) => a - b).at(-1) + 1}
+        const convert = { active: true, itemRef: Number(itemInfo.itemRef), itemValue: typeof itemInfo.itemValue == "number" ? itemInfo.itemValue : Number(itemInfo.itemValue.replaceAll(',', '.')), numItem : itemList.map(item => item.numItem).sort((a, b) => a - b).at(-1) + 1}
         const newItem = [{...itemInfo, ...convert}]
         if (newItem[0].itemValue >= Infinity || isNaN(newItem[0].itemValue)) {
             setAlert(<Alert severity="error">Por favor, insira os dados novamente!</Alert>)
@@ -64,18 +64,25 @@ export const ItemsManager = (props: any) => {
     }
 
     const deleteItem = async (ref: number) => {
+        setItemList(itemList.map(item => {
+            if(item.numItem == ref){
+                item.active = false
+            }
+            return item
+        }))
         await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
-            items: itemList.filter(item => item.numItem != ref)
+            items: itemList
         })
             getItems()
     }
 
     const clear = () => {
         setItemInfo({
-            itemValue: 0,
+            itemValue: "",
             item: "",
             numItem: 0,
-            itemRef: 0
+            itemRef: 0,
+            active: true
         })
     }
 
@@ -89,12 +96,13 @@ export const ItemsManager = (props: any) => {
 
     useEffect(() => {
         getItems()
-    }, [AuthContext.currentUser.id])/* 
+    }, [AuthContext.currentUser.id])
 
     useEffect(() => {
         console.log(itemList)
-        console.log("itemInfo: ", itemInfo)
-    }) */
+        console.log("itemInfo: ", itemInfo)/* 
+        attItemList() */
+    })
 
     return (
         <div>
@@ -157,8 +165,8 @@ export const ItemsManager = (props: any) => {
                                 <Text b css={{ "transform": "translateX(-130px)" }}>Descrição</Text>
                                 <Text b css={{ "transform": "translateX(-110px)" }}>Valor</Text>
                             </Row>
-                            {itemList.map((item, index: number) => {
-                                return (
+                            {itemList.sort((a, b) => a.itemRef - b.itemRef).map((item, index: number) => {
+                                if (item.active) return (
                                     <>
                                         <div key={index} className="items-div">
                                             <p>{item.itemRef}</p>

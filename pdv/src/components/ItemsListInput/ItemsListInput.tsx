@@ -80,7 +80,7 @@ const ItemsListInput = (props: any) => {
 
             <div id='itemList' className={itemListActive? "active primary-text" : "primary-text"}>
                 {itemList.map((item: any, index: number): any => {
-                    return (
+                    if (item.active) return (
                         <button className="item-btn" onClick={(e) => selectItem(item.numItem)} key={index} id={item.numItem}>
                             {getItemText("index", index)}
                         </button>
