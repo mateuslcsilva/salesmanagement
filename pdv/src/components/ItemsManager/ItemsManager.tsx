@@ -10,16 +10,18 @@ import { db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { itemType } from '../../types/itemType/itemType'
 import { Alert, getNativeSelectUtilityClasses } from '@mui/material'
+import { sale } from '../../types/sale/sale'
 
 export const ItemsManager = (props: any) => {
 
-    const initialItemInfo = {active: true} as itemType
+    const initialItemInfo = {} as itemType
 
     const AuthContext = useAuthContext()
     const [itemList, setItemList] = useState<Array<itemType>>([])
+    const [saleList, setSaleList] = useState<Array<sale>>([])
     const [alert, setAlert] = useState(<p></p>)
     const [itemInfo, setItemInfo] = useReducer(
-        (currentValues: itemType, newValues: itemType) => {
+        (currentValues: itemType, newValues: itemType) :itemType => {
           return { ...currentValues, ...newValues }
         },
         initialItemInfo
@@ -39,10 +41,12 @@ export const ItemsManager = (props: any) => {
         let data = await getDoc(docRef)
             .then(res => {
                 setItemList(res.data()?.items)
+                setSaleList(res.data()?.sales)
             })
     }
 
     const addItem = async () => {
+        if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!")
         if (itemList.find(item => item.active && item.itemRef == itemInfo.itemRef)) return setAlert(<Alert severity="error" >Referência já cadastrada!</Alert>)
         //@ts-ignore
         const convert = { active: true, itemRef: Number(itemInfo.itemRef), itemValue: typeof itemInfo.itemValue == "number" ? itemInfo.itemValue : Number(itemInfo.itemValue.replaceAll(',', '.')), numItem : itemList.map(item => item.numItem).sort((a, b) => a - b).at(-1) + 1}
@@ -59,11 +63,13 @@ export const ItemsManager = (props: any) => {
     }
 
     const editItem = (ref :number) => {
+        if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!")
         setItemInfo(itemList[itemList.findIndex(item => item.numItem == ref)])
         deleteItem(ref)
     }
 
     const deleteItem = async (ref: number) => {
+        if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!")
         setItemList(itemList.map(item => {
             if(item.numItem == ref){
                 item.active = false
