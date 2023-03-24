@@ -7,14 +7,19 @@ import { Fab, ThemeProvider } from '@mui/material'
 import { SideBar } from './components/SideBar/SideBar'
 import { ItemsManager } from './components/ItemsManager/ItemsManager'
 import { UsersManager } from './components/UsersManager/UsersManager'
+import { useAuthContext } from './utils/contexts/AuthProvider'
 
 function App() {
+  const AuthContext = useAuthContext()
   const [darkTheme, setDarkTheme] = useState(false)
   const [sideBar, setSideBar] = useState(false)
   const [itemVisible, setItemVisible] = useState(false);
   const [usersVisible, setUsersVisible] = useState(false);
 
-  const itemHandler = () => setItemVisible(true);
+  const itemHandler = () => {
+    if(AuthContext.currentUser.userType == "Padrão") return window.alert("Essa tela é reservada para usuários de nível Gerência e Master.")
+    setItemVisible(true)
+  };
   const closeItemHandler = () => setItemVisible(false);
   const usersHandler = () => setUsersVisible(true);
   const closeUsersHandler = () => setUsersVisible(false);
