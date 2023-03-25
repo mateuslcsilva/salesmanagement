@@ -46,30 +46,47 @@ export const ItemsManager = (props: any) => {
     }
 
     const addItem = async () => {
-        if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!")
+        /* if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!") */
         if (itemList.find(item => item.active && item.itemRef == itemInfo.itemRef)) return setAlert(<Alert severity="error" >Referência já cadastrada!</Alert>)
-        //@ts-ignore
-        const convert = { active: true, itemRef: Number(itemInfo.itemRef), itemValue: typeof itemInfo.itemValue == "number" ? itemInfo.itemValue : Number(itemInfo.itemValue.replaceAll(',', '.')), numItem : itemList.map(item => item.numItem).sort((a, b) => a - b).at(-1) + 1}
+        const convert = { active: true, 
+            itemRef: Number(itemInfo.itemRef), 
+            itemValue: typeof itemInfo.itemValue == "number" ? itemInfo.itemValue : Number(itemInfo.itemValue.replaceAll(',', '.')), 
+            //@ts-ignore
+            numItem : itemInfo.numItem ? itemInfo.numItem : itemList.map(item => item.numItem).sort((a, b) => a - b).at(-1) + 1
+        }
         const newItem = [{...itemInfo, ...convert}]
+        let newItemList = []
+        if(itemList.find(item => item.numItem == newItem[0].numItem)){
+            newItemList = itemList.map(item => {
+                if(item.numItem == newItem[0].numItem){
+                    return {...item, ...newItem[0]}
+                } else{
+                    return item
+                }
+            })
+        } else{
+            newItemList = [...itemList, ...newItem]
+        }
+        console.log(newItemList)
         if (newItem[0].itemValue >= Infinity || isNaN(newItem[0].itemValue)) {
             setAlert(<Alert severity="error">Por favor, insira os dados novamente!</Alert>)
             return clear()
         }
         await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
-            items: [...itemList, ...newItem]
+            items: newItemList
         })
             getItems()
             clear()
     }
 
     const editItem = (ref :number) => {
-        if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!")
+        /* if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!") */
         setItemInfo(itemList[itemList.findIndex(item => item.numItem == ref)])
         deleteItem(ref)
     }
 
     const deleteItem = async (ref: number) => {
-        if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!")
+        /* if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!") */
         setItemList(itemList.map(item => {
             if(item.numItem == ref){
                 item.active = false
@@ -78,6 +95,13 @@ export const ItemsManager = (props: any) => {
         }))
         await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
             items: itemList
+        })
+            getItems()
+    }
+
+    const attItemList = async () => {
+        await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
+            items: itemList.filter(item => item.active)
         })
             getItems()
     }
