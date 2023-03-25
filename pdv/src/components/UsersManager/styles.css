@@ -9,7 +9,7 @@ hr{
 .users-container {
     width: 690px !important;
     padding: 0 15px !important;
-    margin-left: 30px;
+    margin-left: 30px !important;
     max-height: 300px !important;
     overflow-y: scroll !important;
 }
