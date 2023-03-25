@@ -80,6 +80,22 @@ hr{
     background-color: #252525;
 }
 
+.error-label{
+    background-color: #FFD2AF;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 7px;
+    color: #3c3c3cef !important;
+    border-radius: 3px;
+    font-weight: 500;
+}
+
+.error-label i{
+    color: #3c3c3cef !important;
+    font-weight: 500;
+}
+
 .bi-trash3:hover{
     --aciton-color: red !important;
 }

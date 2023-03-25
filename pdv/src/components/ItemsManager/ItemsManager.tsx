@@ -47,7 +47,7 @@ export const ItemsManager = (props: any) => {
 
     const addItem = async () => {
         /* if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!") */
-        if (itemList.find(item => item.active && item.itemRef == itemInfo.itemRef)) return setAlert(<Alert severity="error" >Referência já cadastrada!</Alert>)
+        if (itemList.find(item => item.active && item.itemRef == itemInfo.itemRef)) return setAlert(<p className='error-label' ><i className="bi bi-x-octagon"></i>Referência já cadastrada!</p>)
         const convert = { active: true, 
             itemRef: Number(itemInfo.itemRef), 
             itemValue: typeof itemInfo.itemValue == "number" ? itemInfo.itemValue : Number(itemInfo.itemValue.replaceAll(',', '.')), 
@@ -116,13 +116,13 @@ export const ItemsManager = (props: any) => {
         })
     }
 
-    /* useEffect(() => {
+    useEffect(() => {
         const clearAlert = setTimeout(() => {
             setAlert(<p></p>)
         }, 5000)
 
         return () => clearTimeout(clearAlert)
-    }) */
+    })
 
     useEffect(() => {
         getItems()
@@ -182,7 +182,7 @@ export const ItemsManager = (props: any) => {
                                 onClick={addItem}
                                 className='is-success'
                                 text={<i className="bi bi-check-lg is-size-4"></i>}
-                                disabled={!itemInfo.item || itemInfo.itemValue == 0 || itemInfo.itemRef == 0 ? true : false}
+                                disabled={!itemInfo.item || itemInfo.itemValue == "" || itemInfo.itemRef == 0 ? true : false}
                             />
                         </Row>
                         <Spacer y={0.5} />
