@@ -107,6 +107,7 @@ input:disabled::placeholder{
   width: 75vw;
   padding: 3vh;
   box-shadow: 5px 5px 20px #696b7431;
+  margin-left: 80px !important;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -119,7 +120,7 @@ input:disabled::placeholder{
 
 .divContainer.side-bar {
   width: 65vw !important;
-  margin-left: 270px !important;
+  margin-left: 290px !important;
   padding: 2.6vh;
   transition: 0.4s ease;
 }

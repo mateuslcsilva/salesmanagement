@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import './styles.css'
 import Button from '../../components/Button/Button'
-import { Alert, TextField } from '@mui/material'
+import { Alert } from '@mui/material'
 import { Dropdown } from '@nextui-org/react';
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { sale } from '../../types/sale/sale'
-import { arrayRemove, arrayUnion, doc, FieldValue, getDoc, updateDoc } from 'firebase/firestore'
+import { arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
-import { queryData } from '../../utils/requests/queryData'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale';
 import { itemType } from '../../types/itemType/itemType';
 

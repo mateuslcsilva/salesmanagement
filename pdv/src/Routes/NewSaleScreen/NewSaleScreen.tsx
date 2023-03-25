@@ -1,6 +1,6 @@
-import React, { useState, useEffect, createContext, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import './styles.css'
-import { Alert, TextField } from '@mui/material'
+import { Alert } from '@mui/material'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
 import { sale } from '../../types/sale/sale'
@@ -9,7 +9,6 @@ import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 import { queryData } from '../../utils/requests/queryData'
-import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale'

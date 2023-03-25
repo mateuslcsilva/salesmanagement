@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import './styles.css'
-import Button from '../../components/Button/Button'
-import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
-import { Accordion, Alert, TextField } from '@mui/material'
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { sale } from '../../types/sale/sale'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
