@@ -15,13 +15,13 @@ section{
     font-size: 14pt !important;
     margin-right: 25px;
     overflow: hidden;
+    color: var(--outline-color);
 }
 
 .userTypesInput p{
     overflow: hidden;
     text-overflow: ellipsis !important;
     white-space: nowrap; 
-    color: #121212 !important;
 }
 
 .userTypesInput::placeholder{
@@ -30,7 +30,7 @@ section{
 
 .userTypesInput.active-input{
     outline: 2px solid #3e8ed0 !important;
-    color: var(--primary-text-color);
+    color: var(--primary-text-color) !important;
 }
 
 #userTypeList{
