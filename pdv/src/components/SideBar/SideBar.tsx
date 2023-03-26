@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import "./styles.css"
 import logo from '../../assets/fav-icon.png'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
+import { Link } from 'react-router-dom'
 
 export const SideBar = (props: any) => {
     const [open, setOpen] = useState(false)
@@ -42,22 +43,22 @@ export const SideBar = (props: any) => {
                         </li>
                         <ul className="menu-link-list">
                             <li className="nav-link">
-                                <a href="#">
+                                <Link to="/newsalescreen">
                                     <i className="bi bi-house"></i>
                                     <span className="text nav-text">Início</span>
-                                </a>
+                                </Link>
                             </li>
                             <li className="nav-link">
-                                <a href="#">
+                                <Link to="/sales">
                                     <i className="bi bi-currency-dollar"></i>
                                     <span className="text nav-text">Vendas</span>
-                                </a>
+                                </Link>
                             </li>
                             <li className="nav-link">
-                                <a href="#">
+                                <Link to="/dashboards">
                                     <i className="bi bi-clipboard-data"></i>
                                     <span className="text nav-text">Dashboards</span>
-                                </a>
+                                </Link>
                             </li>
                             <li className="nav-link">
                                 <a href="#" onClick={() => props.usersHandler()}>
@@ -86,10 +87,10 @@ export const SideBar = (props: any) => {
                             </div>
                         </li>
                         <li className="">
-                            <a href="#">
+                            <Link to="/">
                                 <i className="bi bi-box-arrow-right"></i>
                                 <span className="text nav-text">Sair</span>
-                            </a>
+                            </Link>
                         </li>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import './App.css'
 import NavBarButtons from '../src/Routes/NavBarButtons/NavBarButtons'
 import { LoginScreen } from '../src/Routes/LoginScreen/LoginScreen'
@@ -14,6 +14,7 @@ function App() {
   const [sideBar, setSideBar] = useState(false)
   const [itemVisible, setItemVisible] = useState(false);
   const [usersVisible, setUsersVisible] = useState(false);
+  let location = useLocation()
 
   const itemHandler = () => {
     if(AuthContext.currentUser.userType == "Padrão") return window.alert("Essa tela é reservada para usuários de nível Gerência e Master.")
@@ -56,7 +57,7 @@ function App() {
 
       <div className='section'>
         <div className={sideBar == true ? "divContainer side-bar" : "divContainer"}>
-          <NavBarButtons />
+          {!["/sales", "/dashboards"].includes(location.pathname) ? <NavBarButtons /> : ""}
           <Outlet />
         </div>
       </div>
