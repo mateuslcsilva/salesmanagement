@@ -14,3 +14,19 @@
 .dashboards-title i{
     font-size: 24pt;
 }
+
+.primary-data{
+    width: 100%;
+    height: 180px;
+    padding: 1% 3%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.primary-data > div{
+    height: 100%;
+    width: 25%;
+    border-radius: 7px;
+    background-color: #3e8ed020;
+    box-shadow: 12px 12px 25px #efefefab;
+}
