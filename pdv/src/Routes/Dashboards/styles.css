@@ -1,0 +1,16 @@
+.dashboards-title{
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 5px;
+    padding: 0 10px;
+    font-size: 26pt;
+    font-weight: 600;
+    color: #3e8ed0;
+    margin-bottom: 50px;
+}
+
+.dashboards-title i{
+    font-size: 24pt;
+}

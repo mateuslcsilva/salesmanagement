@@ -57,7 +57,7 @@ function App() {
 
       <div className='section'>
         <div className={sideBar == true ? "divContainer side-bar" : "divContainer"}>
-          {!["/sales", "/dashboards"].includes(location.pathname) ? <NavBarButtons /> : ""}
+          {!["/sales", "/dashboards"].includes(location.pathname) && <NavBarButtons /> }
           <Outlet />
         </div>
       </div>
