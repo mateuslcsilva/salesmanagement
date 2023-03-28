@@ -15,7 +15,7 @@ export const Dashboards = () => {
     const [sales, setSales] = useState<Array<sale>>([] as Array<sale>)
     const [salesHistory, setSalesHistory] = useState<Array<sale>>()
 
-    
+
 
     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false
@@ -34,6 +34,8 @@ export const Dashboards = () => {
                 <i className="bi bi-clipboard-data"></i>
                 Dashboards
             </h1>
+            <h3 className='section-title'><i className="bi bi-wallet2"></i>Números do mês</h3>
+            <p className='section-sub-title'>Seu mês até agora</p>
             <div className='primary-data'>
                 <div>
 
@@ -44,6 +46,14 @@ export const Dashboards = () => {
                 <div>
 
                 </div>
+            </div>
+            <h3 className='section-title'><i className="bi bi-graph-up-arrow"></i>Gráficos</h3>
+            <p className='section-sub-title'>Análise detalhada das informações do mês</p>
+            <div className='charts'>
+                <div className='div1'></div>
+                <div className='div2'></div>
+                <div className='div3'></div>
+
             </div>
         </>
     )
