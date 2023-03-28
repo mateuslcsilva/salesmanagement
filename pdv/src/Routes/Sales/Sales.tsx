@@ -34,8 +34,24 @@ export const Sales = () => {
                 <i className="bi bi-currency-dollar"></i>
                 Vendas
             </h1>
-            <div>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Deleniti similique quibusdam, explicabo quos exercitationem eius possimus iusto pariatur adipisci veniam quia temporibus praesentium minima fugiat! Necessitatibus commodi sed sapiente ipsam.
+            <h3 className='section-title'><i className="bi bi-wallet2"></i>Números do dia</h3>
+            <p className='section-sub-title'>Seu dia até agora</p>
+            <div className='primary-sales-data'>
+                <div>
+
+                </div>
+                <div>
+
+                </div>
+                <div>
+
+                </div>
+            </div>
+            <h3 className='section-title'><i className="bi bi-receipt"></i>Extrato de Vendas</h3>
+            <p className='section-sub-title'>Análise detalhada das informações do mês</p>
+            <div className='sales'>
+                <div className='open-sales'></div>
+                <div className='most-salled-item'></div>
             </div>
         </>
     )
