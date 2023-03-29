@@ -38,13 +38,25 @@ export const Dashboards = () => {
             <p className='section-sub-title'>Seu mês até agora</p>
             <div className='primary-data'>
                 <div>
-
+                    <i className="bi bi-cash-stack"></i>
+                    <div className='primary-data-info'>
+                        <h1>R$152.965,40</h1>
+                        <p>Valor total vendido</p>
+                    </div>
                 </div>
                 <div>
-
+                <i className="bi bi-cart-check"></i>
+                    <div className='primary-data-info'>
+                        <h1>1154</h1>
+                        <p>Número de pedidos</p>
+                    </div>
                 </div>
                 <div>
-
+                <i className="bi bi-cash"></i>
+                    <div className='primary-data-info'>
+                        <h1>R$265,40</h1>
+                        <p>Ticket Médio</p>
+                    </div>
                 </div>
             </div>
             <h3 className='section-title'><i className="bi bi-graph-up-arrow"></i>Gráficos</h3>

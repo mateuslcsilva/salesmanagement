@@ -15,7 +15,7 @@
     font-size: 24pt;
 }
 
-.section-title{
+.section-title {
     width: 100%;
     display: flex;
     justify-content: start;
@@ -25,7 +25,7 @@
     font-weight: 600;
 }
 
-.section-sub-title{
+.section-sub-title {
     width: 100%;
     display: flex;
     justify-content: start;
@@ -49,6 +49,39 @@
     border-radius: 7px;
     background-color: #3e8ed020;
     box-shadow: 12px 12px 25px #efefefab;
+    display: flex;
+    flex-direction: row;
+}
+
+.primary-data>div i {
+    display: grid;
+    place-items: center;
+    background-color: #3e8ed040;
+    font-size: 23pt;
+    height: 32%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    margin: 80px 25px;
+    transform: translateY(-50%);
+}
+
+.primary-data .primary-data-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
+    gap: 15px;
+    padding: 0 25px 10px 0;
+    width: 70%;
+}
+
+.primary-data>div h1 {
+    font-size: 26pt;
+    font-weight: 600;
+}
+
+.primary-data>div p{
+    color: #3c3c3c90;
 }
 
 .charts {
@@ -62,7 +95,7 @@
     padding: 0 3%;
 }
 
-.charts div{
+.charts div {
     border-radius: 7px;
     background-color: #3e8ed020;
     box-shadow: 12px 12px 25px #efefefab;
@@ -81,15 +114,18 @@
 }
 
 @media (min-width: 1399px) {
-    .charts, .primary-data{
+
+    .charts,
+    .primary-data {
         padding: 1% 5%;
     }
 
-    .charts{
+    .charts {
         height: 550px;
     }
 
-    .section-title, .section-sub-title{
+    .section-title,
+    .section-sub-title {
         padding: 0 5.5%;
     }
 }

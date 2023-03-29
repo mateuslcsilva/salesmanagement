@@ -38,7 +38,6 @@ export const Sales = () => {
             <p className='section-sub-title'>Seu dia até agora</p>
             <div className='primary-sales-data'>
                 <div>
-
                 </div>
                 <div>
 
