@@ -1,5 +1,5 @@
 import { doc, getDoc } from 'firebase/firestore'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { itemType } from '../../types/itemType/itemType'
 import { sale } from '../../types/sale/sale'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
@@ -28,6 +28,51 @@ export const Dashboards = () => {
             })
     }
 
+    const getTotalSaleValue = () => {
+        let date = new Date
+
+        let totalSaleValue = 0
+        sales.forEach(sale => {
+            if (Number(sale.date.substring(4, 5)) - 1 == date.getMonth()) {
+                totalSaleValue += sale.totalValue
+                console.log("here")
+            }
+        })
+        salesHistory?.forEach(sale => {
+            if (Number(sale.date.substring(4, 5)) - 1 == date.getMonth()) {
+                totalSaleValue += sale.totalValue
+            }
+        })
+        return totalSaleValue
+    }
+
+    const getNumberOfSales = () => {
+        let date = new Date
+
+        let numberOfSales = 0
+        sales.forEach(sale => {
+            if (Number(sale.date.substring(4, 5)) - 1 == date.getMonth()) {
+                numberOfSales++
+            }
+        })
+        salesHistory?.forEach(sale => {
+            if (Number(sale.date.substring(4, 5)) - 1 == date.getMonth()) {
+                numberOfSales++
+            }
+        })
+        return numberOfSales
+    }
+
+    useEffect(() => {
+        getItems()
+    }, [AuthContext.currentUser.id])
+
+    useEffect(() => {
+        //console.log(sales)
+        // console.log(sales[0].date.substring(4,5))
+        console.log(getNumberOfSales())
+    })
+
     return (
         <>
             <h1 className='dashboards-title'>
@@ -40,21 +85,21 @@ export const Dashboards = () => {
                 <div>
                     <i className="bi bi-cash-stack"></i>
                     <div className='primary-data-info'>
-                        <h1>R$152.965,40</h1>
+                        <h1>{getTotalSaleValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
                         <p>Valor total vendido</p>
                     </div>
                 </div>
                 <div>
-                <i className="bi bi-cart-check"></i>
+                    <i className="bi bi-cart-check"></i>
                     <div className='primary-data-info'>
-                        <h1>1154</h1>
+                        <h1>{getNumberOfSales()}</h1>
                         <p>Número de pedidos</p>
                     </div>
                 </div>
                 <div>
-                <i className="bi bi-cash"></i>
+                    <i className="bi bi-cash"></i>
                     <div className='primary-data-info'>
-                        <h1>R$265,40</h1>
+                        <h1>{(getTotalSaleValue()/getNumberOfSales()).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
                         <p>Ticket Médio</p>
                     </div>
                 </div>
