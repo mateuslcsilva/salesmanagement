@@ -28,18 +28,33 @@ export const Dashboards = () => {
             })
     }
 
-    const getTotalSaleValue = () => {
-        let date = new Date
+    const getItemText = (numItem :number) => {
+        let currentItem = itemList.filter(item => item.numItem == numItem)
+        if(currentItem[0]?.itemRef && currentItem[0]?.item) return `${currentItem[0]?.itemRef} - ${currentItem[0]?.item}`
+    }
+    
+    const count = (array :Array<number>, item :number) :any => {
+        let appearence = 0
+        array.forEach(element => {
+            if(element == item) appearence++
+        })
+        if(getItemText(item)) return {
+            element: item,
+            appearences: appearence,
+            text: getItemText(item)
+        } 
+    }
 
+    const getTotalSaleValue = () => {
         let totalSaleValue = 0
         sales.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == date.getMonth()) {
+            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth()) {
                 totalSaleValue += sale.totalValue
                 console.log("here")
             }
         })
         salesHistory?.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == date.getMonth()) {
+            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth()) {
                 totalSaleValue += sale.totalValue
             }
         })
@@ -47,20 +62,40 @@ export const Dashboards = () => {
     }
 
     const getNumberOfSales = () => {
-        let date = new Date
-
         let numberOfSales = 0
         sales.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == date.getMonth()) {
+            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth()) {
                 numberOfSales++
             }
         })
         salesHistory?.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == date.getMonth()) {
+            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth()) {
                 numberOfSales++
             }
         })
         return numberOfSales
+    }
+
+    const getMostSelledItem = () => {
+        let allSelledItems :Array<number> = []
+        sales.forEach(sale => {
+            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth()) {
+                allSelledItems.push(...sale.orders)
+            }
+        })
+        salesHistory?.forEach(sale => {
+            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth()) {
+                allSelledItems.push(...sale.orders)
+            }
+        })
+
+        let mostSelledItems :Array<{element: number, appearences: number, text: string}> = []
+        allSelledItems.forEach(item => {
+            if(mostSelledItems && mostSelledItems.find(element1 => element1.element == item)) return false
+            if(count(allSelledItems, item)) mostSelledItems.push(count(allSelledItems, item))
+        })
+
+        return mostSelledItems.sort((a, b) => b.appearences - a.appearences)
     }
 
     useEffect(() => {
@@ -70,7 +105,7 @@ export const Dashboards = () => {
     useEffect(() => {
         //console.log(sales)
         // console.log(sales[0].date.substring(4,5))
-        console.log(getNumberOfSales())
+        console.log(getMostSelledItem())
     })
 
     return (
