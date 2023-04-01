@@ -122,11 +122,6 @@ export const Dashboards = () => {
 
     const data = {
         labels: getMostSelledItem().map(element => element.text).splice(0, 5),
-        canvas: {
-            style:{
-                outerHeight: 400
-            }
-        },
         outerWidth: 500,
         datasets: [
           {
@@ -168,7 +163,7 @@ export const Dashboards = () => {
             <div className='primary-data'>
                 <div>
                     <i className="bi bi-cash-stack"></i>
-                    <div className='primary-data-info'>
+                    <div className={getTotalSaleValue() > 9999 ? "primary-data-info small-font-size" : "primary-data-info"}>
                         <h1>{getTotalSaleValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
                         <p>Valor total vendido</p>
                     </div>
@@ -194,7 +189,7 @@ export const Dashboards = () => {
                 <div className='div1'></div>
                 <div className='div2'></div>
                 <div className='div3'>
-                        <Pie  data={data}/>
+                        <Pie  data={data} className='pie-chart'/>
                         <div className='pie-chart-legends'>
                             
                             {getMostSelledItem().map(element => element.text).splice(0, 5).map((item, index)=> {
