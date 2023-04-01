@@ -5,7 +5,12 @@ import { sale } from '../../types/sale/sale'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { db } from '../../utils/firebase/firebase'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
 import './styles.css'
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.overrides["pie"].plugins.legend.display = false
 
 
 export const Dashboards = () => {
@@ -15,6 +20,7 @@ export const Dashboards = () => {
     const [sales, setSales] = useState<Array<sale>>([] as Array<sale>)
     const [salesHistory, setSalesHistory] = useState<Array<sale>>()
 
+    
 
 
     const getItems = async () => {
@@ -94,9 +100,52 @@ export const Dashboards = () => {
             if(mostSelledItems && mostSelledItems.find(element1 => element1.element == item)) return false
             if(count(allSelledItems, item)) mostSelledItems.push(count(allSelledItems, item))
         })
-
+        console.log(mostSelledItems.sort((a, b) => b.appearences - a.appearences))
         return mostSelledItems.sort((a, b) => b.appearences - a.appearences)
     }
+
+    const backgroundColor = [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+      ]
+
+      const borderColor = [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+      ]
+
+    const data = {
+        labels: getMostSelledItem().map(element => element.text).splice(0, 5),
+        canvas: {
+            style:{
+                outerHeight: 400
+            }
+        },
+        outerWidth: 500,
+        datasets: [
+          {
+            label: 'Vendidos: ',
+            fill: 1,
+            rotation: 25,
+            data: getMostSelledItem().map(element => element.appearences).splice(0, 5),
+            backgroundColor: backgroundColor,
+            borderColor: backgroundColor,
+            borderWidth: 1,
+          },
+        ],
+      };
+
+      const plugins = {
+        legend:{
+            display: false
+        }
+      }
 
     useEffect(() => {
         getItems()
@@ -144,7 +193,18 @@ export const Dashboards = () => {
             <div className='charts'>
                 <div className='div1'></div>
                 <div className='div2'></div>
-                <div className='div3'></div>
+                <div className='div3'>
+                        <Pie  data={data}/>
+                        <div className='pie-chart-legends'>
+                            
+                            {getMostSelledItem().map(element => element.text).splice(0, 5).map((item, index)=> {
+                                return (
+                                <p id='pie-chart-legend'><span style={{"backgroundColor" : backgroundColor[index], "border": `1px solid ${borderColor[index]}`}}></span>{item}</p>
+                                )
+                            })}
+                        </div>
+                        <p>Itens mais vendidos</p>
+                </div>
 
             </div>
         </>

@@ -82,6 +82,7 @@
 
 .primary-data>div p{
     color: #3c3c3c90;
+    white-space: nowrap;
 }
 
 .charts {
@@ -95,9 +96,9 @@
     padding: 0 3%;
 }
 
-.charts div {
+.charts > div {
     border-radius: 7px;
-    background-color: #3e8ed020;
+    background-color: #3e8ed020 !important;
     box-shadow: 12px 12px 25px #efefefab;
 }
 
@@ -111,6 +112,31 @@
 
 .div3 {
     grid-area: 1 / 5 / 7 / 7;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 15px;
+}
+
+.charts>div p{
+    color: #3c3c3c90;
+    width: 100%;
+    text-align: end;
+}
+
+#pie-chart-legend{
+    color: #252525 ;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: fit-content;
+    padding: 1px 0;
+}
+
+#pie-chart-legend > span{
+    width: 15px ;
+    height: 10px;
 }
 
 @media (min-width: 1399px) {
