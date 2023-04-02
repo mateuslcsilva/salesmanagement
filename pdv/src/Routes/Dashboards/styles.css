@@ -118,10 +118,36 @@
 
 .div1 {
     grid-area: 1 / 1 / 4 / 5;
+    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 20px;
+}
+
+.div1 h1{
+    width: 100%;
+    text-align: start;
+    font-weight: 600;
+    color: #252525;
 }
 
 .div2 {
     grid-area: 4 / 1 / 7 / 5;
+    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 20px;
+}
+
+.div2 h1{
+    width: 100%;
+    text-align: start;
+    font-weight: 600;
+    color: #252525;
 }
 
 .div3 {
