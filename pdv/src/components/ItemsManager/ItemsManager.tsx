@@ -129,8 +129,8 @@ export const ItemsManager = (props: any) => {
     }, [AuthContext.currentUser.id])
 
     useEffect(() => {
-        console.log(itemList)
-        console.log("itemInfo: ", itemInfo)/* 
+        /* console.log(itemList)
+        console.log("itemInfo: ", itemInfo) *//* 
         attItemList() */
     })
 

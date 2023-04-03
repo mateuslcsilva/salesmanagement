@@ -87,15 +87,15 @@ export const Dashboards = () => {
         return totalSaleValue
     }
 
-    const getNumberOfSales = () => {
+    const getNumberOfSales = (dia = 0) => {
         let numberOfSales = 0
         sales.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth()) {
+            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth() && (dia == 0 || Number(sale.date.substring(0, 2)) == dia)) {
                 numberOfSales++
             }
         })
         salesHistory?.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth()) {
+            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth() && (dia == 0 || Number(sale.date.substring(0, 2)) == dia)) {
                 numberOfSales++
             }
         })
@@ -122,6 +122,23 @@ export const Dashboards = () => {
         })
         console.log(mostSelledItems.sort((a, b) => b.appearences - a.appearences))
         return mostSelledItems.sort((a, b) => b.appearences - a.appearences)
+    }
+
+    const getDaysOfTheMonth = () => {
+        let daysOfTheMonth = []
+        let lastDayOfMonth = new Date((new Date().getFullYear()), (new Date().getMonth()) + 1, 0).getDate()
+        for(let i = 1; i <= lastDayOfMonth; i++){
+            daysOfTheMonth.push(i)
+        }
+        return (daysOfTheMonth)
+    }
+
+    const getNumberOfSalesPerDay = () => {
+        let salesPerDay :number[] = []
+        getDaysOfTheMonth().forEach(day => {
+            if(getNumberOfSales(day) > 0) salesPerDay.push(getNumberOfSales(day))
+        })
+        return salesPerDay
     }
 
     const backgroundColor = [
@@ -157,7 +174,7 @@ export const Dashboards = () => {
     };
 
     const dataSalesOfMonth = {
-        labels : ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"],
+        labels : getDaysOfTheMonth(),
         datasets: [
           {
             type: 'line' as const,
@@ -165,7 +182,7 @@ export const Dashboards = () => {
             borderColor: '#191919',
             borderWidth: 1,
             fill: false,
-            data: [75, 82, 144, 86, 159],
+            data: getNumberOfSalesPerDay(),
           },
           {
             type: 'bar' as const,
@@ -199,20 +216,13 @@ export const Dashboards = () => {
           }
         ]
       }
-      const option :ChartOptions = {
-        plugins:{
-            legend:{
-                position: "right"
-            }
-        }
-      }
 
     useEffect(() => {
         getItems()
     }, [AuthContext.currentUser.id])
 
     useEffect(() => {
-        console.log()
+        console.log(getNumberOfSales(1))
     })
 
     return (
@@ -234,14 +244,14 @@ export const Dashboards = () => {
                 <div>
                     <i className="bi bi-cart-check"></i>
                     <div className='primary-data-info'>
-                        <h1>{getNumberOfSales()}</h1>
+                        <h1>{/* getNumberOfSales() */}</h1>
                         <p>Número de pedidos</p>
                     </div>
                 </div>
                 <div>
                     <i className="bi bi-cash"></i>
                     <div className='primary-data-info'>
-                        <h1>{(getTotalSaleValue() / getNumberOfSales()).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
+                        <h1>{/* (getTotalSaleValue() / getNumberOfSales()).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) */}</h1>
                         <p>Ticket Médio</p>
                     </div>
                 </div>
