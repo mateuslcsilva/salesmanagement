@@ -187,12 +187,12 @@ export const UsersManager = (props: any) => {
                       <p style={{ "transform": "translateX(-50px)" }}>{user.email}</p>
                       <p style={{ "transform": "translateX(0px)" }}>{user.userType}</p>
                       <p
-                        style={{ "transform": "translateX(10px)", "width": "40px" }}
+                        style={{ "transform": "translateX(60px)", "width": "120px" }}
                         className="is-flex is-justify-content-space-between"
                       >
-                        {showPassword.includes(user.email) ? user.password : "********"}
+                        {showPassword.includes(user.email) ? user.password : "************"}
                         <span className='ml-2' onClick={() => toggleShowPassword(user.email)}>
-                          {showPassword.includes(user.password) ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
+                          {showPassword.includes(user.email) ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
                         </span>
                       </p>
                       <div>
