@@ -190,8 +190,8 @@ export const UsersManager = (props: any) => {
                         style={{ "transform": "translateX(10px)", "width": "40px" }}
                         className="is-flex is-justify-content-space-between"
                       >
-                        {showPassword.includes(user.password) ? user.password : "********"}
-                        <span className='ml-2' onClick={() => toggleShowPassword(user.password)}>
+                        {showPassword.includes(user.email) ? user.password : "********"}
+                        <span className='ml-2' onClick={() => toggleShowPassword(user.email)}>
                           {showPassword.includes(user.password) ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
                         </span>
                       </p>

@@ -71,16 +71,15 @@ export const Dashboards = () => {
         }
     }
 
-    const getTotalSaleValue = () => {
+    const getTotalSaleValue = (dia = 0) => {
         let totalSaleValue = 0
         sales.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth()) {
+            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth() && (dia == 0 || Number(sale.date.substring(0, 2)) == dia)) {
                 totalSaleValue += sale.totalValue
-                console.log("here")
             }
         })
         salesHistory?.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth()) {
+            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth() && (dia == 0 || Number(sale.date.substring(0, 2)) == dia)) {
                 totalSaleValue += sale.totalValue
             }
         })
@@ -141,6 +140,14 @@ export const Dashboards = () => {
         return salesPerDay
     }
 
+    const getValueOfSalesPerDay = () => {
+        let valuePerDay :number[] = []
+        getDaysOfTheMonth().forEach(day => {
+            if(getTotalSaleValue(day) > 0) valuePerDay.push(getTotalSaleValue(day))
+        })
+        return valuePerDay
+    }
+
     const backgroundColor = [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -188,7 +195,7 @@ export const Dashboards = () => {
             type: 'bar' as const,
             label: 'Valor total',
             backgroundColor: '#3488ceab',
-            data: [1200, 1596, 1320, 1586, 1326],
+            data: getValueOfSalesPerDay(),
             borderColor: '#3488ce',
             borderWidth: 2,
           }
@@ -244,14 +251,14 @@ export const Dashboards = () => {
                 <div>
                     <i className="bi bi-cart-check"></i>
                     <div className='primary-data-info'>
-                        <h1>{/* getNumberOfSales() */}</h1>
+                        <h1>{getNumberOfSales()}</h1>
                         <p>Número de pedidos</p>
                     </div>
                 </div>
                 <div>
                     <i className="bi bi-cash"></i>
                     <div className='primary-data-info'>
-                        <h1>{/* (getTotalSaleValue() / getNumberOfSales()).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) */}</h1>
+                        <h1>{(getTotalSaleValue() / getNumberOfSales()).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
                         <p>Ticket Médio</p>
                     </div>
                 </div>
