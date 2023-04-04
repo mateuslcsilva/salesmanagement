@@ -71,15 +71,15 @@ export const Dashboards = () => {
         }
     }
 
-    const getTotalSaleValue = (dia = 0) => {
+    const getTotalSaleValue = (month = (new Date()).getMonth(), day = 0) => {
         let totalSaleValue = 0
         sales.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth() && (dia == 0 || Number(sale.date.substring(0, 2)) == dia)) {
+            if (Number(sale.date.substring(4, 5)) - 1 == month && (day == 0 || Number(sale.date.substring(0, 2)) == day)) {
                 totalSaleValue += sale.totalValue
             }
         })
         salesHistory?.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth() && (dia == 0 || Number(sale.date.substring(0, 2)) == dia)) {
+            if (Number(sale.date.substring(4, 5)) - 1 == month && (day == 0 || Number(sale.date.substring(0, 2)) == day)) {
                 totalSaleValue += sale.totalValue
             }
         })
@@ -158,9 +158,10 @@ export const Dashboards = () => {
     }
 
     const getValueOfSalesPerMonth = () => {
-        let valuePerDay :number[] = []
-        getDaysOfTheMonth().forEach(day => {
-            if(getTotalSaleValue(day) > 0) valuePerDay.push(getTotalSaleValue(day))
+        let valuePerDay :Array<number | undefined> = []
+        months.forEach((month, index) => {
+            if(getTotalSaleValue(index) == 0) return valuePerDay.push(undefined)
+            valuePerDay.push(getTotalSaleValue(index))
         })
         return valuePerDay
     }
@@ -234,7 +235,7 @@ export const Dashboards = () => {
             type: 'bar' as const,
             label: 'Valor total',
             backgroundColor: '#3488ceab',
-            data: [1200, 1596, 1320, 1586, 1326],
+            data: getValueOfSalesPerMonth(),
             borderColor: '#3488ce',
             borderWidth: 2,
           }
