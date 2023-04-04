@@ -86,15 +86,15 @@ export const Dashboards = () => {
         return totalSaleValue
     }
 
-    const getNumberOfSales = (dia = 0) => {
+    const getNumberOfSales = (month = (new Date()).getMonth(), day = 0) => {
         let numberOfSales = 0
         sales.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth() && (dia == 0 || Number(sale.date.substring(0, 2)) == dia)) {
+            if (Number(sale.date.substring(4, 5)) - 1 == month && (day == 0 || Number(sale.date.substring(0, 2)) == day)) {
                 numberOfSales++
             }
         })
         salesHistory?.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth() && (dia == 0 || Number(sale.date.substring(0, 2)) == dia)) {
+            if (Number(sale.date.substring(4, 5)) - 1 == month && (day == 0 || Number(sale.date.substring(0, 2)) == day)) {
                 numberOfSales++
             }
         })
@@ -141,6 +141,23 @@ export const Dashboards = () => {
     }
 
     const getValueOfSalesPerDay = () => {
+        let valuePerDay :number[] = []
+        getDaysOfTheMonth().forEach(day => {
+            if(getTotalSaleValue(day) > 0) valuePerDay.push(getTotalSaleValue(day))
+        })
+        return valuePerDay
+    }
+
+    const getNumberOfSalesPerMonth = () => {
+        let salesPerDay :Array<number | undefined> = []
+        months.forEach((month, index) => {
+            if(getNumberOfSales(index) == 0) return salesPerDay.push(undefined)
+            salesPerDay.push(getNumberOfSales(index))
+        })
+        return salesPerDay
+    }
+
+    const getValueOfSalesPerMonth = () => {
         let valuePerDay :number[] = []
         getDaysOfTheMonth().forEach(day => {
             if(getTotalSaleValue(day) > 0) valuePerDay.push(getTotalSaleValue(day))
@@ -211,7 +228,7 @@ export const Dashboards = () => {
             borderColor: '#191919',
             borderWidth: 1,
             fill: false,
-            data: [75, 82, 144, 86, 159],
+            data: getNumberOfSalesPerMonth(),
           },
           {
             type: 'bar' as const,
@@ -229,7 +246,7 @@ export const Dashboards = () => {
     }, [AuthContext.currentUser.id])
 
     useEffect(() => {
-        console.log(getNumberOfSales(1))
+       console.log(getNumberOfSalesPerMonth())
     })
 
     return (
