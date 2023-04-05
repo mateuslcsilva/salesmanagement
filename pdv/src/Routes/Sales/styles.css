@@ -15,7 +15,7 @@
     font-size: 24pt;
 }
 
-.section-title{
+.section-title {
     width: 100%;
     display: flex;
     justify-content: start;
@@ -25,7 +25,7 @@
     font-weight: 600;
 }
 
-.section-sub-title{
+.section-sub-title {
     width: 100%;
     display: flex;
     justify-content: start;
@@ -69,15 +69,15 @@
     transition: 0.3s ease;
 }
 
-.divContainer.side-bar .primary-sales-data>div i{
+.divContainer.side-bar .primary-sales-data>div i {
     margin: 80px 5px;
 }
 
-.divContainer.side-bar .primary-sales-data .primary-data-info.small-font-size{
+.divContainer.side-bar .primary-sales-data .primary-data-info.small-font-size {
     gap: 22px;
 }
 
-.divContainer.side-bar .primary-sales-data .primary-data-info.small-font-size h1{
+.divContainer.side-bar .primary-sales-data .primary-data-info.small-font-size h1 {
     font-size: 22pt;
 }
 
@@ -98,14 +98,14 @@
     transition: 0.3s ease;
 }
 
-.primary-sales-data>div p{
+.primary-sales-data>div p {
     color: var(--dashboard-subtitle-color);
     white-space: nowrap;
     transition: 0.3s ease;
 }
 
 
-.sales{
+.sales {
     height: 450px;
     width: 100%;
     display: flex;
@@ -114,7 +114,7 @@
     transition: 0.3s ease;
 }
 
-.sales > div{
+.sales>div {
     border-radius: 7px;
     background-color: var(--primary-dashboar-background-color);
     box-shadow: var(--dashboard-div-shadow);
@@ -127,11 +127,11 @@
     overflow-y: scroll;
 }
 
-.open-sales::-webkit-scrollbar{
+.open-sales::-webkit-scrollbar {
     width: 5px;
 }
 
-.most-salled-item{
+.most-salled-item {
     width: 33.333%;
     display: flex;
     flex-direction: column;
@@ -139,7 +139,7 @@
     padding: 10px 15px;
 }
 
-.most-salled-item p{
+.most-salled-item p {
     color: var(--dashboard-subtitle-color);
     width: 100%;
     text-align: end;
@@ -147,15 +147,30 @@
 }
 
 @media (min-width: 1399px) {
-    .sales, .primary-sales-data{
+
+    .sales,
+    .primary-sales-data {
         padding: 1% 5%;
     }
 
-    .sales{
+    .sales {
         height: 550px;
     }
 
-    .section-title, .section-sub-title{
+    .section-title,
+    .section-sub-title {
         padding: 0 5.5%;
+    }
+
+    .divContainer.side-bar .primary-sales-data>div i {
+        margin: 80px 25px;
+    }
+
+    .divContainer.side-bar .primary-sales-data .primary-data-info.small-font-size {
+        gap: 15px;
+    }
+
+    .divContainer.side-bar .primary-sales-data .primary-data-info.small-font-size h1 {
+        font-size: 26pt;
     }
 }
