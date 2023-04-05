@@ -1,4 +1,8 @@
-.extract-div p{
-    color: var(--dashboard-subtitle-color);
-    white-space: nowrap;
+.extract-div > div{
+    margin-bottom: 10px;
+}
+
+.extract-div > div >  p{
+    color: var(--dashboard-subtitle-color) !important;
+    transition: 0.2s ease;
 }

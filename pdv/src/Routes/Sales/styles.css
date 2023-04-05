@@ -124,6 +124,11 @@
 .open-sales {
     width: 66.666%;
     padding: 15px;
+    overflow-y: scroll;
+}
+
+.open-sales::-webkit-scrollbar{
+    width: 5px;
 }
 
 .most-salled-item{

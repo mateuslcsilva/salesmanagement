@@ -292,7 +292,7 @@ export const Sales = () => {
             <p className='section-sub-title'>Análise detalhada das informações do mês</p>
             <div className='sales'>
                 <div className='open-sales'>
-                    <Extract /> 
+                    <Extract sales={sales} itemList={itemList} /> 
                 </div>
                 <div className='most-salled-item'>
                 <Pie data={data} className='pie-chart' />
