@@ -10,7 +10,7 @@
 }
 
 .btnselect{
-    width: 20.913%;
+    width: 26.12%;
     padding: 12px !important;
     white-space: nowrap;
     background-color: #3e8ed0;
@@ -48,6 +48,6 @@
         transform: translateX(-2.05%);
     }
     .btnselect{
-        width: 20.91%;
+        width: 26.07%;
     }
   }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import './styles.css'
-import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { sale } from '../../types/sale/sale'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
