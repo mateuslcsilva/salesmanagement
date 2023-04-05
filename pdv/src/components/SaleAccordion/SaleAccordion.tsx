@@ -74,7 +74,7 @@ export default function SaleAccordion(props :any) {
             {'Mesa: ' + sale.numTable}
               
             </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>{'Comanda: ' + sale.numSale + '  |  ' + (sale.costumerName? ('Cliente: ' + sale.costumerName) : '')}</Typography>
+            <Typography    sx={{ color: 'text.secondary' }}>{'Comanda: ' + sale.numSale + '  |  ' + (sale.costumerName? ('Cliente: ' + sale.costumerName) : '')}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>

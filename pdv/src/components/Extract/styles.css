@@ -1,0 +1,4 @@
+.extract-div p{
+    color: var(--dashboard-subtitle-color);
+    white-space: nowrap;
+}

@@ -47,9 +47,63 @@
     height: 100%;
     width: 33.333%;
     border-radius: 7px;
-    background-color: #3e8ed020;
-    box-shadow: 12px 12px 25px #efefefab;
+    background-color: var(--primary-dashboar-background-color);
+    box-shadow: var(--dashboard-div-shadow);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    transition: 0.3s ease;
 }
+
+.primary-sales-data>div i {
+    display: grid;
+    place-items: center;
+    background-color: var(--secondary-dashboar-background-color);
+    color: var(--primary-dashboard-color);
+    font-size: 23pt;
+    height: 32%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    margin: 80px 25px;
+    transform: translateY(-50%);
+    transition: 0.3s ease;
+}
+
+.divContainer.side-bar .primary-sales-data>div i{
+    margin: 80px 5px;
+}
+
+.divContainer.side-bar .primary-sales-data .primary-data-info.small-font-size{
+    gap: 22px;
+}
+
+.divContainer.side-bar .primary-sales-data .primary-data-info.small-font-size h1{
+    font-size: 22pt;
+}
+
+.primary-sales-data .primary-data-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
+    gap: 15px;
+    padding: 0 10px 10px 0;
+    width: 65%;
+}
+
+.primary-sales-data>div h1 {
+    font-size: 26pt;
+    font-weight: 600;
+    color: var(--primary-dashboard-color);
+    transition: 0.3s ease;
+}
+
+.primary-sales-data>div p{
+    color: var(--dashboard-subtitle-color);
+    white-space: nowrap;
+    transition: 0.3s ease;
+}
+
 
 .sales{
     height: 450px;
@@ -57,20 +111,34 @@
     display: flex;
     gap: 25px;
     padding: 0 3%;
+    transition: 0.3s ease;
 }
 
-.sales div{
+.sales > div{
     border-radius: 7px;
-    background-color: #3e8ed020;
-    box-shadow: 12px 12px 25px #efefefab;
+    background-color: var(--primary-dashboar-background-color);
+    box-shadow: var(--dashboard-div-shadow);
+    transition: 0.3s ease;
 }
 
 .open-sales {
     width: 66.666%;
+    padding: 15px;
 }
 
 .most-salled-item{
     width: 33.333%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 15px;
+}
+
+.most-salled-item p{
+    color: var(--dashboard-subtitle-color);
+    width: 100%;
+    text-align: end;
+    transition: 0.3s ease;
 }
 
 @media (min-width: 1399px) {
