@@ -242,13 +242,34 @@ export const Dashboards = () => {
         ]
       }
 
+      const charOptions :any = {
+        plugins:{
+            legend: {
+                labels:{
+                    color: "#fff"
+                }
+            },
+        },
+        scales: { 
+            y: {
+                ticks: {
+                    color: "#fff",
+                }
+            },
+            x: {
+                ticks: {
+                    color: "#fff",
+                }
+            }
+        }
+
+      } 
+
     useEffect(() => {
         getItems()
     }, [AuthContext.currentUser.id])
 
-    useEffect(() => {
-       console.log(getNumberOfSalesPerMonth())
-    })
+    useEffect(() => console.log(document.querySelector('.main')?.classList.contains('darkThemed')))
 
     return (
         <>
@@ -286,11 +307,11 @@ export const Dashboards = () => {
             <div className='charts'>
                 <div className='div1'>
                     <h1>Resultados Mensal</h1>
-                <Chart type='bar' data={dataSalesOfMonth} className='bar-chart' />
+                <Chart type='bar' data={dataSalesOfMonth} className='bar-chart' options={document.querySelector('.main')?.classList.contains('darkThemed') ? charOptions : {}} />
                 </div>
                 <div className='div2'>
                 <h1>Resultados Anual</h1>
-                <Chart type='bar' data={dataSalesOfYear} className='bar-chart' />
+                <Chart type='bar' data={dataSalesOfYear} className='bar-chart' options={document.querySelector('.main')?.classList.contains('darkThemed') ? charOptions : {}} />
                 </div>
                 <div className='div3'>
                     <Pie data={data} className='pie-chart' />

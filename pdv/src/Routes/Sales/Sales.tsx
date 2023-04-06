@@ -22,7 +22,6 @@ import {
     ChartOptions,
 } from 'chart.js';
 import { Pie, Chart } from 'react-chartjs-2';
-import { months } from '../../utils/consts'
 
 ChartJS.register(ArcElement,   
     LinearScale,
