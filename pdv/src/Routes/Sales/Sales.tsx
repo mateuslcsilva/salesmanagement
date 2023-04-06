@@ -130,49 +130,6 @@ export const Sales = () => {
         return totalValue
     }
 
-/*     const getDaysOfTheMonth = () => {
-        let daysOfTheMonth = []
-        let lastDayOfMonth = new Date((new Date().getFullYear()), (new Date().getMonth()) + 1, 0).getDate()
-        for(let i = 1; i <= lastDayOfMonth; i++){
-            daysOfTheMonth.push(i)
-        }
-        return (daysOfTheMonth)
-    }
- */
-/*     const getNumberOfSalesPerDay = () => {
-        let salesPerDay :number[] = []
-        getDaysOfTheMonth().forEach(day => {
-            if(getNumberOfSales(day) > 0) salesPerDay.push(getNumberOfSales(day))
-        })
-        return salesPerDay
-    }
- */
-/*     const getValueOfSalesPerDay = () => {
-        let valuePerDay :number[] = []
-        getDaysOfTheMonth().forEach(day => {
-            if(getTotalSaleValue(day) > 0) valuePerDay.push(getTotalSaleValue(day))
-        })
-        return valuePerDay
-    } */
-
-/*     const getNumberOfSalesPerMonth = () => {
-        let salesPerDay :Array<number | undefined> = []
-        months.forEach((month, index) => {
-            if(getNumberOfSales(index) == 0) return salesPerDay.push(undefined)
-            salesPerDay.push(getNumberOfSales(index))
-        })
-        return salesPerDay
-    } */
-
-/*     const getValueOfSalesPerMonth = () => {
-        let valuePerDay :Array<number | undefined> = []
-        months.forEach((month, index) => {
-            if(getTotalSaleValue(index) == 0) return valuePerDay.push(undefined)
-            valuePerDay.push(getTotalSaleValue(index))
-        })
-        return valuePerDay
-    } */
-
     const backgroundColor = [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -205,57 +162,9 @@ export const Sales = () => {
         ],
     };
 
-/*     const dataSalesOfMonth = {
-        labels : getDaysOfTheMonth(),
-        datasets: [
-          {
-            type: 'line' as const,
-            label: 'Quantidade de Vendas',
-            borderColor: '#191919',
-            borderWidth: 1,
-            fill: false,
-            data: getNumberOfSalesPerDay(),
-          },
-          {
-            type: 'bar' as const,
-            label: 'Valor total',
-            backgroundColor: '#3488ceab',
-            data: getValueOfSalesPerDay(),
-            borderColor: '#3488ce',
-            borderWidth: 2,
-          }
-        ]
-      } */
-
-/*       const dataSalesOfYear = {
-        labels : months,
-        datasets: [
-          {
-            type: 'line' as const,
-            label: 'Quantidade de Vendas',
-            borderColor: '#191919',
-            borderWidth: 1,
-            fill: false,
-            data: getNumberOfSalesPerMonth(),
-          },
-          {
-            type: 'bar' as const,
-            label: 'Valor total',
-            backgroundColor: '#3488ceab',
-            data: getValueOfSalesPerMonth(),
-            borderColor: '#3488ce',
-            borderWidth: 2,
-          }
-        ]
-      } */
-
     useEffect(() => {
         getItems()
     }, [AuthContext.currentUser.id])
-
-    useEffect(() => {
-       /* console.log(getNumberOfSalesPerMonth()) */
-    })
 
     return (
         <>
