@@ -4,6 +4,7 @@ import { useAuthContext } from "../../utils/contexts/AuthProvider.js";
 import { useOrderContext } from "../../utils/contexts/OrderContext.js";
 import { db } from "../../utils/firebase/firebase.js";
 import './styles.css'
+import { itemType } from "../../types/itemType/itemType.js";
 
 const ItemsListInput = (props: any) => {
     const AuthContext = useAuthContext()
@@ -12,12 +13,6 @@ const ItemsListInput = (props: any) => {
     const [itemList, setItemList] = useState<itemType[]>([])
     const [currentUserId, setCurrentUserId] = useState<string>()
     const [itemListActive, setItemListActive] = useState<boolean>(false)
-
-    interface itemType {
-        numItem: number;
-        item: string;
-        itemValue: number
-    } 
 
     const getItems = async () => {
         if(AuthContext.currentUser.id == '') return false
@@ -38,12 +33,12 @@ const ItemsListInput = (props: any) => {
         if (typeParam == "numItem"){
             let index = itemList.findIndex(item => item.numItem == value)
             if(index < 0) return ""
-            let text = (itemList[index]?.numItem < 10 ? '0' + itemList[index]?.numItem : itemList[index]?.numItem.toString()) + ' - ' + itemList[index]?.item + ' - ' +  itemList[index]?.itemValue.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})
+            let text = (itemList[index]?.itemRef < 10 ? '0' + itemList[index]?.itemRef : itemList[index]?.itemRef.toString()) + ' - ' + itemList[index]?.item + ' - ' +  itemList[index]?.itemValue.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})
             return text
         }
         if(!itemList[value]) return ''
         if (typeParam == "index") {
-            let text = (itemList[value]?.numItem < 10 ? '0' + itemList[value]?.numItem : itemList[value]?.numItem.toString()) + ' - ' + itemList[value]?.item + ' - ' + itemList[value]?.itemValue.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})
+            let text = (itemList[value]?.itemRef < 10 ? '0' + itemList[value]?.itemRef : itemList[value]?.itemRef.toString()) + ' - ' + itemList[value]?.item + ' - ' + itemList[value]?.itemValue.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})
             return text
         }
     }
@@ -79,9 +74,9 @@ const ItemsListInput = (props: any) => {
             />
 
             <div id='itemList' className={itemListActive? "active primary-text" : "primary-text"}>
-                {itemList.map((item: any, index: number): any => {
+                {itemList.sort((a, b) => a.itemRef - b.itemRef).map((item: any, index: number): any => {
                     if (item.active) return (
-                        <button className="item-btn" onClick={(e) => selectItem(item.numItem)} key={index} id={item.numItem}>
+                        <button className="item-btn" onClick={(e) => selectItem(item.itemRef)} key={index} id={item.numItem}>
                             {getItemText("index", index)}
                         </button>
                     )

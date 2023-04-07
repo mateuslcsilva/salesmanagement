@@ -191,9 +191,11 @@ export const Dashboards = () => {
                 fill: 1,
                 rotation: 25,
                 data: getMostSelledItem().map(element => element.appearences).splice(0, 5),
-                backgroundColor: backgroundColor,
-                borderColor: backgroundColor,
+                backgroundColor: document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor : backgroundColor,
+                borderColor: borderColor,
                 borderWidth: 1,
+                cutout: 70,
+                weight: 200
             },
         ],
     };
@@ -319,7 +321,7 @@ export const Dashboards = () => {
 
                         {getMostSelledItem().map(element => element.text).splice(0, 5).map((item, index) => {
                             return (
-                                <p id='pie-chart-legend'><span style={{ "backgroundColor": backgroundColor[index], "border": `1px solid ${borderColor[index]}` }}></span>{item}</p>
+                                <p id='pie-chart-legend'><span style={{ "backgroundColor": document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor[index] : backgroundColor[index], "border": `1px solid ${borderColor[index]}` }}></span>{item}</p>
                             )
                         })}
                     </div>
