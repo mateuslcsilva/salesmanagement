@@ -42,6 +42,7 @@ export const Dashboards = () => {
     const [itemList, setItemList] = useState<Array<itemType>>([])
     const [sales, setSales] = useState<Array<sale>>([] as Array<sale>)
     const [salesHistory, setSalesHistory] = useState<Array<sale>>()
+    const [hiddenInfo, setHiddenInfo] = useState<Array<string>>([])
 
     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false
@@ -166,6 +167,13 @@ export const Dashboards = () => {
         return valuePerDay
     }
 
+    const toggleHiddenInfo = (info :string) => {
+        if(hiddenInfo.includes(info)){
+            return setHiddenInfo((hiddenInfo) => hiddenInfo.filter(text => text != info))
+        }
+        setHiddenInfo(hiddenInfo => [...hiddenInfo, info])
+    }
+
     const backgroundColor = [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -206,14 +214,15 @@ export const Dashboards = () => {
           {
             type: 'line' as const,
             label: 'Quantidade de Vendas',
-            borderColor: '#191919',
+            borderColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f2" : "#191919",
+            backgroundColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f290" : "#191919",
             borderWidth: 1,
             fill: false,
             data: getNumberOfSalesPerDay(),
           },
           {
             type: 'bar' as const,
-            label: 'Valor total',
+            label: 'Valor total (R$)',
             backgroundColor: '#3488ceab',
             data: getValueOfSalesPerDay(),
             borderColor: '#3488ce',
@@ -228,7 +237,8 @@ export const Dashboards = () => {
           {
             type: 'line' as const,
             label: 'Quantidade de Vendas',
-            borderColor: '#191919',
+            borderColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f2" : "#191919",
+            backgroundColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f290" : "#191919",
             borderWidth: 1,
             fill: false,
             data: getNumberOfSalesPerMonth(),
@@ -271,7 +281,7 @@ export const Dashboards = () => {
         getItems()
     }, [AuthContext.currentUser.id])
 
-    useEffect(() => console.log(document.querySelector('.main')?.classList.contains('darkThemed')))
+    useEffect(() => console.log(hiddenInfo))
 
     return (
         <>
@@ -281,32 +291,41 @@ export const Dashboards = () => {
             </h1>
             <h3 className='section-title'><i className="bi bi-wallet2"></i>Números do mês</h3>
             <p className='section-sub-title'>Seu mês até agora</p>
-            <div className='primary-data'>
+            <div className={AuthContext.currentUser.userType == "Padrão" ? 'primary-data hidden-info' : 'primary-data'}>
                 <div>
                     <i className="bi bi-cash-stack"></i>
                     <div className={getTotalSaleValue() > 9999 ? "primary-data-info small-font-size" : "primary-data-info"}>
-                        <h1>{getTotalSaleValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
+                        <h1 
+                        className={hiddenInfo.includes("totalValue") ? 'info hidden-info' : 'info'}
+                        onClick={() => toggleHiddenInfo("totalValue")}
+                        >{hiddenInfo.includes("totalValue") ? "R$****" : getTotalSaleValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
                         <p>Valor total vendido</p>
                     </div>
                 </div>
                 <div>
                     <i className="bi bi-cart-check"></i>
                     <div className='primary-data-info'>
-                        <h1>{getNumberOfSales()}</h1>
+                        <h1
+                        className={hiddenInfo.includes("numberOfSales") ? 'info hidden-info' : 'info'}
+                        onClick={() => toggleHiddenInfo("numberOfSales")}
+                        >{hiddenInfo.includes("numberOfSales") ? "--" : getNumberOfSales()}</h1>
                         <p>Número de pedidos</p>
                     </div>
                 </div>
                 <div>
                     <i className="bi bi-cash"></i>
                     <div className='primary-data-info'>
-                        <h1>{(getTotalSaleValue() / getNumberOfSales()).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
+                        <h1
+                        className={hiddenInfo.includes("ticket") ? 'info hidden-info' : 'info'}
+                        onClick={() => toggleHiddenInfo("ticket")}
+                        >{hiddenInfo.includes("ticket") ? "R$****" : (getTotalSaleValue() / getNumberOfSales()).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
                         <p>Ticket Médio</p>
                     </div>
                 </div>
             </div>
             <h3 className='section-title'><i className="bi bi-graph-up-arrow"></i>Gráficos</h3>
             <p className='section-sub-title'>Análise detalhada das informações do mês</p>
-            <div className='charts'>
+            <div className={AuthContext.currentUser.userType == "Padrão" ? 'charts hidden-info' : 'charts'}>
                 <div className='div1'>
                     <h1>Resultados Mensal</h1>
                 <Chart type='bar' data={dataSalesOfMonth} className='bar-chart' options={document.querySelector('.main')?.classList.contains('darkThemed') ? charOptions : {}} />

@@ -45,6 +45,7 @@
 }
 
 .primary-data>div {
+    position: relative;
     height: 100%;
     width: 33.333%;
     border-radius: 7px;
@@ -69,15 +70,15 @@
     transition: 0.3s ease;
 }
 
-.divContainer.side-bar .primary-data>div i{
+.divContainer.side-bar .primary-data>div i {
     margin: 80px 5px;
 }
 
-.divContainer.side-bar .primary-data .primary-data-info.small-font-size{
+.divContainer.side-bar .primary-data .primary-data-info.small-font-size {
     gap: 22px;
 }
 
-.divContainer.side-bar .primary-data .primary-data-info.small-font-size h1{
+.divContainer.side-bar .primary-data .primary-data-info.small-font-size h1 {
     font-size: 22pt;
 }
 
@@ -92,12 +93,35 @@
 }
 
 .primary-data>div h1 {
+    position: relative;
     font-size: 26pt;
     font-weight: 600;
     color: var(--primary-dashboard-color);
+    cursor: pointer;
+    transition: 0.2s ease
 }
 
-.primary-data>div p{
+.primary-data>div h1::before{
+    content:"Clique para esconder";
+    position: absolute;
+    top: -30%;
+    right: 0;
+    width: 0;
+    white-space: nowrap;
+    font-size: 8pt;
+    transition: 0.2s ease;
+    overflow: hidden;
+}
+
+.primary-data>div h1:hover::before{
+    content:"Clique para esconder";
+    width: 120px;
+    white-space: nowrap;
+    font-size: 8pt;
+    transition: 0.2s ease
+}
+
+.primary-data>div p {
     color: var(--dashboard-subtitle-color);
     white-space: nowrap;
 }
@@ -113,7 +137,8 @@
     padding: 0 3%;
 }
 
-.charts > div {
+.charts>div {
+    position: relative;
     border-radius: 7px;
     background-color: var(--primary-dashboar-background-color) !important;
     box-shadow: var(--dashboard-div-shadow);
@@ -129,7 +154,7 @@
     padding-bottom: 20px;
 }
 
-.div1 h1{
+.div1 h1 {
     width: 100%;
     text-align: start;
     font-weight: 600;
@@ -146,11 +171,11 @@
     padding-bottom: 20px;
 }
 
-.div2 h1{
+.div2 h1 {
     width: 100%;
     text-align: start;
     font-weight: 600;
-    color: var(--primary-text-color) ;
+    color: var(--primary-text-color);
 }
 
 .div3 {
@@ -161,14 +186,14 @@
     padding: 10px 15px;
 }
 
-.charts>div p{
+.charts>div p {
     color: var(--dashboard-subtitle-color);
     width: 100%;
     text-align: end;
 }
 
-#pie-chart-legend{
-    color: var(--primary-text-color) ;
+#pie-chart-legend {
+    color: var(--primary-text-color);
     display: flex;
     align-items: center;
     gap: 10px;
@@ -177,9 +202,41 @@
     padding: 1px 0;
 }
 
-#pie-chart-legend > span{
-    width: 15px ;
+#pie-chart-legend>span {
+    width: 15px;
     height: 10px;
+}
+
+
+/* ====> hidden dashboard info <==== */
+.primary-data.hidden-info>div::after,
+.charts.hidden-info > div::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* From https://css.glass */
+    border-radius: 7px;
+    background: #f2f2f201;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(13.6px);
+    -webkit-backdrop-filter: blur(13.6px);
+}
+
+
+.info.hidden-info::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -15%;
+    width: 120%;
+    height: 100%;
+    /* From https://css.glass */
+    background: var(--dashboard-blur-color);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
 }
 
 @media (min-width: 1399px) {
@@ -193,8 +250,8 @@
         width: 70%;
         padding: 0 25px 10px 0;
     }
-    
-    .divContainer.side-bar .primary-data>div i{
+
+    .divContainer.side-bar .primary-data>div i {
         margin: 80px 25px;
     }
 
@@ -207,14 +264,14 @@
         padding: 0 5.5%;
     }
 
-    .pie-chart{
+    .pie-chart {
         width: 312px !important;
         height: 312px !important;
         margin-left: 30px;
         transition: 0.5s ease;
     }
 
-    .divContainer.side-bar .pie-chart{
-       margin-left: 0;
+    .divContainer.side-bar .pie-chart {
+        margin-left: 0;
     }
 }
