@@ -33,12 +33,12 @@ ChartJS.register(ArcElement,
     Tooltip,
     LineController,
     BarController);
+
 ChartJS.overrides["pie"].plugins.legend.display = false
 
 
 export const Dashboards = () => {
     const AuthContext = useAuthContext()
-    const orderContext = useOrderContext()
     const [itemList, setItemList] = useState<Array<itemType>>([])
     const [sales, setSales] = useState<Array<sale>>([] as Array<sale>)
     const [salesHistory, setSalesHistory] = useState<Array<sale>>()
@@ -280,8 +280,6 @@ export const Dashboards = () => {
     useEffect(() => {
         getItems()
     }, [AuthContext.currentUser.id])
-
-    useEffect(() => console.log(hiddenInfo))
 
     return (
         <>

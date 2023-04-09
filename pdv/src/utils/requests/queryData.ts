@@ -9,7 +9,7 @@ export const queryData = async (queryType: string, whereParam: string, value: an
           if (response.size > 1) return 'Existe mais de uma empresa com esse nome, entre em contato com o suporte!!' //todo: testar
           if (response.size < 1) {
             return 'Empresa não encontrada! Por favor, faça o cadastro!'
-          }  //todo: testar
+          } 
           let data = response.docs[0] // receber uma informação é a única possível opção aqui, entretanto, o firebase sempre entrega um array
           let idObject = { id: data.id, users: data.data().users, workplaceName: data.data().name }
           return idObject

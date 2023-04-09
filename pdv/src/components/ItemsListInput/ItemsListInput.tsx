@@ -76,7 +76,7 @@ const ItemsListInput = (props: any) => {
             <div id='itemList' className={itemListActive? "active primary-text" : "primary-text"}>
                 {itemList.sort((a, b) => a.itemRef - b.itemRef).map((item: any, index: number): any => {
                     if (item.active) return (
-                        <button className="item-btn" onClick={(e) => selectItem(item.itemRef)} key={index} id={item.numItem}>
+                        <button className="item-btn" onClick={(e) => selectItem(item.numItem)} key={index} id={item.numItem}>
                             {getItemText("index", index)}
                         </button>
                     )

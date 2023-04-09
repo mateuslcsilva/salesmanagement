@@ -11,6 +11,7 @@ import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { itemType } from '../../types/itemType/itemType'
 import { Alert, getNativeSelectUtilityClasses } from '@mui/material'
 import { sale } from '../../types/sale/sale'
+import { AlertModal } from '../AlertModal/AlertModal'
 
 export const ItemsManager = (props: any) => {
 
@@ -20,6 +21,7 @@ export const ItemsManager = (props: any) => {
     const [itemList, setItemList] = useState<Array<itemType>>([])
     const [saleList, setSaleList] = useState<Array<sale>>([])
     const [alert, setAlert] = useState(<p></p>)
+    const [alertVisible, setAlertVisible] = useState(false)
     const [itemInfo, setItemInfo] = useReducer(
         (currentValues: itemType, newValues: itemType) :itemType => {
           return { ...currentValues, ...newValues }
@@ -35,6 +37,9 @@ export const ItemsManager = (props: any) => {
         setItemInfo({ ...itemInfo, ...newValues });
       };
 
+      const alertHandle = () => setAlertVisible(true);
+      const closeAlertHandle = () => setAlertVisible(false);
+
     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false
         let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
@@ -46,7 +51,7 @@ export const ItemsManager = (props: any) => {
     }
 
     const addItem = async () => {
-        /* if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!") */
+        if(saleList.length != 0) return alertHandle()
         if (itemList.find(item => item.active && item.itemRef == itemInfo.itemRef)) return setAlert(<p className='error-label' ><i className="bi bi-x-octagon"></i>Referência já cadastrada!</p>)
         const convert = { active: true, 
             itemRef: Number(itemInfo.itemRef), 
@@ -80,13 +85,13 @@ export const ItemsManager = (props: any) => {
     }
 
     const editItem = (ref :number) => {
-        /* if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!") */
+        if(saleList.length != 0) return alertHandle()
         setItemInfo(itemList[itemList.findIndex(item => item.numItem == ref)])
         deleteItem(ref)
     }
 
     const deleteItem = async (ref: number) => {
-        /* if(saleList) return window.alert("Você não pode alterar a lista de itens enquanto houverem vendas abertas!") */
+        if(saleList.length != 0) return alertHandle()
         setItemList(itemList.map(item => {
             if(item.numItem == ref){
                 item.active = false
@@ -128,14 +133,11 @@ export const ItemsManager = (props: any) => {
         getItems()
     }, [AuthContext.currentUser.id])
 
-    useEffect(() => {
-        /* console.log(itemList)
-        console.log("itemInfo: ", itemInfo) *//* 
-        attItemList() */
-    })
+    useEffect(() => console.log(saleList))
 
     return (
         <div>
+            <AlertModal visible={alertVisible} closeHandler={closeAlertHandle} text={"Não é possível alterar itens com vendas em aberto!"} />
             <Modal
                 aria-labelledby="modal-title"
                 open={props.visible}
