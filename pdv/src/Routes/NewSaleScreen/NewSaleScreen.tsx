@@ -12,11 +12,12 @@ import { queryData } from '../../utils/requests/queryData'
 import 'react-toastify/dist/ReactToastify.css';
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale'
+import { useSalesContext } from '../../utils/contexts/SalesProvider'
+import { useItemListContext } from '../../utils/contexts/ItemsProvider'
 
 
 export const NewSaleScreen = () => {
 
-    const [itemList, setItemList] = useState<itemType[]>([])
     const [currentUserId, setCurrentUserId] = useState<string>()
     const [tableNumber, setTableNumber] = useState<number>(0)
     const [saleNumber, setSaleNumber] = useState<number>(0)
@@ -25,36 +26,37 @@ export const NewSaleScreen = () => {
     const [sale, setSale] = useState<sale>({} as sale)
     const AuthContext = useAuthContext()
     const orderContext = useOrderContext()
+    const SalesContext = useSalesContext()
+    const ItemListContext = useItemListContext()
 
-    const getItems = async () => {
+/*     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false
         let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
         let data = await getDoc(docRef)
             .then(res => res.data()?.items)
         setItemList(data)
-    }
+    } */
 
     const getItemText = (typeParam: string, value: number | undefined) => {
         if (AuthContext.currentUser.id == '') return
         if (!value) return
         if (typeParam == "numItem") {
-            let index = itemList.findIndex(item => item.numItem == value)
+            let index = ItemListContext.itemList.findIndex(item => item.numItem == value)
             //@ts-ignore
-            let text = (itemList[index]?.itemRef < 10 ? '0' + itemList[index]?.itemRef : itemList[index]?.itemRef.toString()) + ' - ' + itemList[index]?.item + ' ' + itemList[index]?.itemValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+            let text = (ItemListContext.itemList[index]?.itemRef < 10 ? '0' + ItemListContext.itemList[index]?.itemRef : ItemListContext.itemList[index]?.itemRef.toString()) + ' - ' + ItemListContext.itemList[index]?.item + ' ' + ItemListContext.itemList[index]?.itemValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
             return text
         }
-        if (!itemList[value]) return ''
+        if (!ItemListContext.itemList[value]) return ''
         if (typeParam == "index") {
             //@ts-ignore
-            let text = (itemList[value]?.itemRef < 10 ? '0' + itemList[value]?.itemRef : itemList[value]?.itemRef.toString()) + ' - ' + itemList[value]?.item + ' ' + itemList[value]?.itemValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+            let text = (ItemListContext.itemList[value]?.itemRef < 10 ? '0' + ItemListContext.itemList[value]?.itemRef : ItemListContext.itemList[value]?.itemRef.toString()) + ' - ' + ItemListContext.itemList[value]?.item + ' ' + ItemListContext.itemList[value]?.itemValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
             return text
         }
     }
 
     const setTable = async () => {
         if (saleNumber == 0) return false
-
-        let alert = <p></p>
+/*         let alert = <p></p>
         await getDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`))
             .then(res => {
                 let sales = res.data()?.sales
@@ -66,10 +68,10 @@ export const NewSaleScreen = () => {
                     })
                 }
             })
-            .catch(err => console.log(err.message))
-        if (alert.type != "p") {
+            .catch(err => console.log(err.message)) */
+        if (SalesContext.sales.find(sale => sale.numSale == saleNumber)) {
             clear()
-            return setAlert(alert)
+            return setAlert(<Alert severity="warning">Essa comanda já está em uso!</Alert>)
         }
         let current = new Date
         let currentDay = current.getDate().toString().length < 2 ? '0' + current.getDate() : current.getDate()
@@ -102,7 +104,7 @@ export const NewSaleScreen = () => {
     const getTotalValue = () => {
         let totalValue = 0
         sale.orders?.map(order => {
-            let item = itemList.find(item => item.numItem == order)
+            let item = ItemListContext.itemList.find(item => item.numItem == order)
             if (item) totalValue += Number(item.itemValue)
         })
         let obj = { totalValue: totalValue }
@@ -119,12 +121,14 @@ export const NewSaleScreen = () => {
     }
 
     const updateSales = async () => {
-        const update = await queryData("saleUpdate", "null", { id: AuthContext.currentUser.id, sale: sale })
+        SalesContext.setSales(sales => [...sales, sale])
+        clear()
+        /* const update = await queryData("saleUpdate", "null", { id: AuthContext.currentUser.id, sale: sale })
             .then(res => {
                 clear()
-                return /* toast.success("Venda salva com sucesso!") */
+                return 
             })
-            .catch(err => console.log(err.message))
+            .catch(err => console.log(err.message)) */
     }
 
     useEffect(() => {
@@ -143,12 +147,9 @@ export const NewSaleScreen = () => {
         setCurrentUserId(AuthContext.currentUser.id)
     }, [AuthContext.currentUser.id])
 
-    useEffect(() => {
+/*     useEffect(() => {
         getItems()
-    }, [currentUserId])
-
-    useEffect(() => console.log("itemList: ", itemList))
-    useEffect(() => console.log("sale: ", sale))
+    }, [currentUserId]) */
 
     return (
         <>

@@ -25,10 +25,10 @@ import { ItemListProvider } from './utils/contexts/ItemsProvider';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <SalesHistoryProvider>
-      <SalesProvider>
-        <ItemListProvider>
-          <AuthProvider>
+    <AuthProvider>
+      <SalesHistoryProvider>
+        <SalesProvider>
+          <ItemListProvider>
             <OrderProvider >
               <BrowserRouter >
                 <Routes>
@@ -44,9 +44,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 </Routes>
               </BrowserRouter>
             </OrderProvider>
-          </AuthProvider>
-        </ItemListProvider>
-      </SalesProvider>
-    </SalesHistoryProvider>
+          </ItemListProvider>
+        </SalesProvider>
+      </SalesHistoryProvider>
+    </AuthProvider>
   </React.StrictMode>
 )

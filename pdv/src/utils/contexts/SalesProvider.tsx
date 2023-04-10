@@ -1,5 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { sale } from '../../types/sale/sale'
+import { doc, updateDoc } from 'firebase/firestore'
+import { db } from '../firebase/firebase'
+import { useAuthContext } from './AuthProvider'
 
 interface SalesContextType {
     sales: Array<sale>,
@@ -19,6 +22,18 @@ export const useSalesContext = () => {
 export const SalesProvider = ({ children }: childrenType) => {
 
     const [sales, setSales] = useState([] as Array<sale>)
+    const AuthContext = useAuthContext()
+
+    useEffect(() => {
+        console.log("salesContext: ", sales)
+        updateSales()
+    }, [sales])
+
+    const updateSales = async () => {
+        await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
+            sales: sales
+      })
+    }
 
     return (
         <>

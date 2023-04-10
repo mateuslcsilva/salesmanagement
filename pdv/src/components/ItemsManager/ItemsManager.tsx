@@ -72,7 +72,6 @@ export const ItemsManager = (props: any) => {
         } else{
             newItemList = [...itemList, ...newItem]
         }
-        console.log(newItemList)
         if (newItem[0].itemValue >= Infinity || isNaN(newItem[0].itemValue)) {
             setAlert(<Alert severity="error">Por favor, insira os dados novamente!</Alert>)
             return clear()
@@ -132,8 +131,6 @@ export const ItemsManager = (props: any) => {
     useEffect(() => {
         getItems()
     }, [AuthContext.currentUser.id])
-
-    useEffect(() => console.log(saleList))
 
     return (
         <div>
