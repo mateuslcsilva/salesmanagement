@@ -6,8 +6,8 @@ import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { db } from '../../utils/firebase/firebase'
 import {
-    Chart as ChartJS, 
-    ArcElement, 
+    Chart as ChartJS,
+    ArcElement,
     LinearScale,
     CategoryScale,
     BarElement,
@@ -23,7 +23,7 @@ import { Pie, Chart } from 'react-chartjs-2';
 import './styles.css'
 import { months } from '../../utils/consts'
 
-ChartJS.register(ArcElement,   
+ChartJS.register(ArcElement,
     LinearScale,
     CategoryScale,
     BarElement,
@@ -127,48 +127,48 @@ export const Dashboards = () => {
     const getDaysOfTheMonth = () => {
         let daysOfTheMonth = []
         let lastDayOfMonth = new Date((new Date().getFullYear()), (new Date().getMonth()) + 1, 0).getDate()
-        for(let i = 1; i <= lastDayOfMonth; i++){
+        for (let i = 1; i <= lastDayOfMonth; i++) {
             daysOfTheMonth.push(i)
         }
         return (daysOfTheMonth)
     }
 
     const getNumberOfSalesPerDay = () => {
-        let salesPerDay :number[] = []
+        let salesPerDay: number[] = []
         getDaysOfTheMonth().forEach(day => {
-            if(getNumberOfSales(day) > 0) salesPerDay.push(getNumberOfSales(day))
+            if (getNumberOfSales(day) > 0) salesPerDay.push(getNumberOfSales(day))
         })
         return salesPerDay
     }
 
     const getValueOfSalesPerDay = () => {
-        let valuePerDay :number[] = []
+        let valuePerDay: number[] = []
         getDaysOfTheMonth().forEach(day => {
-            if(getTotalSaleValue(day) > 0) valuePerDay.push(getTotalSaleValue(day))
+            if (getTotalSaleValue(day) > 0) valuePerDay.push(getTotalSaleValue(day))
         })
         return valuePerDay
     }
 
     const getNumberOfSalesPerMonth = () => {
-        let salesPerDay :Array<number | undefined> = []
+        let salesPerDay: Array<number | undefined> = []
         months.forEach((month, index) => {
-            if(getNumberOfSales(index) == 0) return salesPerDay.push(undefined)
+            if (getNumberOfSales(index) == 0) return salesPerDay.push(undefined)
             salesPerDay.push(getNumberOfSales(index))
         })
         return salesPerDay
     }
 
     const getValueOfSalesPerMonth = () => {
-        let valuePerDay :Array<number | undefined> = []
+        let valuePerDay: Array<number | undefined> = []
         months.forEach((month, index) => {
-            if(getTotalSaleValue(index) == 0) return valuePerDay.push(undefined)
+            if (getTotalSaleValue(index) == 0) return valuePerDay.push(undefined)
             valuePerDay.push(getTotalSaleValue(index))
         })
         return valuePerDay
     }
 
-    const toggleHiddenInfo = (info :string) => {
-        if(hiddenInfo.includes(info)){
+    const toggleHiddenInfo = (info: string) => {
+        if (hiddenInfo.includes(info)) {
             return setHiddenInfo((hiddenInfo) => hiddenInfo.filter(text => text != info))
         }
         setHiddenInfo(hiddenInfo => [...hiddenInfo, info])
@@ -209,60 +209,60 @@ export const Dashboards = () => {
     };
 
     const dataSalesOfMonth = {
-        labels : getDaysOfTheMonth(),
+        labels: getDaysOfTheMonth(),
         datasets: [
-          {
-            type: 'line' as const,
-            label: 'Quantidade de Vendas',
-            borderColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f2" : "#191919",
-            backgroundColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f290" : "#191919",
-            borderWidth: 1,
-            fill: false,
-            data: getNumberOfSalesPerDay(),
-          },
-          {
-            type: 'bar' as const,
-            label: 'Valor total (R$)',
-            backgroundColor: '#3488ceab',
-            data: getValueOfSalesPerDay(),
-            borderColor: '#3488ce',
-            borderWidth: 2,
-          }
+            {
+                type: 'line' as const,
+                label: 'Quantidade de Vendas',
+                borderColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f2" : "#191919",
+                backgroundColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f290" : "#191919",
+                borderWidth: 1,
+                fill: false,
+                data: getNumberOfSalesPerDay(),
+            },
+            {
+                type: 'bar' as const,
+                label: 'Valor total (R$)',
+                backgroundColor: '#3488ceab',
+                data: getValueOfSalesPerDay(),
+                borderColor: '#3488ce',
+                borderWidth: 2,
+            }
         ]
-      }
+    }
 
-      const dataSalesOfYear = {
-        labels : months,
+    const dataSalesOfYear = {
+        labels: months,
         datasets: [
-          {
-            type: 'line' as const,
-            label: 'Quantidade de Vendas',
-            borderColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f2" : "#191919",
-            backgroundColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f290" : "#191919",
-            borderWidth: 1,
-            fill: false,
-            data: getNumberOfSalesPerMonth(),
-          },
-          {
-            type: 'bar' as const,
-            label: 'Valor total',
-            backgroundColor: '#3488ceab',
-            data: getValueOfSalesPerMonth(),
-            borderColor: '#3488ce',
-            borderWidth: 2,
-          }
+            {
+                type: 'line' as const,
+                label: 'Quantidade de Vendas',
+                borderColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f2" : "#191919",
+                backgroundColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f290" : "#191919",
+                borderWidth: 1,
+                fill: false,
+                data: getNumberOfSalesPerMonth(),
+            },
+            {
+                type: 'bar' as const,
+                label: 'Valor total',
+                backgroundColor: '#3488ceab',
+                data: getValueOfSalesPerMonth(),
+                borderColor: '#3488ce',
+                borderWidth: 2,
+            }
         ]
-      }
+    }
 
-      const charOptions :any = {
-        plugins:{
+    const charOptions: any = {
+        plugins: {
             legend: {
-                labels:{
+                labels: {
                     color: "#fff"
                 }
             },
         },
-        scales: { 
+        scales: {
             y: {
                 ticks: {
                     color: "#fff",
@@ -275,7 +275,7 @@ export const Dashboards = () => {
             }
         }
 
-      } 
+    }
 
     useEffect(() => {
         getItems()
@@ -293,10 +293,12 @@ export const Dashboards = () => {
                 <div>
                     <i className="bi bi-cash-stack"></i>
                     <div className={getTotalSaleValue() > 9999 ? "primary-data-info small-font-size" : "primary-data-info"}>
-                        <h1 
-                        className={hiddenInfo.includes("totalValue") ? 'info hidden-info' : 'info'}
-                        onClick={() => toggleHiddenInfo("totalValue")}
-                        >{hiddenInfo.includes("totalValue") ? "R$****" : getTotalSaleValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
+                        <h1
+                            className={hiddenInfo.includes("totalValue") ? 'info hidden-info' : 'info'}
+                            onClick={() => toggleHiddenInfo("totalValue")}
+                        >
+                            {hiddenInfo.includes("totalValue") ? "R$****" : getTotalSaleValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                        </h1>
                         <p>Valor total vendido</p>
                     </div>
                 </div>
@@ -304,9 +306,11 @@ export const Dashboards = () => {
                     <i className="bi bi-cart-check"></i>
                     <div className='primary-data-info'>
                         <h1
-                        className={hiddenInfo.includes("numberOfSales") ? 'info hidden-info' : 'info'}
-                        onClick={() => toggleHiddenInfo("numberOfSales")}
-                        >{hiddenInfo.includes("numberOfSales") ? "--" : getNumberOfSales()}</h1>
+                            className={hiddenInfo.includes("numberOfSales") ? 'info hidden-info' : 'info'}
+                            onClick={() => toggleHiddenInfo("numberOfSales")}
+                        >
+                            {hiddenInfo.includes("numberOfSales") ? "--" : getNumberOfSales()}
+                        </h1>
                         <p>Número de pedidos</p>
                     </div>
                 </div>
@@ -314,9 +318,11 @@ export const Dashboards = () => {
                     <i className="bi bi-cash"></i>
                     <div className='primary-data-info'>
                         <h1
-                        className={hiddenInfo.includes("ticket") ? 'info hidden-info' : 'info'}
-                        onClick={() => toggleHiddenInfo("ticket")}
-                        >{hiddenInfo.includes("ticket") ? "R$****" : (getTotalSaleValue() / getNumberOfSales()).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
+                            className={hiddenInfo.includes("ticket") ? 'info hidden-info' : 'info'}
+                            onClick={() => toggleHiddenInfo("ticket")}
+                        >
+                            {hiddenInfo.includes("ticket") ? "R$****" : (getTotalSaleValue() / getNumberOfSales()).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                        </h1>
                         <p>Ticket Médio</p>
                     </div>
                 </div>
@@ -326,11 +332,11 @@ export const Dashboards = () => {
             <div className={AuthContext.currentUser.userType == "Padrão" ? 'charts hidden-info' : 'charts'}>
                 <div className='div1'>
                     <h1>Resultados Mensal</h1>
-                <Chart type='bar' data={dataSalesOfMonth} className='bar-chart' options={document.querySelector('.main')?.classList.contains('darkThemed') ? charOptions : {}} />
+                    <Chart type='bar' data={dataSalesOfMonth} className='bar-chart' options={document.querySelector('.main')?.classList.contains('darkThemed') ? charOptions : {}} />
                 </div>
                 <div className='div2'>
-                <h1>Resultados Anual</h1>
-                <Chart type='bar' data={dataSalesOfYear} className='bar-chart' options={document.querySelector('.main')?.classList.contains('darkThemed') ? charOptions : {}} />
+                    <h1>Resultados Anual</h1>
+                    <Chart type='bar' data={dataSalesOfYear} className='bar-chart' options={document.querySelector('.main')?.classList.contains('darkThemed') ? charOptions : {}} />
                 </div>
                 <div className='div3'>
                     <Pie data={data} className='pie-chart' />

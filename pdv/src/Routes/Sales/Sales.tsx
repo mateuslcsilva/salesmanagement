@@ -42,6 +42,7 @@ export const Sales = () => {
     const [itemList, setItemList] = useState<Array<itemType>>([])
     const [sales, setSales] = useState<Array<sale>>([] as Array<sale>)
     const [salesHistory, setSalesHistory] = useState<Array<sale>>()
+    const [hiddenInfo, setHiddenInfo] = useState<Array<string>>([])
 
     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false
@@ -128,6 +129,13 @@ export const Sales = () => {
         sales.forEach(sale => totalValue += sale.totalValue)
         return totalValue
     }
+    
+    const toggleHiddenInfo = (info :string) => {
+        if(hiddenInfo.includes(info)){
+            return setHiddenInfo((hiddenInfo) => hiddenInfo.filter(text => text != info))
+        }
+        setHiddenInfo(hiddenInfo => [...hiddenInfo, info])
+    }
 
     const backgroundColor = [
         'rgba(255, 99, 132, 0.2)',
@@ -173,32 +181,45 @@ export const Sales = () => {
             </h1>
             <h3 className='section-title'><i className="bi bi-wallet2"></i>Números do dia</h3>
             <p className='section-sub-title'>Seu dia até agora</p>
-            <div className='primary-sales-data'>
+            <div  className={AuthContext.currentUser.userType == "Padrão" ? 'primary-sales-data hidden-info' : 'primary-sales-data'}>
                 <div>
                 <i className="bi bi-cash-stack"></i>
                     <div className={getTotalSaleValue() > 9999 ? "primary-data-info small-font-size" : "primary-data-info"}>
-                        <h1>{getTotalSaleValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
+                        <h1 
+                        className={hiddenInfo.includes("totalValue") ? 'info hidden-info' : 'info'}
+                        onClick={() => toggleHiddenInfo("totalValue")}
+                        >{hiddenInfo.includes("totalValue") ? "R$****" : getTotalSaleValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
                         <p>Valor total vendido</p>
                     </div>
                 </div>
                 <div> 
                 <i className="bi bi-cart-check"></i>
                     <div className='primary-data-info'>
-                        <h1>{getNumberOfSales()}</h1>
+                    <h1
+                        className={hiddenInfo.includes("numberOfSales") ? 'info hidden-info' : 'info'}
+                        onClick={() => toggleHiddenInfo("numberOfSales")}
+                        >
+                            {hiddenInfo.includes("numberOfSales") ? "--" : getNumberOfSales()}
+                        </h1>
                         <p>Número de pedidos</p>
                     </div>
                 </div>
                 <div>
                 <i className="bi bi-cash"></i>
                     <div className='primary-data-info'>
-                        <h1>{getTotalValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
+                        <h1
+                            className={hiddenInfo.includes("ticket") ? 'info hidden-info' : 'info'}
+                            onClick={() => toggleHiddenInfo("ticket")}
+                        >
+                            {hiddenInfo.includes("ticket") ? "R$****" : getTotalValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                        </h1>
                         <p>Valor em aberto</p>
                     </div>
                 </div>
             </div>
             <h3 className='section-title'><i className="bi bi-receipt"></i>Extrato de Vendas</h3>
             <p className='section-sub-title'>Análise detalhada das informações do mês</p>
-            <div className='sales'>
+            <div  className={AuthContext.currentUser.userType == "Padrão" ? 'sales hidden-info' : 'sales'}>
                 <div className='open-sales'>
                     <Extract sales={sales} itemList={itemList} /> 
                 </div>
@@ -215,6 +236,6 @@ export const Sales = () => {
                     <p>Itens mais vendidos</p>
                 </div>
             </div>
-        </>
+        </> 
     )
 }

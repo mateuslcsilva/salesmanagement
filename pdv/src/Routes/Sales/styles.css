@@ -44,6 +44,7 @@
 }
 
 .primary-sales-data>div {
+    position: relative;
     height: 100%;
     width: 33.333%;
     border-radius: 7px;
@@ -92,16 +93,37 @@
 }
 
 .primary-sales-data>div h1 {
+    position: relative;
     font-size: 26pt;
     font-weight: 600;
     color: var(--primary-dashboard-color);
-    transition: 0.3s ease;
+    cursor: pointer;
+    transition: 0.2s ease
+}
+
+.primary-sales-data>div h1::before{
+    content:"Clique para esconder";
+    position: absolute;
+    top: -30%;
+    right: 0; 
+    width: 0;
+    white-space: nowrap;
+    font-size: 8pt;
+    transition: 0.2s ease;
+    overflow: hidden;
+}
+
+.primary-sales-data>div h1:hover::before{
+    content:"Clique para esconder";
+    width: 120px;
+    white-space: nowrap;
+    font-size: 8pt;
+    transition: 0.2s ease
 }
 
 .primary-sales-data>div p {
     color: var(--dashboard-subtitle-color);
     white-space: nowrap;
-    transition: 0.3s ease;
 }
 
 
@@ -132,6 +154,7 @@
 }
 
 .most-salled-item {
+    position: relative;
     width: 33.333%;
     display: flex;
     flex-direction: column;
@@ -146,13 +169,44 @@
     transition: 0.3s ease;
 }
 
+/* ====> hidden dashboard info <==== */
+.primary-sales-data.hidden-info>div::after,
+.sales.hidden-info .most-salled-item::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* From https://css.glass */
+    border-radius: 7px;
+    background: #f2f2f201;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(13.6px);
+    -webkit-backdrop-filter: blur(13.6px);
+}
+
+
+.info.hidden-info::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -15%;
+    width: 120%;
+    height: 100%;
+    /* From https://css.glass */
+    background: var(--dashboard-blur-color);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+}
+
 @media (min-width: 1399px) {
 
     .sales,
     .primary-sales-data {
         padding: 1% 5%;
     }
-
+ 
     .sales {
         height: 550px;
     }
