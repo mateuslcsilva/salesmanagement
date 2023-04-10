@@ -12,10 +12,12 @@ import { db } from '../../utils/firebase/firebase'
 import { ConfirmationModal } from '../../components/ConfirmationModal/ConfirmationModal'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale'
 import { itemType } from '../../types/itemType/itemType'
+import { useItemListContext } from '../../utils/contexts/ItemsProvider'
+import { useSalesContext } from '../../utils/contexts/SalesProvider'
 
 export const UpdateSaleScreen = () => {
 
-    const [itemList, setItemList] = useState<itemType[]>([])
+/*     const [itemList, setItemList] = useState<itemType[]>([]) */
     const [currentUserId, setCurrentUserId] = useState<string>()
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
@@ -31,11 +33,13 @@ export const UpdateSaleScreen = () => {
     const [visible, setVisible] = useState(false);
     const [permission, setPermission] = useState(false)
     const AuthContext = useAuthContext()
+    const ItemListContext = useItemListContext()
+    const SalesContext = useSalesContext()
 
     const handler = () => setVisible(true);
     const closeHandler = () => setVisible(false);
 
-    const getItems = async () => {
+/*     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false
         let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
         let data = await getDoc(docRef)
@@ -43,10 +47,11 @@ export const UpdateSaleScreen = () => {
                 setItemList(res.data()?.items)
                 setSales(res.data()?.sales)
             })
-    }
+    } */
 
     const getItemText = (typeParam: string, value: number | undefined) => {
         if (AuthContext.currentUser.id == '') return
+        const itemList = ItemListContext.itemList
         if (!value) return
         if (typeParam == "numItem") {
             let index = itemList.findIndex(item => item.numItem == value)
@@ -69,14 +74,14 @@ export const UpdateSaleScreen = () => {
 
     const findTable = () => {
         let salesIndex: number[] = []
-        sales.forEach((item: sale, index: number) => {
+        SalesContext.sales.forEach((item: sale, index: number) => {
             if (item.numTable == tableNumber) {
                 salesIndex.push(index)
             }
         })
         setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
         let currentSale: sale[] = []
-        sales.forEach((sale: sale, index: number) => {
+        SalesContext.sales.forEach((sale: sale, index: number) => {
             if (salesIndex.includes(index)) {
                 currentSale.push(sale)
             }
@@ -91,7 +96,7 @@ export const UpdateSaleScreen = () => {
 
     const findSale = () => {
         let salesIndex: any = []
-        sales.forEach((item: sale, index: number) => {
+        SalesContext.sales.forEach((item: sale, index: number) => {
             if (item.numSale == saleNumber) {
                 salesIndex.push(index)
             }
@@ -105,12 +110,12 @@ export const UpdateSaleScreen = () => {
         if (Array.isArray(salesIndex)) return window.alert("Ocorreu um erro, por favor contate o desenvolvedor!")
 
         setSaleIndex(salesIndex)
-        setSale(sales[salesIndex])
+        setSale(SalesContext.sales[salesIndex])
     }
 
     const findCostumer = () => {
         let salesIndex: number[] = []
-        sales.forEach((item: sale, index: number) => {
+        SalesContext.sales.forEach((item: sale, index: number) => {
             if (item.costumerName?.toLowerCase().trim() == costumerName?.toLowerCase().trim()) {
                 salesIndex.push(index)
             }
@@ -121,7 +126,7 @@ export const UpdateSaleScreen = () => {
         }
         setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
         let currentSale: sale[] = []
-        sales.forEach((sale: sale, index: number) => {
+        SalesContext.sales.forEach((sale: sale, index: number) => {
             if (salesIndex.includes(index)) {
                 currentSale.push(sale)
             }
@@ -130,17 +135,20 @@ export const UpdateSaleScreen = () => {
     }
 
     const deleteItems = () => {
+        if(Array.isArray(sale)) return
         let selectedItems = selected?.map(item => Number(item))
+        let newSale = sale
         if (typeof saleIndex == "number") {
             selectedItems?.forEach((item) => {
-                sales[saleIndex].orders.splice(item, 1)
+                newSale.orders.splice(item, 1)
             })
             let totalValue = 0
-            sales[saleIndex].orders?.map(order => {
-                let item = itemList.find(item => item.numItem == order)
+            newSale.orders?.map(order => {
+                let item = ItemListContext.itemList.find(item => item.numItem == order)
                 if (item) totalValue += Number(item.itemValue)
             })
-            sales[saleIndex].totalValue = totalValue
+            newSale.totalValue = totalValue
+            setSale({...sale, ...newSale})
             updateSales()
             clear()
             setAlert(<Alert severity="success">Pronto, pedidos excluídos!</Alert>)
@@ -162,7 +170,7 @@ export const UpdateSaleScreen = () => {
         })
         let totalValue = 0
         sales[saleIndex].orders?.map(order => {
-            let item = itemList.find(item => item.numItem == order)
+            let item = ItemListContext.itemList.find(item => item.numItem == order)
             if (item) totalValue += Number(item.itemValue)
         })
         sales[saleIndex].totalValue = totalValue
@@ -171,7 +179,7 @@ export const UpdateSaleScreen = () => {
             sales[currentSale].orders = [...sales[currentSale]?.orders, ...deletedItems]
             let totalValueCurrentSale = 0
             sales[currentSale].orders?.map(order => {
-                let item = itemList.find(item => item.numItem == order)
+                let item = ItemListContext.itemList.find(item => item.numItem == order)
                 if (item) totalValueCurrentSale += Number(item.itemValue)
             })
             sales[currentSale].totalValue = totalValueCurrentSale
@@ -193,7 +201,7 @@ export const UpdateSaleScreen = () => {
             }
             let totalValue = 0
             updatedSale.orders?.map(order => {
-                let item = itemList.find(item => item.numItem == order)
+                let item = ItemListContext.itemList.find(item => item.numItem == order)
                 if (item) totalValue += Number(item.itemValue)
             })
             updatedSale.totalValue = totalValue
@@ -208,8 +216,10 @@ export const UpdateSaleScreen = () => {
 
     const changeNumTable = () => {
         if (tableNumber < 0) return
-        if (typeof saleIndex == "number") {
-            sales[saleIndex].numTable = Number(newTableNumber)
+        if (!Array.isArray(sale)) {
+            let newSale = sale
+            newSale.numTable = Number(newTableNumber)
+            setSale({...sale, ...newSale})
         }
         updateSales()
         clear()
@@ -226,10 +236,13 @@ export const UpdateSaleScreen = () => {
     }
 
     const updateSales = async () => {
-        await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
+/*         await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
             sales: sales
         })
-        clear()
+        clear() */
+        if(Array.isArray(sale)) return window.alert("Não foi possível concluir a operação!")
+        const cleanedSales = SalesContext.sales.filter(existentSale => existentSale.numSale != sale.numSale)
+         SalesContext.setSales([...cleanedSales, sale])
     }
 
     const clear = () => {
@@ -257,9 +270,12 @@ export const UpdateSaleScreen = () => {
         setCurrentUserId(AuthContext.currentUser.id)
     }, [AuthContext.currentUser.id])
 
-    useEffect(() => {
+/*     useEffect(() => {
         getItems()
-    }, [])
+    }, []) */
+    useEffect(() => {
+        console.log(sale)
+    }, [sale])
 
     useEffect(() => {
         if (!permission) return
@@ -324,15 +340,15 @@ export const UpdateSaleScreen = () => {
                 {alert}
 
                 {
-                    ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && (typeof saleIndex == "number")) &&
+                    ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && (!Array.isArray(sale) && sale.numSale > 0)) &&
                     <div className='saleInfo mb-3 mt-5 primary-text'>
                         <p className='title is-5'>
-                            {sales[saleIndex].numTable ? 'Mesa: ' + sales[saleIndex].numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
-                            {sales[saleIndex].costumerName ? 'Cliente: ' + sales[saleIndex].costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
-                            {sales[saleIndex].numSale ? 'Comanda ' + sales[saleIndex].numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
+                            {'Mesa: ' + sale.numTable + '  |  '} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
+                            {'Cliente: ' + sale.costumerName + '  |  '} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
+                            {'Comanda ' + sale.numSale + '\n'} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                        {sales[saleIndex].orders && sales[saleIndex].orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
-                        {sales[saleIndex].orders?.length > 0 && <p className='mt-3 title is-5'> Total: {sales[saleIndex].totalValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>}
+                        {sale.orders && sale.orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
+                        {sale.orders?.length > 0 && <p className='mt-3 title is-5'> Total: {sale.totalValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>}
                     </div>
                 }
 
@@ -384,7 +400,7 @@ export const UpdateSaleScreen = () => {
                                 onChange={setSelected}
                             >
                                 {/* @ts-ignore */}
-                                {sales[saleIndex].orders.map((order: number, index: number) => <Checkbox value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
+                                {sale.orders.map((order: number, index: number) => <Checkbox value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
                             </Checkbox.Group>
                             <div className='is-flex is-justify-content-flex-end mt-5 mb-5'>
                                 <Button
@@ -423,7 +439,7 @@ export const UpdateSaleScreen = () => {
                                 onChange={setSelected}
                             >
                                 {/* @ts-ignore */}
-                                {sales[saleIndex].orders.map((order: number, index: number) => <Checkbox value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
+                                {sale.orders.map((order: number, index: number) => <Checkbox value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
                             </Checkbox.Group>
                             <div>
                                 <InputSearchSale

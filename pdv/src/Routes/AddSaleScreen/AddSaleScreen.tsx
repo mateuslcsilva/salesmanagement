@@ -235,7 +235,7 @@ export const AddSaleScreen = () => {
                     text='Acrescentar item'
                 />
                 {
-                    ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && (!Array.isArray(sale))) &&
+                    ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && (!Array.isArray(sale) && sale.numSale > 0)) &&
                     <div className='saleInfo mb-3 primary-text'>
                         <p className='title is-5'>
                             {'Mesa: ' + sale.numTable + '  |  '} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
