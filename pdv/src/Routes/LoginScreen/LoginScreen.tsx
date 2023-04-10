@@ -16,11 +16,19 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
 import { queryData } from "../../utils/requests/queryData";
 import { useAuthContext } from "../../utils/contexts/AuthProvider";
+import { useSalesContext } from "../../utils/contexts/SalesProvider";
+import { useSalesHistoryContext } from "../../utils/contexts/SalesHistoryProvider";
+import { useItemListContext } from "../../utils/contexts/ItemsProvider";
 
 export const LoginScreen = () => {
   const initialSignUpState = {} as initialSignUp;
 
   const initialSignInState = {} as initialSignIn;
+
+  const setAuthContext = useAuthContext()
+  const SalesContext = useSalesContext()
+  const SalesHistoryContext = useSalesHistoryContext()
+  const ItemListContext = useItemListContext()
 
   const [darkTheme, setDarkTheme] = useState(false)
   const [signUpValues, setSignUpValues] = useReducer(
@@ -58,17 +66,20 @@ export const LoginScreen = () => {
   const [visible, setVisible] = useState(true);
   const [hasAccount, setHasAccount] = useState(true);
 
-  const setAuthContext = useAuthContext()
-
   const dataHandler = async () => {
     if (hasAccount) { //signin shit
       const accountInfo = await queryData('accountInfo', 'name', signInValues.userWorkplace)
       .then( res => {
         if (typeof (res) == "string") return alert(res)
-        let user = res?.users?.find((user: any) => user.email.toLowerCase() == signInValues.userEmail.toLowerCase())
+        let user = res?.userInfo.users?.find((user: any) => user.email.toLowerCase() == signInValues.userEmail.toLowerCase())
         if (!user) return alert("Conta não encontrada!")
         if (user.password != signInValues.userPassword) return toast.error("Senha Incorreta!")
-        if (res) setAuthContext.setCurrentUser({ id: res.id, userName: user.username, workplaceName: res.workplaceName, userType: user.userType})
+        if (res) {
+          setAuthContext.setCurrentUser({ id: res.userInfo.id, userName: user.username, workplaceName: res.userInfo.workplaceName, userType: user.userType})
+          SalesContext.setSales(res.sales)
+          SalesHistoryContext.setSalesHistory(res.salesHistory)
+          ItemListContext.setItemList(res.items)
+        }
         return setVisible(false);
       }) 
       return

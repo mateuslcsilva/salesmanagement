@@ -7,9 +7,11 @@ import { SideBar } from './components/SideBar/SideBar'
 import { ItemsManager } from './components/ItemsManager/ItemsManager'
 import { UsersManager } from './components/UsersManager/UsersManager'
 import { useAuthContext } from './utils/contexts/AuthProvider'
+import { useItemListContext } from './utils/contexts/ItemsProvider'
 
 function App() {
   const AuthContext = useAuthContext()
+  const ItemListContext = useItemListContext()
   const [darkTheme, setDarkTheme] = useState(false)
   const [sideBar, setSideBar] = useState(false)
   const [itemVisible, setItemVisible] = useState(false);

@@ -12,7 +12,12 @@ export const queryData = async (queryType: string, whereParam: string, value: an
           } 
           let data = response.docs[0] // receber uma informação é a única possível opção aqui, entretanto, o firebase sempre entrega um array
           let idObject = { id: data.id, users: data.data().users, workplaceName: data.data().name }
-          return idObject
+          return {
+            userInfo: idObject,
+            sales: data.data().sales,
+            salesHistory: data.data().salesHistory,
+            items: data.data().items
+          }
         })
       return accountInfo
       break
