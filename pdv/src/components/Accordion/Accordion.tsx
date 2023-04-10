@@ -5,8 +5,6 @@ import { itemType } from '../../types/itemType/itemType'
 export const Accordion = (props :any) => {
     const [open, setOpen] = useState(false)
 
-    useEffect(() => {console.log(`${props.sale.orders?.length * 24}px`)})
-
     const getItemText = (typeParam: string, value: number | undefined) => {
         if (props.AuthContext.currentUser.id == '') return
         if (!value) return

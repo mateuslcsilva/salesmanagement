@@ -7,14 +7,16 @@ import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { sale } from '../../types/sale/sale'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
-import { db } from '../../utils/firebase/firebase'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale'
-import { itemType } from '../../types/itemType/itemType'
+import { useSalesContext } from '../../utils/contexts/SalesProvider'
+import { useItemListContext } from '../../utils/contexts/ItemsProvider'
+/* import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { db } from '../../utils/firebase/firebase'
+import { itemType } from '../../types/itemType/itemType' */
 
 export const AddSaleScreen = () => {
 
-    const [itemList, setItemList] = useState<itemType[]>([])
+/*     const [itemList, setItemList] = useState<itemType[]>([]) */
     const [currentUserId, setCurrentUserId] = useState<string>()
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
@@ -22,11 +24,13 @@ export const AddSaleScreen = () => {
     const [saleIndex, setSaleIndex] = useState<number[] | number>()
     const [sale, setSale] = useState<sale | sale[]>({} as sale)
     const [alert, setAlert] = useState(<p></p>)
-    const [sales, setSales] = useState([] as sale[])
+/*     const [sales, setSales] = useState([] as sale[]) */
     const AuthContext = useAuthContext()
     const orderContext = useOrderContext()
+    const SalesContext = useSalesContext()
+    const ItemListContext = useItemListContext()
 
-    const getItems = async () => {
+    /* const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false
         let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
         let data = await getDoc(docRef)
@@ -34,10 +38,11 @@ export const AddSaleScreen = () => {
                 setItemList(res.data()?.items)
                 setSales(res.data()?.sales)
             })
-    }
+    } */
 
     const getItemText = (typeParam: string, value: number | undefined) => {
         if (AuthContext.currentUser.id == '') return
+        let itemList = ItemListContext.itemList
         if (!value) return
         if (typeParam == "numItem") {
             let index = itemList.findIndex(item => item.numItem == value)
@@ -60,7 +65,7 @@ export const AddSaleScreen = () => {
 
     const findTable = () => {
         let salesIndex: number[] = []
-        sales.forEach((item: sale, index: number) => {
+        SalesContext.sales.forEach((item: sale, index: number) => {
             if (item.numTable == tableNumber) {
                 salesIndex.push(index)
             }
@@ -71,7 +76,7 @@ export const AddSaleScreen = () => {
         }
         setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
         let currentSale: sale[] = []
-        sales.forEach((sale: sale, index: number) => {
+        SalesContext.sales.forEach((sale: sale, index: number) => {
             if (salesIndex.includes(index)) {
                 currentSale.push(sale)
             }
@@ -82,7 +87,7 @@ export const AddSaleScreen = () => {
 
     const findSale = () => {
         let salesIndex: any = []
-        sales.forEach((item: sale, index: number) => {
+        SalesContext.sales.forEach((item: sale, index: number) => {
             if (item.numSale == saleNumber) {
                 salesIndex.push(index)
             }
@@ -96,13 +101,13 @@ export const AddSaleScreen = () => {
         if (Array.isArray(salesIndex)) return window.alert("Ocorreu um erro, por favor contate o desenvolvedor!")
 
         setSaleIndex(salesIndex)
-        setSale(sales[salesIndex])
+        setSale(SalesContext.sales[salesIndex])
     }
 
     const findCostumer = () => {
 
         let salesIndex: number[] = []
-        sales.forEach((item: sale, index: number) => {
+        SalesContext.sales.forEach((item: sale, index: number) => {
             if (item.costumerName?.toLocaleLowerCase().trim() == costumerName?.toLocaleLowerCase().trim()) {
                 salesIndex.push(index)
             }
@@ -113,7 +118,7 @@ export const AddSaleScreen = () => {
         }
         setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
         let currentSale: sale[] = []
-        sales.forEach((sale: sale, index: number) => {
+        SalesContext.sales.forEach((sale: sale, index: number) => {
             if (salesIndex.includes(index)) {
                 currentSale.push(sale)
             }
@@ -122,27 +127,33 @@ export const AddSaleScreen = () => {
     }
 
     const setOrder = () => {
-        if (typeof saleIndex == 'number' && orderContext.currentOrder != undefined) {
-            let oldValue = sales[saleIndex].totalValue
+        if (!Array.isArray(sale) && orderContext.currentOrder != undefined) {
+            let newSale = sale
+            let oldValue = sale.totalValue
             let newValue = 0
-            itemList.forEach(item => {
+            ItemListContext.itemList.forEach(item => {
                 if (item.numItem == orderContext.currentOrder) {
                     //@ts-ignore
                     newValue = item.itemValue
                 }
             })
-            sales[saleIndex].totalValue += newValue
-            sales[saleIndex].orders.push(orderContext.currentOrder)
+            newSale.totalValue += newValue
+            newSale.orders.push(orderContext.currentOrder)
+            setSale({...sale, ...newSale})
+            setAlert(<Alert severity="success">Pedido registrado!</Alert>)
+            orderContext.setCurrentOrder(0)
         }
-        setAlert(<Alert severity="success">Pedido registrado!</Alert>)
-        orderContext.setCurrentOrder(0)
     }
 
     const updateSales = async () => {
-        await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
+        if(Array.isArray(sale)) return window.alert("Não foi possível concluir a operação!")
+        const cleanedSales = SalesContext.sales.filter(existentSale => existentSale.numSale != sale.numSale)
+         SalesContext.setSales([...cleanedSales, sale])
+         clear()
+/*         await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
             sales: sales
         })
-        clear()
+        clear() */
     }
 
     const clear = () => {
@@ -167,9 +178,12 @@ export const AddSaleScreen = () => {
         setCurrentUserId(AuthContext.currentUser.id)
     }, [AuthContext.currentUser.id])
 
-    useEffect(() => {
+/*     useEffect(() => {
         getItems()
-    }, [])
+    }, []) */
+    useEffect(() => {
+        console.log(sale)
+    }, [sale])
 
     return (
         <>
@@ -221,15 +235,15 @@ export const AddSaleScreen = () => {
                     text='Acrescentar item'
                 />
                 {
-                    ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && (typeof saleIndex == "number")) &&
+                    ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && (!Array.isArray(sale))) &&
                     <div className='saleInfo mb-3 primary-text'>
                         <p className='title is-5'>
-                            {sales[saleIndex].numTable ? 'Mesa: ' + sales[saleIndex].numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
-                            {sales[saleIndex].costumerName ? 'Cliente: ' + sales[saleIndex].costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
-                            {sales[saleIndex].numSale ? 'Comanda ' + sales[saleIndex].numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
+                            {'Mesa: ' + sale.numTable + '  |  '} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
+                            {'Cliente: ' + sale.costumerName + '  |  '} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
+                            {'Comanda ' + sale.numSale + '\n'} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
                         </p>
-                        {sales[saleIndex].orders && sales[saleIndex].orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
-                        {sales[saleIndex].orders?.length > 0 && <p className='mt-3 title is-5'> Total: {sales[saleIndex].totalValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>}
+                        {sale.orders && sale.orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
+                        {sale.orders?.length > 0 && <p className='mt-3 title is-5'> Total: {sale.totalValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>}
                     </div>
                 }
 

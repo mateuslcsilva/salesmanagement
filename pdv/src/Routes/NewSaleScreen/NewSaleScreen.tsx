@@ -4,11 +4,11 @@ import { Alert } from '@mui/material'
 import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
 import { sale } from '../../types/sale/sale'
-import { itemType } from '../../types/itemType/itemType'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
+/* import { itemType } from '../../types/itemType/itemType'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
-import { queryData } from '../../utils/requests/queryData'
+import { queryData } from '../../utils/requests/queryData' */
 import 'react-toastify/dist/ReactToastify.css';
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale'
