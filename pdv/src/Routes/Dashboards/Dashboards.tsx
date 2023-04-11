@@ -22,6 +22,9 @@ import {
 import { Pie, Chart } from 'react-chartjs-2';
 import './styles.css'
 import { months } from '../../utils/consts'
+import { useItemListContext } from '../../utils/contexts/ItemsProvider'
+import { useSalesHistoryContext } from '../../utils/contexts/SalesHistoryProvider'
+import { useSalesContext } from '../../utils/contexts/SalesProvider'
 
 ChartJS.register(ArcElement,
     LinearScale,
@@ -39,12 +42,15 @@ ChartJS.overrides["pie"].plugins.legend.display = false
 
 export const Dashboards = () => {
     const AuthContext = useAuthContext()
-    const [itemList, setItemList] = useState<Array<itemType>>([])
+    const SalesContext = useSalesContext()
+    const SalesHistoryContext = useSalesHistoryContext()
+    const ItemListContext = useItemListContext()
+/*     const [itemList, setItemList] = useState<Array<itemType>>([])
     const [sales, setSales] = useState<Array<sale>>([] as Array<sale>)
-    const [salesHistory, setSalesHistory] = useState<Array<sale>>()
+    const [salesHistory, setSalesHistory] = useState<Array<sale>>() */
     const [hiddenInfo, setHiddenInfo] = useState<Array<string>>([])
 
-    const getItems = async () => {
+/*     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false
         let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
         let data = await getDoc(docRef)
@@ -53,10 +59,10 @@ export const Dashboards = () => {
                 setSales(res.data()?.sales)
                 setSalesHistory(res.data()?.salesHistory)
             })
-    }
+    } */
 
     const getItemText = (numItem: number) => {
-        let currentItem = itemList.filter(item => item.numItem == numItem)
+        let currentItem = ItemListContext.itemList.filter(item => item.numItem == numItem)
         if (currentItem[0]?.itemRef && currentItem[0]?.item) return `${currentItem[0]?.itemRef} - ${currentItem[0]?.item}`
     }
 
@@ -74,12 +80,12 @@ export const Dashboards = () => {
 
     const getTotalSaleValue = (month = (new Date()).getMonth(), day = 0) => {
         let totalSaleValue = 0
-        sales.forEach(sale => {
+        SalesContext.sales.forEach(sale => {
             if (Number(sale.date.substring(4, 5)) - 1 == month && (day == 0 || Number(sale.date.substring(0, 2)) == day)) {
                 totalSaleValue += sale.totalValue
             }
         })
-        salesHistory?.forEach(sale => {
+        SalesHistoryContext.salesHistory?.forEach(sale => {
             if (Number(sale.date.substring(4, 5)) - 1 == month && (day == 0 || Number(sale.date.substring(0, 2)) == day)) {
                 totalSaleValue += sale.totalValue
             }
@@ -89,12 +95,12 @@ export const Dashboards = () => {
 
     const getNumberOfSales = (month = (new Date()).getMonth(), day = 0) => {
         let numberOfSales = 0
-        sales.forEach(sale => {
+        SalesContext.sales.forEach(sale => {
             if (Number(sale.date.substring(4, 5)) - 1 == month && (day == 0 || Number(sale.date.substring(0, 2)) == day)) {
                 numberOfSales++
             }
         })
-        salesHistory?.forEach(sale => {
+        SalesHistoryContext.salesHistory?.forEach(sale => {
             if (Number(sale.date.substring(4, 5)) - 1 == month && (day == 0 || Number(sale.date.substring(0, 2)) == day)) {
                 numberOfSales++
             }
@@ -104,12 +110,12 @@ export const Dashboards = () => {
 
     const getMostSelledItem = () => {
         let allSelledItems: Array<number> = []
-        sales.forEach(sale => {
+        SalesContext.sales.forEach(sale => {
             if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth()) {
                 allSelledItems.push(...sale.orders)
             }
         })
-        salesHistory?.forEach(sale => {
+        SalesHistoryContext.salesHistory?.forEach(sale => {
             if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth()) {
                 allSelledItems.push(...sale.orders)
             }
@@ -277,9 +283,9 @@ export const Dashboards = () => {
 
     }
 
-    useEffect(() => {
+/*     useEffect(() => {
         getItems()
-    }, [AuthContext.currentUser.id])
+    }, [AuthContext.currentUser.id]) */
 
     return (
         <>
