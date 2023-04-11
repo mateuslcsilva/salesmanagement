@@ -12,103 +12,113 @@ import { itemType } from '../../types/itemType/itemType'
 import { Alert, getNativeSelectUtilityClasses } from '@mui/material'
 import { sale } from '../../types/sale/sale'
 import { AlertModal } from '../AlertModal/AlertModal'
+import { useItemListContext } from '../../utils/contexts/ItemsProvider'
+import { useSalesContext } from '../../utils/contexts/SalesProvider'
 
 export const ItemsManager = (props: any) => {
 
     const initialItemInfo = {} as itemType
 
     const AuthContext = useAuthContext()
-    const [itemList, setItemList] = useState<Array<itemType>>([])
-    const [saleList, setSaleList] = useState<Array<sale>>([])
+    const ItemListContext = useItemListContext()
+    const SalesContext = useSalesContext()
+    /*     const [itemList, setItemList] = useState<Array<itemType>>([])
+        const [saleList, setSaleList] = useState<Array<sale>>([]) */
     const [alert, setAlert] = useState(<p></p>)
     const [alertVisible, setAlertVisible] = useState(false)
     const [itemInfo, setItemInfo] = useReducer(
-        (currentValues: itemType, newValues: itemType) :itemType => {
-          return { ...currentValues, ...newValues }
+        (currentValues: itemType, newValues: itemType): itemType => {
+            return { ...currentValues, ...newValues }
         },
         initialItemInfo
-      )
-    
-      const handleItemInfoChange = (event: {
+    )
+
+    const handleItemInfoChange = (event: {
         target: { name: string; value: string }
-      }) => {
+    }) => {
         const { name, value } = event.target
-        const newValues ={ [name]: value } 
+        const newValues = { [name]: value }
         setItemInfo({ ...itemInfo, ...newValues });
-      };
+    };
 
-      const alertHandle = () => setAlertVisible(true);
-      const closeAlertHandle = () => setAlertVisible(false);
+    const alertHandle = () => setAlertVisible(true);
+    const closeAlertHandle = () => setAlertVisible(false);
 
-    const getItems = async () => {
-        if (AuthContext.currentUser.id == '') return false
-        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
-        let data = await getDoc(docRef)
-            .then(res => {
-                setItemList(res.data()?.items)
-                setSaleList(res.data()?.sales)
-            })
-    }
+    /*     const getItems = async () => {
+            if (AuthContext.currentUser.id == '') return false
+            let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
+            let data = await getDoc(docRef)
+                .then(res => {
+                    setItemList(res.data()?.items)
+                    setSaleList(res.data()?.sales)
+                })
+        } */
 
     const addItem = async () => {
-        if(saleList.length != 0) return alertHandle()
+        if (SalesContext.sales.length != 0) return alertHandle()
+        const itemList = ItemListContext.itemList
         if (itemList.find(item => item.active && item.itemRef == itemInfo.itemRef)) return setAlert(<p className='error-label' ><i className="bi bi-x-octagon"></i>Referência já cadastrada!</p>)
-        const convert = { active: true, 
-            itemRef: Number(itemInfo.itemRef), 
-            itemValue: typeof itemInfo.itemValue == "number" ? itemInfo.itemValue : Number(itemInfo.itemValue.replaceAll(',', '.')), 
+        const convert = {
+            active: true,
+            itemRef: Number(itemInfo.itemRef),
+            itemValue: typeof itemInfo.itemValue == "number" ? itemInfo.itemValue : Number(itemInfo.itemValue.replaceAll(',', '.')),
             //@ts-ignore
-            numItem : itemInfo.numItem ? itemInfo.numItem : itemList.map(item => item.numItem).sort((a, b) => a - b).at(-1) + 1
+            numItem: itemInfo.numItem ? itemInfo.numItem : itemList.map(item => item.numItem).sort((a, b) => a - b).at(-1) + 1
         }
-        const newItem = [{...itemInfo, ...convert}]
+        const newItem = [{ ...itemInfo, ...convert }]
         let newItemList = []
-        if(itemList.find(item => item.numItem == newItem[0].numItem)){
+        if (itemList.find(item => item.numItem == newItem[0].numItem)) {
             newItemList = itemList.map(item => {
-                if(item.numItem == newItem[0].numItem){
-                    return {...item, ...newItem[0]}
-                } else{
+                if (item.numItem == newItem[0].numItem) {
+                    return { ...item, ...newItem[0] }
+                } else {
                     return item
                 }
             })
-        } else{
+        } else {
             newItemList = [...itemList, ...newItem]
         }
         if (newItem[0].itemValue >= Infinity || isNaN(newItem[0].itemValue)) {
             setAlert(<Alert severity="error">Por favor, insira os dados novamente!</Alert>)
             return clear()
         }
-        await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
-            items: newItemList
-        })
-            getItems()
-            clear()
+        /*         await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
+                    items: newItemList
+                })
+                    getItems() */
+        ItemListContext.setItemList(newItemList)
+        clear()
     }
 
-    const editItem = (ref :number) => {
-        if(saleList.length != 0) return alertHandle()
-        setItemInfo(itemList[itemList.findIndex(item => item.numItem == ref)])
-        deleteItem(ref)
+    const editItem = (ref: number) => {
+        if (SalesContext.sales.length != 0) return alertHandle()
+        setItemInfo(ItemListContext.itemList[ItemListContext.itemList.findIndex(item => item.numItem == ref)])
+                deleteItem(ref)
     }
 
     const deleteItem = async (ref: number) => {
-        if(saleList.length != 0) return alertHandle()
-        setItemList(itemList.map(item => {
-            if(item.numItem == ref){
+        if (SalesContext.sales.length != 0) return alertHandle()
+        let itemList = ItemListContext.itemList
+        let newItemList = itemList.map(item => {
+            if (item.numItem == ref) {
                 item.active = false
             }
             return item
-        }))
-        await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
-            items: itemList
         })
-            getItems()
+        console.log("newItemList", newItemList)
+        ItemListContext.setItemList(newItemList)
+        /*         await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
+                    items: itemList
+                })
+                    getItems() */
     }
 
-    const attItemList = async () => {
-        await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
-            items: itemList.filter(item => item.active)
-        })
-            getItems()
-    }
+    /*     const attItemList = async () => {
+            await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
+                items: itemList.filter(item => item.active)
+            })
+                getItems()
+        } */
 
     const clear = () => {
         setItemInfo({
@@ -128,9 +138,9 @@ export const ItemsManager = (props: any) => {
         return () => clearTimeout(clearAlert)
     })
 
-    useEffect(() => {
-        getItems()
-    }, [AuthContext.currentUser.id])
+    /*     useEffect(() => {
+            getItems()
+        }, [AuthContext.currentUser.id]) */
 
     return (
         <div>
@@ -194,7 +204,7 @@ export const ItemsManager = (props: any) => {
                                 <Text b css={{ "transform": "translateX(-130px)" }}>Descrição</Text>
                                 <Text b css={{ "transform": "translateX(-110px)" }}>Valor</Text>
                             </Row>
-                            {itemList.sort((a, b) => a.itemRef - b.itemRef).map((item, index: number) => {
+                            {ItemListContext.itemList.sort((a, b) => a.itemRef - b.itemRef).map((item, index: number) => {
                                 if (item.active) return (
                                     <>
                                         <div key={index} className="items-div">
@@ -208,11 +218,11 @@ export const ItemsManager = (props: any) => {
                                                         <i className="bi bi-pencil-square"></i>
                                                     </button>
                                                 </Tooltip>
-                                                    <button onClick={() => deleteItem(item.numItem)}>
-                                                <Tooltip title="Deletar">
+                                                <button onClick={() => deleteItem(item.numItem)}>
+                                                    <Tooltip title="Deletar">
                                                         <i className="bi bi-trash3"></i>
-                                                </Tooltip>
-                                                    </button>
+                                                    </Tooltip>
+                                                </button>
                                             </div>
                                         </div>
                                     </>
