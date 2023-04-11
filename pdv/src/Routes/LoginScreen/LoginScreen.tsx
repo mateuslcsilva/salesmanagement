@@ -12,8 +12,6 @@ import { SignIn } from "../../components/SignIn/SignIn";
 import { SignUp } from "../../components/SignUp/SignUp";
 import { db } from "../../utils/firebase/firebase";
 import { collection, doc, setDoc } from "firebase/firestore";
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from "react-toastify";
 import { queryData } from "../../utils/requests/queryData";
 import { useAuthContext } from "../../utils/contexts/AuthProvider";
 import { useSalesContext } from "../../utils/contexts/SalesProvider";
@@ -73,7 +71,7 @@ export const LoginScreen = () => {
         if (typeof (res) == "string") return alert(res)
         let user = res?.userInfo.users?.find((user: any) => user.email.toLowerCase() == signInValues.userEmail.toLowerCase())
         if (!user) return alert("Conta não encontrada!")
-        if (user.password != signInValues.userPassword) return toast.error("Senha Incorreta!")
+        if (user.password != signInValues.userPassword) return 
         if (res) {
           setAuthContext.setCurrentUser({ id: res.userInfo.id, userName: user.username, workplaceName: res.userInfo.workplaceName, userType: user.userType})
           SalesContext.setSales(res.sales)
@@ -164,7 +162,6 @@ export const LoginScreen = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-{      <ToastContainer position="top-right"/>}
     </div>
   );
 }

@@ -11,10 +11,13 @@ import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale';
 import { itemType } from '../../types/itemType/itemType';
+import { useSalesContext } from '../../utils/contexts/SalesProvider';
+import { useSalesHistoryContext } from '../../utils/contexts/SalesHistoryProvider';
+import { useItemListContext } from '../../utils/contexts/ItemsProvider';
 
 export const CheckOutScreen = () => {
 
-    const [itemList, setItemList] = useState<Array<itemType>>([])
+/*     const [itemList, setItemList] = useState<Array<itemType>>([]) */
     const [currentUserId, setCurrentUserId] = useState<string>()
     const [saleIndex, setSaleIndex] = useState<number[] | number>()
     const [sale, setSale] = useState<sale | sale[]>({} as sale)
@@ -27,13 +30,16 @@ export const CheckOutScreen = () => {
     const [selected, setSelected] = useState<any>('Forma de Pagamento');
     const AuthContext = useAuthContext()
     const orderContext = useOrderContext()
+    const SalesContext = useSalesContext()
+    const SalesHistoryContext = useSalesHistoryContext()
+    const ItemListContext = useItemListContext()
 
     const paymentMethods = React.useMemo(
         () => Array.from(selected).join("").replaceAll("_", " "),
         [selected]
     );
 
-    const getItems = async () => {
+/*     const getItems = async () => {
         if (AuthContext.currentUser.id == '') return false
         let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
         let data = await getDoc(docRef)
@@ -42,10 +48,11 @@ export const CheckOutScreen = () => {
                 setSales(res.data()?.sales)
                 setSalesHistory(res.data()?.salesHistory)
             })
-    }
+    } */
 
     const getItemText = (typeParam: string, value: number | undefined) => {
         if (AuthContext.currentUser.id == '') return
+        const itemList = ItemListContext.itemList
         if (!value) return
         if (typeParam == "numItem") {
             let index = itemList.findIndex(item => item.numItem == value)
@@ -62,7 +69,7 @@ export const CheckOutScreen = () => {
     }
 
     const findTable = () => {
-        let currentSale = sales.filter(sale => sale.numTable == tableNumber)
+        let currentSale = SalesContext.sales.filter(sale => sale.numTable == tableNumber)
         if (currentSale.length < 1) {
             clear()
             return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
@@ -71,7 +78,7 @@ export const CheckOutScreen = () => {
     }
 
     const findSale = () => {
-        let currentSale = sales.filter(sale => sale.numSale == saleNumber)
+        let currentSale = SalesContext.sales.filter(sale => sale.numSale == saleNumber)
         if (currentSale.length < 1) {
             clear()
             return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
@@ -80,7 +87,7 @@ export const CheckOutScreen = () => {
     }
 
     const findCostumer = () => {
-        let currentSale = sales.filter(sale => sale.costumerName?.toLocaleLowerCase().trim() == costumerName.toLocaleLowerCase().trim())
+        let currentSale = SalesContext.sales.filter(sale => sale.costumerName?.toLocaleLowerCase().trim() == costumerName.toLocaleLowerCase().trim())
         if (currentSale.length < 1) {
             clear()
             return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
@@ -89,9 +96,12 @@ export const CheckOutScreen = () => {
     }
 
     const closeSale = async () => {
-        if (Array.isArray(sale) || typeof salesHistory == "undefined") return
+        if (Array.isArray(sale)) return
         sale.paymentMethod = paymentMethods
-        await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
+        SalesContext.setSales(sales => sales.filter(remainSale => remainSale.numSale != sale.numSale))
+        SalesHistoryContext.setSalesHistory([...SalesHistoryContext.salesHistory, sale])
+        clear()
+/*         await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
             sales: sales.filter(sale2 => sale2.numSale !== sale.numSale),
             salesHistory: arrayUnion(sale)
         }).then(res => {
@@ -99,7 +109,7 @@ export const CheckOutScreen = () => {
             clear()
         }
         )
-        .catch(err => console.log("Erro ao subir informações: ", err.message))
+        .catch(err => console.log("Erro ao subir informações: ", err.message)) */
     }
 
     const clear = () => {
@@ -122,9 +132,9 @@ export const CheckOutScreen = () => {
         setCurrentUserId(AuthContext.currentUser.id)
     }, [AuthContext.currentUser.id])
 
-    useEffect(() => {
+/*     useEffect(() => {
         getItems()
-    }, [])
+    }, []) */
 
     return (
         <>
