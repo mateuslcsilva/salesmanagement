@@ -17,15 +17,15 @@ import { useSalesContext } from '../../utils/contexts/SalesProvider'
 
 export const UpdateSaleScreen = () => {
 
-/*     const [itemList, setItemList] = useState<itemType[]>([]) */
+    /*     const [itemList, setItemList] = useState<itemType[]>([]) */
     const [currentUserId, setCurrentUserId] = useState<string>()
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
     const [costumerName, setCostumerName] = useState('')
-    const [saleIndex, setSaleIndex] = useState<number[] | number>()
+/*     const [saleIndex, setSaleIndex] = useState<number[] | number>() */
     const [sale, setSale] = useState<sale | sale[]>({} as sale)
     const [alert, setAlert] = useState(<p></p>)
-/*     const [sales, setSales] = useState([] as sale[]) */
+    /*     const [sales, setSales] = useState([] as sale[]) */
     const [selected, setSelected] = useState<Array<string> | undefined>([])
     const [newTableNumber, setNewTableNumber] = useState<number>(0)
     const [newSaleNumber, setNewSaleNumber] = useState<number>(0)
@@ -39,15 +39,15 @@ export const UpdateSaleScreen = () => {
     const handler = () => setVisible(true);
     const closeHandler = () => setVisible(false);
 
-/*     const getItems = async () => {
-        if (AuthContext.currentUser.id == '') return false
-        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
-        let data = await getDoc(docRef)
-            .then(res => {
-                setItemList(res.data()?.items)
-                setSales(res.data()?.sales)
-            })
-    } */
+    /*     const getItems = async () => {
+            if (AuthContext.currentUser.id == '') return false
+            let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
+            let data = await getDoc(docRef)
+                .then(res => {
+                    setItemList(res.data()?.items)
+                    setSales(res.data()?.sales)
+                })
+        } */
 
     const getItemText = (typeParam: string, value: number | undefined) => {
         if (AuthContext.currentUser.id == '') return
@@ -67,10 +67,10 @@ export const UpdateSaleScreen = () => {
         }
     }
 
-    const getSelectedIndex = (index: number) => {
+/*     const getSelectedIndex = (index: number) => {
         if (Array.isArray(saleIndex) && saleIndex[index] != undefined) return setSaleIndex(saleIndex[index])
         window.alert("Erro ao obter a venda, por favor, informe o desenvolvedor!")
-    }
+    } */
 
     const findTable = () => {
         let salesIndex: number[] = []
@@ -79,14 +79,14 @@ export const UpdateSaleScreen = () => {
                 salesIndex.push(index)
             }
         })
-        setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
+        /* setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0]) */
         let currentSale: sale[] = []
         SalesContext.sales.forEach((sale: sale, index: number) => {
-            if (salesIndex.includes(index)) {
+            if (sale.numTable == tableNumber) {
                 currentSale.push(sale)
             }
         })
-        if (salesIndex.length == 0){
+        if (currentSale.length == 0) {
             clear()
             return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
         }
@@ -95,26 +95,23 @@ export const UpdateSaleScreen = () => {
     }
 
     const findSale = () => {
-        let salesIndex: any = []
-        SalesContext.sales.forEach((item: sale, index: number) => {
-            if (item.numSale == saleNumber) {
-                salesIndex.push(index)
+        let currentSale: Array<sale> = []
+        SalesContext.sales.forEach((sale: sale, index: number) => {
+            if (sale.numSale == saleNumber) {
+                currentSale.push(sale)
             }
         })
-
-        if (salesIndex.length == 1) salesIndex = salesIndex[0]
-        if (salesIndex.length == 0) {
+        if (currentSale.length == 0) {
             clear()
             return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
         }
-        if (Array.isArray(salesIndex)) return window.alert("Ocorreu um erro, por favor contate o desenvolvedor!")
+        if (currentSale.length > 1) return window.alert("Ocorreu um erro, por favor contate o desenvolvedor!")
 
-        setSaleIndex(salesIndex)
-        setSale(SalesContext.sales[salesIndex])
+        setSale(currentSale[0])
     }
 
     const findCostumer = () => {
-        let salesIndex: number[] = []
+/*         let salesIndex: number[] = []
         SalesContext.sales.forEach((item: sale, index: number) => {
             if (item.costumerName?.toLowerCase().trim() == costumerName?.toLowerCase().trim()) {
                 salesIndex.push(index)
@@ -124,35 +121,37 @@ export const UpdateSaleScreen = () => {
             clear()
             return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
         }
-        setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0])
+        setSaleIndex(salesIndex.length > 1 ? salesIndex : salesIndex[0]) */
         let currentSale: sale[] = []
-        SalesContext.sales.forEach((sale: sale, index: number) => {
-            if (salesIndex.includes(index)) {
+        SalesContext.sales.forEach((sale: sale) => {
+            if (sale.costumerName?.toLowerCase().trim() == costumerName?.toLowerCase().trim()) {
                 currentSale.push(sale)
             }
         })
+        if (currentSale.length == 0) {
+            clear()
+            return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
+        }
         setSale(currentSale.length == 1 ? currentSale[0] : currentSale)
     }
 
     const deleteItems = () => {
-        if(Array.isArray(sale)) return
+        if (Array.isArray(sale)) return
         let selectedItems = selected?.map(item => Number(item))
         let newSale = sale
-        if (typeof saleIndex == "number") {
-            selectedItems?.forEach((item) => {
-                newSale.orders.splice(item, 1)
-            })
-            let totalValue = 0
-            newSale.orders?.map(order => {
-                let item = ItemListContext.itemList.find(item => item.numItem == order)
-                if (item) totalValue += Number(item.itemValue)
-            })
-            newSale.totalValue = totalValue
-            setSale({...sale, ...newSale})
-            updateSales()
-            clear()
-            setAlert(<Alert severity="success">Pronto, pedidos excluídos!</Alert>)
-        }
+        selectedItems?.forEach((item) => {
+            newSale.orders.splice(item, 1)
+        })
+        let totalValue = 0
+        newSale.orders?.map(order => {
+            let item = ItemListContext.itemList.find(item => item.numItem == order)
+            if (item) totalValue += Number(item.itemValue)
+        })
+        newSale.totalValue = totalValue
+        setSale({ ...sale, ...newSale })
+        updateSales()
+        clear()
+        setAlert(<Alert severity="success">Pronto, pedidos excluídos!</Alert>)
     }
 
     /* const transferringOrders = () => {
@@ -273,7 +272,7 @@ export const UpdateSaleScreen = () => {
         console.log("newSale: ", newSale)
         console.log("sales: ", sales)
         console.log("contextsales: ", [...sales, currentSale, newSale])
-        if(newSale) SalesContext.setSales([...sales, currentSale, newSale].filter(sale => sale.orders.length > 0))
+        if (newSale) SalesContext.setSales([...sales, currentSale, newSale].filter(sale => sale.orders.length > 0))
         clear()
         setAlert(<Alert severity="success">Pronto, pedidos transferidos!</Alert>)
     }
@@ -283,35 +282,34 @@ export const UpdateSaleScreen = () => {
         if (!Array.isArray(sale)) {
             let newSale = sale
             newSale.numTable = Number(newTableNumber)
-            setSale({...sale, ...newSale})
+            setSale({ ...sale, ...newSale })
         }
         updateSales()
         clear()
         setAlert(<Alert severity="success">Pronto, número da mesa alterada!</Alert>)
     }
 
-/*     const deleteSale = () => {
+    const deleteSale = () => {
         let confirm = window.confirm("Deseja realmente excluir a comanda?")
-        if (!confirm || typeof saleIndex != "number") return
-        sales.splice(saleIndex, 1)
-        updateSales()
+        if (!confirm || Array.isArray(sale)) return
+        SalesContext.setSales(sales => sales.filter(otherSales => otherSales.numSale != sale.numSale))
         clear()
         setAlert(<Alert severity="success">Pronto, comanda excluída!</Alert>)
-    } */
+    }
 
     const updateSales = async () => {
-/*         await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
-            sales: sales
-        })
-        clear() */
-        if(Array.isArray(sale)) return window.alert("Não foi possível concluir a operação!")
+        /*         await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
+                    sales: sales
+                })
+                clear() */
+        if (Array.isArray(sale)) return window.alert("Não foi possível concluir a operação!")
         const cleanedSales = SalesContext.sales.filter(existentSale => existentSale.numSale != sale.numSale)
-         SalesContext.setSales([...cleanedSales, sale])
+        SalesContext.setSales([...cleanedSales, sale])
     }
 
     const clear = () => {
         setSale({} as sale)
-        setSaleIndex([])
+        /* setSaleIndex([]) */
         setAction(0)
         setSaleNumber(0)
         setTableNumber(0)
@@ -334,99 +332,18 @@ export const UpdateSaleScreen = () => {
         setCurrentUserId(AuthContext.currentUser.id)
     }, [AuthContext.currentUser.id])
 
-/*     useEffect(() => {
-        getItems()
-    }, []) */
+    /*     useEffect(() => {
+            getItems()
+        }, []) */
     useEffect(() => {
         console.log(sale)
     }, [sale])
-/*     useEffect(() => {
-        SalesContext.setSales([
-            {
-                "orders": [
-                    14,
-                    3
-                ],
-                "numSale": 1,
-                "numTable": "Não informado",
-                "time": "12:24",
-                "loggedUser": "b",
-                "costumerName": "Não informado",
-                "date": "09/04/2023",
-                "totalValue": 18.5
-            },
-            {
-                "numSale": 2,
-                "orders": [
-                    16,
-                    15
-                ],
-                "date": "10/04/2023",
-                "costumerName": "Não informado",
-                "numTable": "Não informado",
-                "loggedUser": "b",
-                "totalValue": 24.5,
-                "time": "12:33"
-            },
-            {
-                "date": "10/04/2023",
-                "loggedUser": "b",
-                "numTable": "Não informado",
-                "numSale": 3,
-                "orders": [
-                    15
-                ],
-                "costumerName": "Não informado",
-                "time": "18:56",
-                "totalValue": 12
-            },
-            {
-                "costumerName": "Não informado",
-                "numTable": "1",
-                "time": "19:36",
-                "totalValue": 62.4,
-                "date": "10/04/2023",
-                "numSale": 5,
-                "loggedUser": "b",
-                "orders": [
-                    5,
-                    16
-                ]
-            },
-            {
-                "numSale": 6,
-                "loggedUser": "b",
-                "orders": [
-                    16
-                ],
-                "costumerName": "Não informado",
-                "numTable": "1",
-                "time": "19:36",
-                "totalValue": 12.5,
-                "date": "10/04/2023"
-            },
-            {
-                "numTable": 11,
-                "totalValue": 57.4,
-                "time": "18:58",
-                "costumerName": "Não informado",
-                "numSale": 4,
-                "loggedUser": "b",
-                "orders": [
-                    16,
-                    17,
-                    15
-                ],
-                "date": "10/04/2023"
-            }
-        ])
-    }, []) */
 
     useEffect(() => {
         if (!permission) return
         switch (action) {
             case 0:
-                /* deleteSale() */
+                deleteSale()
                 break
             case 1:
                 deleteItems()
@@ -499,7 +416,7 @@ export const UpdateSaleScreen = () => {
 
                 {Array.isArray(sale) &&
                     <div>
-                        <SaleAccordion sale={sale} selectedSale={(selectedSale: sale) => setSale(selectedSale)} selectedIndex={getSelectedIndex} />
+                        <SaleAccordion sale={sale} selectedSale={(selectedSale: sale) => setSale(selectedSale)} /* selectedIndex={getSelectedIndex} */ />
                     </div>
                 }
 
@@ -508,19 +425,19 @@ export const UpdateSaleScreen = () => {
                         onClick={() => setAction(1)}
                         className='is-info mt-5 mb-5'
                         text='Excluir Pedido'
-                        disabled={saleIndex == undefined || Array.isArray(saleIndex) ? true : false}
+                        disabled={sale == undefined || Array.isArray(sale) ? true : false}
                     />
                     <Button
                         onClick={() => setAction(2)}
                         className='is-info mt-5 mb-5'
                         text='Mudar Mesa'
-                        disabled={saleIndex == undefined || Array.isArray(saleIndex) ? true : false}
+                        disabled={sale == undefined || Array.isArray(sale) ? true : false}
                     />
                     <Button
                         onClick={() => setAction(3)}
                         className='is-info mt-5 mb-5'
                         text='Migrar Pedidos'
-                        disabled={saleIndex == undefined || Array.isArray(saleIndex) ? true : false}
+                        disabled={sale == undefined || Array.isArray(sale) ? true : false}
                     />
 
                     <Button
@@ -530,7 +447,7 @@ export const UpdateSaleScreen = () => {
                         }}
                         className='is-info mt-5 mb-5'
                         text='Excluir Comanda'
-                        disabled={saleIndex == undefined || Array.isArray(saleIndex) ? true : false}
+                        disabled={sale == undefined || Array.isArray(sale) ? true : false}
                     />
                 </div>
 
@@ -607,7 +524,7 @@ export const UpdateSaleScreen = () => {
                 </div>
 
                 <div className='btn-limpar-centered mt-5'>
-                    <Button onClick={clear} disabled={saleIndex == undefined ? true : false} text='Limpar' />
+                    <Button onClick={clear} disabled={sale == undefined ? true : false} text='Limpar' />
                 </div>
             </div>
         </>
