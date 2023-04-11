@@ -27,20 +27,22 @@ export const SideBar = (props: any) => {
                         </span>
                         <div className="div text header-text">
                             <span className="name">Simpls Software</span>
-                            <span className="workplace">{AuthContext.currentUser.workplaceName ? AuthContext.currentUser.workplaceName : "."}</span>
-                            <span className="user">{AuthContext.currentUser.userName ? AuthContext.currentUser.userName : "."}</span>
+                            <span className="workplace">{AuthContext.currentUser.workplaceName}</span>
+                            <span className="user">{AuthContext.currentUser.userName}</span>
+                            <span className="user">{AuthContext.currentUser.userType}</span>
                         </div>
                     </div>
                     <span className=" toggle" onClick={handleSideBar}>
                         <i className="bi bi-chevron-right"></i>
                         </span>
                 </header>
+                <hr />
                 <div className="menu-bar">
                     <div className="menu">
-                        <li className="search-box">
+{/*                         <li className="search-box">
                             <label htmlFor="input-search"><i className="bi bi-search"></i></label>
                             <input type="search" id="input-search" placeholder="Search..."></input>
-                        </li>
+                        </li> */}
                         <ul className="menu-link-list">
                             <li className="nav-link">
                                 <Link to="/newsalescreen">

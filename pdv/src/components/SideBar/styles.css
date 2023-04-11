@@ -125,7 +125,7 @@
   .sidebar header .toggle * {
     margin-left: 2px;
   }
-  
+/*   
   .sidebar .search-box {
     background-color: var(--primary-color-light);
     border-radius: 6px;
@@ -151,7 +151,7 @@
   .sidebar.close .search-box input {
     transition: var(--tran-03);
     opacity: 0;
-  }
+  } */
   
   .sidebar li a {
     height: 100%;
@@ -179,10 +179,20 @@
     flex-direction: column;
     justify-content: space-between;
   }
+
+  hr{
+    opacity: 0.6;
+    margin-top: 10px !important;
+  }
   
   .bottom-content hr {
     opacity: 0.6;
     margin-bottom: 15px;
+    margin-top: none;
+  }
+
+  .menu-bar .bottom-content{
+    transform: translateY(-70px);
   }
   
   .menu-bar .mode {
