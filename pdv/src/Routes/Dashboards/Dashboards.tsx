@@ -142,7 +142,7 @@ export const Dashboards = () => {
     const getNumberOfSalesPerDay = () => {
         let salesPerDay: number[] = []
         getDaysOfTheMonth().forEach(day => {
-            if (getNumberOfSales(day) > 0) salesPerDay.push(getNumberOfSales(day))
+            if (getNumberOfSales((new Date).getMonth(), day) > 0) salesPerDay.push(getNumberOfSales((new Date).getMonth(), day))
         })
         return salesPerDay
     }
@@ -150,7 +150,7 @@ export const Dashboards = () => {
     const getValueOfSalesPerDay = () => {
         let valuePerDay: number[] = []
         getDaysOfTheMonth().forEach(day => {
-            if (getTotalSaleValue(day) > 0) valuePerDay.push(getTotalSaleValue(day))
+            if (getTotalSaleValue((new Date).getMonth(), day) > 0) valuePerDay.push(getTotalSaleValue((new Date).getMonth(), day))
         })
         return valuePerDay
     }
