@@ -5,22 +5,24 @@ import { useOrderContext } from "../../utils/contexts/OrderContext.js";
 import { db } from "../../utils/firebase/firebase.js";
 import './styles.css'
 import { itemType } from "../../types/itemType/itemType.js";
+import { useItemListContext } from "../../utils/contexts/ItemsProvider.js";
 
 const ItemsListInput = (props: any) => {
     const AuthContext = useAuthContext()
     const orderContext = useOrderContext()
+    const ItemListContext = useItemListContext()
     const [currentOrder, setCurrentOrder] = useState<string>()
-    const [itemList, setItemList] = useState<itemType[]>([])
+/*     const [itemList, setItemList] = useState<itemType[]>([]) */
     const [currentUserId, setCurrentUserId] = useState<string>()
     const [itemListActive, setItemListActive] = useState<boolean>(false)
 
-    const getItems = async () => {
+/*     const getItems = async () => {
         if(AuthContext.currentUser.id == '') return false
         let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
         let data = await getDoc(docRef)
         .then(res => res.data()?.items)
         setItemList(data)
-    }
+    } */
 
     const selectItem = (numItem: number) => {
         orderContext.setCurrentOrder(numItem)
@@ -29,6 +31,7 @@ const ItemsListInput = (props: any) => {
 
     const getItemText = (typeParam :string, value :number | undefined) => {
         if(AuthContext.currentUser.id == '') return 
+        const itemList = ItemListContext.itemList
         if(value == undefined) return 
         if (typeParam == "numItem"){
             let index = itemList.findIndex(item => item.numItem == value)
@@ -47,9 +50,9 @@ const ItemsListInput = (props: any) => {
         setCurrentUserId(AuthContext.currentUser.id)
     }, [AuthContext.currentUser.id])
 
-    useEffect(() => {
+/*     useEffect(() => {
         getItems()
-    }, [currentUserId])
+    }, [currentUserId]) */
 
     useEffect(() => {
         setCurrentOrder(getItemText("numItem", orderContext.currentOrder))
@@ -74,7 +77,7 @@ const ItemsListInput = (props: any) => {
             />
 
             <div id='itemList' className={itemListActive? "active primary-text" : "primary-text"}>
-                {itemList.sort((a, b) => a.itemRef - b.itemRef).map((item: any, index: number): any => {
+                {ItemListContext.itemList.sort((a, b) => a.itemRef - b.itemRef).map((item: any, index: number): any => {
                     if (item.active) return (
                         <button className="item-btn" onClick={(e) => selectItem(item.numItem)} key={index} id={item.numItem}>
                             {getItemText("index", index)}
