@@ -22,6 +22,11 @@
 
 .accordion-title p{
     text-align: center;
+    width: 161px;
+}
+
+.accordion-title :nth-child(2){
+    width: 90px;
 }
 
 .accordion-title i{

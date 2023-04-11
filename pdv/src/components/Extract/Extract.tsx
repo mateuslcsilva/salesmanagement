@@ -54,7 +54,7 @@ export const Extract = (props :propsType) => {
                     <p>Qtde Mesas em uso: {ocuppiedTables}</p>
                 </div>
                         <div>
-                            {props.sales.map(sale => {
+                            {props.sales.sort((a, b) => a.numSale - b.numSale).map(sale => {
                                 return(
                                     <Accordion sale={sale} itemList={props.itemList} AuthContext={AuthContext} />
                                 )
