@@ -25,7 +25,7 @@ export const UpdateSaleScreen = () => {
     const [saleIndex, setSaleIndex] = useState<number[] | number>()
     const [sale, setSale] = useState<sale | sale[]>({} as sale)
     const [alert, setAlert] = useState(<p></p>)
-    const [sales, setSales] = useState([] as sale[])
+/*     const [sales, setSales] = useState([] as sale[]) */
     const [selected, setSelected] = useState<Array<string> | undefined>([])
     const [newTableNumber, setNewTableNumber] = useState<number>(0)
     const [newSaleNumber, setNewSaleNumber] = useState<number>(0)
@@ -155,7 +155,7 @@ export const UpdateSaleScreen = () => {
         }
     }
 
-    const transferringOrders = () => {
+    /* const transferringOrders = () => {
         if (selected == undefined || typeof saleIndex != "number") return
         if (selected.length == sales[saleIndex].orders.length) {
             let confirm = window.confirm("Isso irá excluir a comanda, clique confirmar para continuar.")
@@ -212,6 +212,70 @@ export const UpdateSaleScreen = () => {
         updateSales()
         clear()
         setAlert(<Alert severity="success">Pronto, pedidos transferidos!</Alert>)
+    } */
+
+    const transferringOrders = () => {
+        if (selected == undefined || Array.isArray(sale)) return
+        let newSale = SalesContext.sales.find(sale => sale.numSale == newSaleNumber)
+        let currentSale = sale
+        let sales = SalesContext.sales.filter(sale => ![newSale, currentSale].includes(sale))
+        if (selected.length == currentSale.orders.length) {
+            let confirm = window.confirm("Isso irá excluir a comanda, clique confirmar para continuar.")
+            if (!confirm) return setPermission(false)
+        }
+        const selectedItems = selected?.map(order => Number(order))
+        let deletedItems = currentSale.orders.filter((order: number, index: number) => selectedItems.includes(index))
+
+        selectedItems?.sort().reverse().forEach((item) => {
+            currentSale.orders.splice(item, 1)
+        })
+        let totalValue = 0
+        currentSale.orders?.map(order => {
+            let item = ItemListContext.itemList.find(item => item.numItem == order)
+            if (item) totalValue += Number(item.itemValue)
+        })
+        currentSale.totalValue = totalValue
+
+        if (newSale != undefined) {
+            newSale.orders = [...newSale?.orders, ...deletedItems]
+            let totalValueCurrentSale = 0
+            newSale.orders?.map(order => {
+                let item = ItemListContext.itemList.find(item => item.numItem == order)
+                if (item) totalValueCurrentSale += Number(item.itemValue)
+            })
+            newSale.totalValue = totalValueCurrentSale
+        } else {
+            let current = new Date
+            let currentDay = current.getDate().toString().length < 2 ? '0' + current.getDate() : current.getDate()
+            let currentMonth = current.getMonth().toString().length < 2 ? '0' + (current.getMonth() + 1) : (current.getMonth() + 1)
+            let currentDate = currentDay + '/' + currentMonth + '/' + current.getFullYear()
+            let currentTime = current.getHours() + ':' + (current.getMinutes() < 10 ? "0" + current.getMinutes() : current.getMinutes())
+            let newSale = {
+                numTable: "Não informado",
+                numSale: newSaleNumber,
+                orders: deletedItems,
+                costumerName: "Não informado",
+                date: currentDate,
+                time: currentTime,
+                loggedUser: AuthContext.currentUser.userName,
+                totalValue: 0
+            }
+            let totalValue = 0
+            newSale.orders?.map(order => {
+                let item = ItemListContext.itemList.find(item => item.numItem == order)
+                if (item) totalValue += Number(item.itemValue)
+            })
+            newSale.totalValue = totalValue
+            //@ts-ignore
+        }
+
+        console.log("currentSale: ", currentSale)
+        console.log("newSale: ", newSale)
+        console.log("sales: ", sales)
+        console.log("contextsales: ", [...sales, currentSale, newSale])
+        if(newSale) SalesContext.setSales([...sales, currentSale, newSale].filter(sale => sale.orders.length > 0))
+        clear()
+        setAlert(<Alert severity="success">Pronto, pedidos transferidos!</Alert>)
     }
 
     const changeNumTable = () => {
@@ -226,14 +290,14 @@ export const UpdateSaleScreen = () => {
         setAlert(<Alert severity="success">Pronto, número da mesa alterada!</Alert>)
     }
 
-    const deleteSale = () => {
+/*     const deleteSale = () => {
         let confirm = window.confirm("Deseja realmente excluir a comanda?")
         if (!confirm || typeof saleIndex != "number") return
         sales.splice(saleIndex, 1)
         updateSales()
         clear()
         setAlert(<Alert severity="success">Pronto, comanda excluída!</Alert>)
-    }
+    } */
 
     const updateSales = async () => {
 /*         await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
@@ -276,12 +340,93 @@ export const UpdateSaleScreen = () => {
     useEffect(() => {
         console.log(sale)
     }, [sale])
+/*     useEffect(() => {
+        SalesContext.setSales([
+            {
+                "orders": [
+                    14,
+                    3
+                ],
+                "numSale": 1,
+                "numTable": "Não informado",
+                "time": "12:24",
+                "loggedUser": "b",
+                "costumerName": "Não informado",
+                "date": "09/04/2023",
+                "totalValue": 18.5
+            },
+            {
+                "numSale": 2,
+                "orders": [
+                    16,
+                    15
+                ],
+                "date": "10/04/2023",
+                "costumerName": "Não informado",
+                "numTable": "Não informado",
+                "loggedUser": "b",
+                "totalValue": 24.5,
+                "time": "12:33"
+            },
+            {
+                "date": "10/04/2023",
+                "loggedUser": "b",
+                "numTable": "Não informado",
+                "numSale": 3,
+                "orders": [
+                    15
+                ],
+                "costumerName": "Não informado",
+                "time": "18:56",
+                "totalValue": 12
+            },
+            {
+                "costumerName": "Não informado",
+                "numTable": "1",
+                "time": "19:36",
+                "totalValue": 62.4,
+                "date": "10/04/2023",
+                "numSale": 5,
+                "loggedUser": "b",
+                "orders": [
+                    5,
+                    16
+                ]
+            },
+            {
+                "numSale": 6,
+                "loggedUser": "b",
+                "orders": [
+                    16
+                ],
+                "costumerName": "Não informado",
+                "numTable": "1",
+                "time": "19:36",
+                "totalValue": 12.5,
+                "date": "10/04/2023"
+            },
+            {
+                "numTable": 11,
+                "totalValue": 57.4,
+                "time": "18:58",
+                "costumerName": "Não informado",
+                "numSale": 4,
+                "loggedUser": "b",
+                "orders": [
+                    16,
+                    17,
+                    15
+                ],
+                "date": "10/04/2023"
+            }
+        ])
+    }, []) */
 
     useEffect(() => {
         if (!permission) return
         switch (action) {
             case 0:
-                deleteSale()
+                /* deleteSale() */
                 break
             case 1:
                 deleteItems()
