@@ -1,5 +1,5 @@
 import { doc, getDoc } from "firebase/firestore";
-import React, { useContext, useEffect, useState } from "react";
+import React, { ReactElement, ReactEventHandler, useContext, useEffect, useState } from "react";
 import { useAuthContext } from "../../utils/contexts/AuthProvider.js";
 import { useOrderContext } from "../../utils/contexts/OrderContext.js";
 import { db } from "../../utils/firebase/firebase.js";
@@ -54,6 +54,15 @@ const ItemsListInput = (props: any) => {
         return newItemList
     }
 
+    const focusItem = (e :React.KeyboardEvent<HTMLElement>) => {
+        if(e.key == "ArrowDown") {
+            document.getElementById((1 + Number(e.target.id)).toString())?.focus()
+        }
+        if(e.key == "ArrowUp") {
+            document.getElementById((Number(e.target.id) - 1).toString())?.focus()
+        }
+    }
+
     useEffect(() => {
         setCurrentUserId(AuthContext.currentUser.id)
     }, [AuthContext.currentUser.id])
@@ -64,6 +73,7 @@ const ItemsListInput = (props: any) => {
 
     useEffect(() => {
         setCurrentOrder(getItemText("numItem", orderContext.currentOrder))
+        if(orderContext.currentOrder == 0) document.getElementById('itemListInput')?.focus()
     }, [orderContext.currentOrder])
 
     useEffect(() => {
@@ -90,6 +100,11 @@ const ItemsListInput = (props: any) => {
                     if(e.key == "ArrowDown") {
                         document.getElementById(focusedElement.toString())?.focus()
                     }
+                    if(e.key == "F1"){
+                        e.preventDefault()
+                        props.updateSales()
+                    }
+                    console.log(e.key)
                 }}
             />
 
@@ -109,16 +124,7 @@ const ItemsListInput = (props: any) => {
                         onClick={(e) => selectItem(item.numItem)} 
                         key={index} 
                         id={index.toString()}
-                        onKeyDown={(e) => {
-                            if(e.key == "ArrowDown") {
-                                console.log((1 + Number(e.target.id)).toString())
-                                document.getElementById((1 + Number(e.target.id)).toString())?.focus()
-                            }
-                            if(e.key == "ArrowUp") {
-                                console.log((Number(e.target.id) - 1).toString())
-                                document.getElementById((Number(e.target.id) - 1).toString())?.focus()
-                            }
-                        }}
+                        onKeyDown={(e) => focusItem(e)}
                         >
                             {getItemText("numItem", item.numItem)}
                         </button>

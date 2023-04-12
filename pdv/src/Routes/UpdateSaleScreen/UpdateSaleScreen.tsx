@@ -340,6 +340,10 @@ export const UpdateSaleScreen = () => {
     }, [sale])
 
     useEffect(() => {
+        if(!Array.isArray(sale) && !sale.numSale) document.getElementById('inputComanda')?.focus()
+    }, [sale])
+
+    useEffect(() => {
         if (!permission) return
         switch (action) {
             case 0:

@@ -147,6 +147,10 @@ export const NewSaleScreen = () => {
         setCurrentUserId(AuthContext.currentUser.id)
     }, [AuthContext.currentUser.id])
 
+    useEffect(() => {
+        if(!sale.numSale) document.getElementById('inputComanda')?.focus()
+    }, [sale])
+
 /*     useEffect(() => {
         getItems()
     }, [currentUserId]) */
@@ -189,10 +193,14 @@ export const NewSaleScreen = () => {
                     className='is-info mb-5'
                     placeholder="00 - Nome do Pedido"
                     disabled={sale.numSale == undefined ? true : false}
+                    updateSales={updateSales}
                 />
 
                 <Button
                     onClick={setOrder}
+                    onKeyDown={(e :React.KeyboardEvent<HTMLElement>) => {
+                        if(e.key == "Enter" && sale.numSale && orderContext.currentOrder != 0)  setOrder()
+                    }}
                     className='is-info mb-5'
                     text='Acrescentar item'
                     disabled={!sale.numSale || orderContext.currentOrder == 0 ? true : false}
@@ -217,6 +225,7 @@ export const NewSaleScreen = () => {
                         disabled={sale.numSale == undefined || sale.orders.length < 1 ? true : false}
                         text='Salvar'
                         className="is-success"
+                        id="salvar-venda"
                     />
                     <Button onClick={clear} disabled={sale.numSale == undefined ? true : false} text='Limpar' />
                 </div>

@@ -136,9 +136,14 @@ export const CheckOutScreen = () => {
         getItems()
     }, []) */
 
+    useEffect(() => {
+        if(!Array.isArray(sale) && !sale.numSale) document.getElementById('inputComanda')?.focus()
+    }, [sale])
+
     return (
         <>
-            <div className='div' id='div1'>
+            <div className='div' id='div1'
+            >
                 <h3 className='title is-3 mt-3'>FECHAR COMANDA</h3>
                 <InputSearchSale
                     label="Mesa"
@@ -201,6 +206,29 @@ export const CheckOutScreen = () => {
                         <Dropdown.Button
                         light
                         css={{"color" : "var(--primary-text-color)"}}
+                        onKeyDown={(e) => {
+                            e.preventDefault()
+                            switch(e.key){
+                                case "F5":
+                                    setSelected("Visa Crédito")
+                                break
+                                case "F6":
+                                    setSelected("Visa Débito")
+                                break
+                                case "F7":
+                                    setSelected("Master Crédito")
+                                break
+                                case "F8":
+                                    setSelected("Master Débito")
+                                break
+                                case "F9":
+                                    setSelected("Dinheiro")
+                                break
+                                case "F1":
+                                    closeSale()
+                                break
+                            }
+                        }}
                         >{paymentMethods}</Dropdown.Button>
                         <Dropdown.Menu
                             aria-label="Static Actions"

@@ -185,6 +185,10 @@ export const AddSaleScreen = () => {
         console.log(sale)
     }, [sale])
 
+    useEffect(() => {
+        if(!Array.isArray(sale) && !sale.numSale) document.getElementById('inputComanda')?.focus()
+    }, [sale])
+
     return (
         <>
             <div className='div' id='div1'>
@@ -226,6 +230,7 @@ export const AddSaleScreen = () => {
                     className='is-info mt-5'
                     placeholder="00 - Nome do Pedido"
                     disabled={Array.isArray(sale) || !sale.numSale? true : false}
+                    updateSales={updateSales}
                 />
 
                 <Button

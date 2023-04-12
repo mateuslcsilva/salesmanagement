@@ -15,7 +15,6 @@ export const InputSearchSale = (props: any) => {
                 onChange={(e: any) => props.set(e.target.value)}
                 value={props.value < 1 ? '' : props.value}
                 required 
-                
                 />
                 <label htmlFor={`input${props.label}`} className="search-sale-label">{props.label}</label>
             </div>
