@@ -12,6 +12,7 @@ const ItemsListInput = (props: any) => {
     const orderContext = useOrderContext()
     const ItemListContext = useItemListContext()
     const [currentOrder, setCurrentOrder] = useState<string>("")
+    const [focusedElement, setFocusedElement] = useState<number>(0)
 /*     const [itemList, setItemList] = useState<itemType[]>([]) */
     const [currentUserId, setCurrentUserId] = useState<string>()
     const [itemListActive, setItemListActive] = useState<boolean>(false)
@@ -70,8 +71,8 @@ const ItemsListInput = (props: any) => {
     }, [props.disabled])
 
     useEffect(() => {
-        console.log(filterItemList(currentOrder))
-    })
+        if(currentOrder.length > 0 && !orderContext.currentOrder) setItemListActive(true)
+    }, [currentOrder])
 
     return (
         <section onKeyDown={(e) => e.key == "Escape" ? setItemListActive(false) : {} }>
@@ -85,15 +86,40 @@ const ItemsListInput = (props: any) => {
                 onClick={() => setItemListActive(itemListActive => !itemListActive)}
                 value={currentOrder}
                 disabled={props.disabled}
+                onKeyDown={(e) => {
+                    if(e.key == "ArrowDown") {
+                        document.getElementById(focusedElement.toString())?.focus()
+                    }
+                }}
             />
 
-            <div id='itemList' className={itemListActive? "active primary-text" : "primary-text"} style={itemListActive ? {'height':`${25 + filterItemList(currentOrder).length * 25}px`, 'maxHeight': '220px'} : {}}>
+            <div 
+            id='itemList' 
+            className={itemListActive? "active primary-text" : "primary-text"} 
+            style={itemListActive ? {'height':`${25 + filterItemList(currentOrder).length * 25}px`, 'maxHeight': '220px'} : {}}
+            >
                 {
                 filterItemList(currentOrder)
+                .filter(item => item.active)
                 .sort((a, b) => a.itemRef - b.itemRef)
                 .map((item: any, index: number): any => {
-                    if (item.active) return (
-                        <button className="item-btn" onClick={(e) => selectItem(item.numItem)} key={index} id={item.numItem}>
+                    return (
+                        <button 
+                        className="item-btn" 
+                        onClick={(e) => selectItem(item.numItem)} 
+                        key={index} 
+                        id={index.toString()}
+                        onKeyDown={(e) => {
+                            if(e.key == "ArrowDown") {
+                                console.log((1 + Number(e.target.id)).toString())
+                                document.getElementById((1 + Number(e.target.id)).toString())?.focus()
+                            }
+                            if(e.key == "ArrowUp") {
+                                console.log((Number(e.target.id) - 1).toString())
+                                document.getElementById((Number(e.target.id) - 1).toString())?.focus()
+                            }
+                        }}
+                        >
                             {getItemText("numItem", item.numItem)}
                         </button>
                     )

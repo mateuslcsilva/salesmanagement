@@ -52,7 +52,8 @@ section{
     margin-bottom: 15px;
 }
 
-#itemList.active .item-btn:hover{
+#itemList.active .item-btn:hover,
+#itemList.active .item-btn:focus{
     background-color: #3e8ed0;
     color: #FFF !important;
     cursor: pointer;
