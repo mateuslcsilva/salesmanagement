@@ -11,7 +11,7 @@ const ItemsListInput = (props: any) => {
     const AuthContext = useAuthContext()
     const orderContext = useOrderContext()
     const ItemListContext = useItemListContext()
-    const [currentOrder, setCurrentOrder] = useState<string>()
+    const [currentOrder, setCurrentOrder] = useState<string>("")
 /*     const [itemList, setItemList] = useState<itemType[]>([]) */
     const [currentUserId, setCurrentUserId] = useState<string>()
     const [itemListActive, setItemListActive] = useState<boolean>(false)
@@ -29,10 +29,10 @@ const ItemsListInput = (props: any) => {
         setItemListActive(false)
     }
 
-    const getItemText = (typeParam :string, value :number | undefined) => {
-        if(AuthContext.currentUser.id == '') return 
+    const getItemText = (typeParam :string, value :number | undefined) :string => {
+        if(AuthContext.currentUser.id == '') return ''
         const itemList = ItemListContext.itemList
-        if(value == undefined) return 
+        if(value == undefined) return ''
         if (typeParam == "numItem"){
             let index = itemList.findIndex(item => item.numItem == value)
             if(index < 0) return ""
@@ -44,6 +44,13 @@ const ItemsListInput = (props: any) => {
             let text = (itemList[value]?.itemRef < 10 ? '0' + itemList[value]?.itemRef : itemList[value]?.itemRef.toString()) + ' - ' + itemList[value]?.item + ' - ' + itemList[value]?.itemValue.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})
             return text
         }
+        return ''
+    }
+
+    const filterItemList = (param :string) :Array<itemType> => {
+        const itemList = ItemListContext.itemList
+        const newItemList = itemList.filter(item => getItemText("numItem", item.numItem)?.toLowerCase().includes(currentOrder.toLowerCase()))
+        return newItemList
     }
 
     useEffect(() => {
@@ -62,28 +69,36 @@ const ItemsListInput = (props: any) => {
         setItemListActive(false)
     }, [props.disabled])
 
+    useEffect(() => {
+        console.log(filterItemList(currentOrder))
+    })
+
     return (
-        <section>
+        <section onKeyDown={(e) => e.key == "Escape" ? setItemListActive(false) : {} }>
             <input
                 type="text"
                 autoComplete="off"
                 id="itemListInput"
                 className={props.className + ' input'}
                 placeholder={props.placeholder}
-                onChange={props.onChange}
+                onChange={(e) => setCurrentOrder(e.target.value.toString())}
                 onClick={() => setItemListActive(itemListActive => !itemListActive)}
                 value={currentOrder}
                 disabled={props.disabled}
             />
 
-            <div id='itemList' className={itemListActive? "active primary-text" : "primary-text"}>
-                {ItemListContext.itemList.sort((a, b) => a.itemRef - b.itemRef).map((item: any, index: number): any => {
+            <div id='itemList' className={itemListActive? "active primary-text" : "primary-text"} style={itemListActive ? {'height':`${25 + filterItemList(currentOrder).length * 25}px`, 'maxHeight': '220px'} : {}}>
+                {
+                filterItemList(currentOrder)
+                .sort((a, b) => a.itemRef - b.itemRef)
+                .map((item: any, index: number): any => {
                     if (item.active) return (
                         <button className="item-btn" onClick={(e) => selectItem(item.numItem)} key={index} id={item.numItem}>
-                            {getItemText("index", index)}
+                            {getItemText("numItem", item.numItem)}
                         </button>
                     )
-                })}
+                })
+                }
             </div>
         </section>
     )

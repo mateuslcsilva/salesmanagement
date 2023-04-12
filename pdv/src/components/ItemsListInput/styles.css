@@ -45,7 +45,6 @@ section{
 }
 
 #itemList.active{
-    height: 220px;
     border: 1px solid var(--input-border-color);
     padding: 10px;
     overflow-y: scroll;
