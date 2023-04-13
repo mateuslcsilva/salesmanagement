@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect, useContext } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import './styles.css'
 import {
   Modal,
@@ -97,15 +97,17 @@ export const LoginScreen = () => {
         salesHistory: []
     }
 
+    if(!signUpValues.workplace || !signUpValues.username || !signUpValues.email || !signUpValues.password) return 
+
     const collectionRef = collection(db, "empresas")
     const docRef = await setDoc(doc(collectionRef, signUpValues.workplace), newInfo)
       .then(response => {
         setVisible(false)
-        /* toast.success('Conta criada com sucesso!'); */
       })
       .catch(err => {
-        /* toast.error(err.message) */
+        console.log(err.message)
       });
+      setAuthContext.setCurrentUser({ id: signUpValues.workplace, userName: signUpValues.username, workplaceName: signUpValues.workplace, userType: "Master"})
   };
 
   const localStorageManagement = () => {

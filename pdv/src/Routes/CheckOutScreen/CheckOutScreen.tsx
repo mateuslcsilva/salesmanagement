@@ -5,24 +5,16 @@ import { Alert } from '@mui/material'
 import { Dropdown } from '@nextui-org/react';
 import SaleAccordion from '../../components/SaleAccordion/SaleAccordion'
 import { sale } from '../../types/sale/sale'
-import { arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore'
-import { db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale';
-import { itemType } from '../../types/itemType/itemType';
 import { useSalesContext } from '../../utils/contexts/SalesProvider';
 import { useSalesHistoryContext } from '../../utils/contexts/SalesHistoryProvider';
 import { useItemListContext } from '../../utils/contexts/ItemsProvider';
 
 export const CheckOutScreen = () => {
-
-/*     const [itemList, setItemList] = useState<Array<itemType>>([]) */
     const [currentUserId, setCurrentUserId] = useState<string>()
-    const [saleIndex, setSaleIndex] = useState<number[] | number>()
     const [sale, setSale] = useState<sale | sale[]>({} as sale)
-    const [sales, setSales] = useState<Array<sale>>([] as Array<sale>)
-    const [salesHistory, setSalesHistory] = useState<Array<sale>>()
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
     const [costumerName, setCostumerName] = useState('')
@@ -35,20 +27,34 @@ export const CheckOutScreen = () => {
     const ItemListContext = useItemListContext()
 
     const paymentMethods = React.useMemo(
+        //@ts-ignore
         () => Array.from(selected).join("").replaceAll("_", " "),
         [selected]
     );
 
-/*     const getItems = async () => {
-        if (AuthContext.currentUser.id == '') return false
-        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
-        let data = await getDoc(docRef)
-            .then(res => {
-                setItemList(res.data()?.items)
-                setSales(res.data()?.sales)
-                setSalesHistory(res.data()?.salesHistory)
-            })
-    } */
+    const getPaymentMehods = (e :React.KeyboardEvent<HTMLElement>) => {
+        e.preventDefault()
+        switch(e.key){
+            case "F5":
+                setSelected("Visa Crédito")
+            break
+            case "F6":
+                setSelected("Visa Débito")
+            break
+            case "F7":
+                setSelected("Master Crédito")
+            break
+            case "F8":
+                setSelected("Master Débito")
+            break
+            case "F9":
+                setSelected("Dinheiro")
+            break
+            case "F1":
+                closeSale()
+            break
+        }
+    }
 
     const getItemText = (typeParam: string, value: number | undefined) => {
         if (AuthContext.currentUser.id == '') return
@@ -101,15 +107,6 @@ export const CheckOutScreen = () => {
         SalesContext.setSales(sales => sales.filter(remainSale => remainSale.numSale != sale.numSale))
         SalesHistoryContext.setSalesHistory([...SalesHistoryContext.salesHistory, sale])
         clear()
-/*         await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
-            sales: sales.filter(sale2 => sale2.numSale !== sale.numSale),
-            salesHistory: arrayUnion(sale)
-        }).then(res => {
-            getItems()
-            clear()
-        }
-        )
-        .catch(err => console.log("Erro ao subir informações: ", err.message)) */
     }
 
     const clear = () => {
@@ -131,10 +128,6 @@ export const CheckOutScreen = () => {
     useEffect(() => {
         setCurrentUserId(AuthContext.currentUser.id)
     }, [AuthContext.currentUser.id])
-
-/*     useEffect(() => {
-        getItems()
-    }, []) */
 
     useEffect(() => {
         if(!Array.isArray(sale) && !sale.numSale) document.getElementById('inputComanda')?.focus()
@@ -182,16 +175,14 @@ export const CheckOutScreen = () => {
                     ((!Array.isArray(sale))) && sale && sale.numSale &&
                     <div className='saleInfo mb-3  primary-text'>
                         <p className='title is-5'>
-                            {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
-                            {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
-                            {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
+                            {'Mesa: ' + sale.numTable + '  |  '} 
+                            {'Cliente: ' + sale.costumerName + '  |  '} 
+                            {'Comanda ' + sale.numSale + '\n'} 
                         </p>
-                        {sale.orders && sale.orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
+                        {sale.orders && sale.orders.map((item: number, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
                         <p className='mt-3 title is-5'> Total: {sale.totalValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>
                     </div>
                 }
-
-
                 {Array.isArray(sale) &&
                     <div>
                         <SaleAccordion sale={sale} selectedSale={(selectedSale: sale) => setSale(selectedSale)} />
@@ -206,29 +197,7 @@ export const CheckOutScreen = () => {
                         <Dropdown.Button
                         light
                         css={{"color" : "var(--primary-text-color)"}}
-                        onKeyDown={(e) => {
-                            e.preventDefault()
-                            switch(e.key){
-                                case "F5":
-                                    setSelected("Visa Crédito")
-                                break
-                                case "F6":
-                                    setSelected("Visa Débito")
-                                break
-                                case "F7":
-                                    setSelected("Master Crédito")
-                                break
-                                case "F8":
-                                    setSelected("Master Débito")
-                                break
-                                case "F9":
-                                    setSelected("Dinheiro")
-                                break
-                                case "F1":
-                                    closeSale()
-                                break
-                            }
-                        }}
+                        onKeyDown={(e) => getPaymentMehods(e)}
                         >{paymentMethods}</Dropdown.Button>
                         <Dropdown.Menu
                             aria-label="Static Actions"

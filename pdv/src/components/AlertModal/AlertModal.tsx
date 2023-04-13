@@ -1,9 +1,5 @@
-import React, { useState } from "react";
-import { Modal, Button, Text, Input, Row, Checkbox } from "@nextui-org/react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../utils/firebase/firebase";
-import { useAuthContext } from "../../utils/contexts/AuthProvider";
-import { Alert } from "@mui/material";
+import React from "react";
+import { Modal, Button, Text } from "@nextui-org/react";
 
 interface propsType {
     closeHandler: () => void,
@@ -12,19 +8,6 @@ interface propsType {
 }
 
 export const AlertModal = (props :propsType) =>  {
-    const AuthContext = useAuthContext()
-
-    const getUsers = async () => {
-        if (AuthContext.currentUser.id == '') return false
-        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
-        let data = await getDoc(docRef)
-            .then(res => {
-                return res.data()?.users
-            })
-            return data
-    }
-
-
 
   return (
     <div>

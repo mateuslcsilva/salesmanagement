@@ -3,14 +3,10 @@ import Tooltip from '@mui/material/Tooltip'
 import './styles.css'
 import Button from '../../components/Button/Button'
 import React, { useEffect, useReducer, useState } from 'react'
-import { ToastContainer } from 'react-toastify'
 import { OrdinaryInput } from '../OrdinaryInput/OrdinaryInput'
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
-import { db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { itemType } from '../../types/itemType/itemType'
-import { Alert, getNativeSelectUtilityClasses } from '@mui/material'
-import { sale } from '../../types/sale/sale'
+import { Alert } from '@mui/material'
 import { AlertModal } from '../AlertModal/AlertModal'
 import { useItemListContext } from '../../utils/contexts/ItemsProvider'
 import { useSalesContext } from '../../utils/contexts/SalesProvider'
@@ -22,8 +18,6 @@ export const ItemsManager = (props: any) => {
     const AuthContext = useAuthContext()
     const ItemListContext = useItemListContext()
     const SalesContext = useSalesContext()
-    /*     const [itemList, setItemList] = useState<Array<itemType>>([])
-        const [saleList, setSaleList] = useState<Array<sale>>([]) */
     const [alert, setAlert] = useState(<p></p>)
     const [alertVisible, setAlertVisible] = useState(false)
     const [itemInfo, setItemInfo] = useReducer(
@@ -44,16 +38,6 @@ export const ItemsManager = (props: any) => {
     const alertHandle = () => setAlertVisible(true);
     const closeAlertHandle = () => setAlertVisible(false);
 
-    /*     const getItems = async () => {
-            if (AuthContext.currentUser.id == '') return false
-            let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
-            let data = await getDoc(docRef)
-                .then(res => {
-                    setItemList(res.data()?.items)
-                    setSaleList(res.data()?.sales)
-                })
-        } */
-
     const addItem = async () => {
         if (SalesContext.sales.length != 0) return alertHandle()
         const itemList = ItemListContext.itemList
@@ -61,12 +45,12 @@ export const ItemsManager = (props: any) => {
         const convert = {
             active: true,
             itemRef: Number(itemInfo.itemRef),
-            itemValue: typeof itemInfo.itemValue == "number" ? itemInfo.itemValue : Number(itemInfo.itemValue.replaceAll(',', '.')),
+            itemValue: typeof itemInfo.itemValue == "number" ? itemInfo.itemValue : Number(itemInfo.itemValue.replace(',', '.')),
             //@ts-ignore
             numItem: itemInfo.numItem ? itemInfo.numItem : itemList.map(item => item.numItem).sort((a, b) => a - b).at(-1) + 1
         }
         const newItem = [{ ...itemInfo, ...convert }]
-        let newItemList = []
+        let newItemList: Array<itemType> = []
         if (itemList.find(item => item.numItem == newItem[0].numItem)) {
             newItemList = itemList.map(item => {
                 if (item.numItem == newItem[0].numItem) {
@@ -82,10 +66,7 @@ export const ItemsManager = (props: any) => {
             setAlert(<Alert severity="error">Por favor, insira os dados novamente!</Alert>)
             return clear()
         }
-        /*         await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
-                    items: newItemList
-                })
-                    getItems() */
+        console.log(newItemList)
         ItemListContext.setItemList(newItemList)
         clear()
     }
@@ -93,7 +74,7 @@ export const ItemsManager = (props: any) => {
     const editItem = (ref: number) => {
         if (SalesContext.sales.length != 0) return alertHandle()
         setItemInfo(ItemListContext.itemList[ItemListContext.itemList.findIndex(item => item.numItem == ref)])
-                deleteItem(ref)
+        deleteItem(ref)
     }
 
     const deleteItem = async (ref: number) => {
@@ -107,18 +88,7 @@ export const ItemsManager = (props: any) => {
         })
         console.log("newItemList", newItemList)
         ItemListContext.setItemList(newItemList)
-        /*         await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
-                    items: itemList
-                })
-                    getItems() */
     }
-
-    /*     const attItemList = async () => {
-            await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
-                items: itemList.filter(item => item.active)
-            })
-                getItems()
-        } */
 
     const clear = () => {
         setItemInfo({
@@ -137,10 +107,6 @@ export const ItemsManager = (props: any) => {
 
         return () => clearTimeout(clearAlert)
     })
-
-    /*     useEffect(() => {
-            getItems()
-        }, [AuthContext.currentUser.id]) */
 
     return (
         <div>
@@ -231,9 +197,6 @@ export const ItemsManager = (props: any) => {
                         </Col>
                     </Col>
                 </Modal.Body>
-                <Modal.Footer>
-
-                </Modal.Footer>
             </Modal>
         </div>
     )

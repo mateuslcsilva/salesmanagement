@@ -1,8 +1,6 @@
-import { doc, getDoc } from "firebase/firestore";
-import React, { ReactElement, ReactEventHandler, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../../utils/contexts/AuthProvider.js";
 import { useOrderContext } from "../../utils/contexts/OrderContext.js";
-import { db } from "../../utils/firebase/firebase.js";
 import './styles.css'
 import { itemType } from "../../types/itemType/itemType.js";
 import { useItemListContext } from "../../utils/contexts/ItemsProvider.js";
@@ -12,18 +10,7 @@ const ItemsListInput = (props: any) => {
     const orderContext = useOrderContext()
     const ItemListContext = useItemListContext()
     const [currentOrder, setCurrentOrder] = useState<string>("")
-    const [focusedElement, setFocusedElement] = useState<number>(0)
-/*     const [itemList, setItemList] = useState<itemType[]>([]) */
-    const [currentUserId, setCurrentUserId] = useState<string>()
     const [itemListActive, setItemListActive] = useState<boolean>(false)
-
-/*     const getItems = async () => {
-        if(AuthContext.currentUser.id == '') return false
-        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
-        let data = await getDoc(docRef)
-        .then(res => res.data()?.items)
-        setItemList(data)
-    } */
 
     const selectItem = (numItem: number) => {
         orderContext.setCurrentOrder(numItem)
@@ -64,14 +51,6 @@ const ItemsListInput = (props: any) => {
     }
 
     useEffect(() => {
-        setCurrentUserId(AuthContext.currentUser.id)
-    }, [AuthContext.currentUser.id])
-
-/*     useEffect(() => {
-        getItems()
-    }, [currentUserId]) */
-
-    useEffect(() => {
         setCurrentOrder(getItemText("numItem", orderContext.currentOrder))
         if(orderContext.currentOrder == 0) document.getElementById('itemListInput')?.focus()
     }, [orderContext.currentOrder])
@@ -98,7 +77,7 @@ const ItemsListInput = (props: any) => {
                 disabled={props.disabled}
                 onKeyDown={(e) => {
                     if(e.key == "ArrowDown") {
-                        document.getElementById(focusedElement.toString())?.focus()
+                        document.getElementById("0".toString())?.focus()
                     }
                     if(e.key == "F1"){
                         e.preventDefault()
@@ -137,4 +116,3 @@ const ItemsListInput = (props: any) => {
 }
 
 export default ItemsListInput
-

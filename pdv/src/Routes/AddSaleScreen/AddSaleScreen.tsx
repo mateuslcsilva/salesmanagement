@@ -10,13 +10,8 @@ import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale'
 import { useSalesContext } from '../../utils/contexts/SalesProvider'
 import { useItemListContext } from '../../utils/contexts/ItemsProvider'
-/* import { doc, getDoc, updateDoc } from 'firebase/firestore'
-import { db } from '../../utils/firebase/firebase'
-import { itemType } from '../../types/itemType/itemType' */
 
 export const AddSaleScreen = () => {
-
-/*     const [itemList, setItemList] = useState<itemType[]>([]) */
     const [currentUserId, setCurrentUserId] = useState<string>()
     const [tableNumber, setTableNumber] = useState(0)
     const [saleNumber, setSaleNumber] = useState(0)
@@ -24,21 +19,10 @@ export const AddSaleScreen = () => {
     const [saleIndex, setSaleIndex] = useState<number[] | number>()
     const [sale, setSale] = useState<sale | sale[]>({} as sale)
     const [alert, setAlert] = useState(<p></p>)
-/*     const [sales, setSales] = useState([] as sale[]) */
     const AuthContext = useAuthContext()
     const orderContext = useOrderContext()
     const SalesContext = useSalesContext()
     const ItemListContext = useItemListContext()
-
-    /* const getItems = async () => {
-        if (AuthContext.currentUser.id == '') return false
-        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
-        let data = await getDoc(docRef)
-            .then(res => {
-                setItemList(res.data()?.items)
-                setSales(res.data()?.sales)
-            })
-    } */
 
     const getItemText = (typeParam: string, value: number | undefined) => {
         if (AuthContext.currentUser.id == '') return
@@ -105,7 +89,6 @@ export const AddSaleScreen = () => {
     }
 
     const findCostumer = () => {
-
         let salesIndex: number[] = []
         SalesContext.sales.forEach((item: sale, index: number) => {
             if (item.costumerName?.toLocaleLowerCase().trim() == costumerName?.toLocaleLowerCase().trim()) {
@@ -150,10 +133,6 @@ export const AddSaleScreen = () => {
         const cleanedSales = SalesContext.sales.filter(existentSale => existentSale.numSale != sale.numSale)
          SalesContext.setSales([...cleanedSales, sale])
          clear()
-/*         await updateDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`), {
-            sales: sales
-        })
-        clear() */
     }
 
     const clear = () => {
@@ -178,9 +157,6 @@ export const AddSaleScreen = () => {
         setCurrentUserId(AuthContext.currentUser.id)
     }, [AuthContext.currentUser.id])
 
-/*     useEffect(() => {
-        getItems()
-    }, []) */
     useEffect(() => {
         console.log(sale)
     }, [sale])
@@ -243,11 +219,11 @@ export const AddSaleScreen = () => {
                     ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && (!Array.isArray(sale) && sale.numSale > 0)) &&
                     <div className='saleInfo mb-3 primary-text'>
                         <p className='title is-5'>
-                            {'Mesa: ' + sale.numTable + '  |  '} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
-                            {'Cliente: ' + sale.costumerName + '  |  '} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
-                            {'Comanda ' + sale.numSale + '\n'} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
+                            {'Mesa: ' + sale.numTable + '  |  '} 
+                            {'Cliente: ' + sale.costumerName + '  |  '}
+                            {'Comanda ' + sale.numSale + '\n'} 
                         </p>
-                        {sale.orders && sale.orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
+                        {sale.orders && sale.orders.map((item: number, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
                         {sale.orders?.length > 0 && <p className='mt-3 title is-5'> Total: {sale.totalValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>}
                     </div>
                 }

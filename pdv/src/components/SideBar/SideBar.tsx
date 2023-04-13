@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "./styles.css"
-import logo from '../../assets/fav-icon.png'
+//@ts-ignore
+import logo from '../../../src/assets/fav-icon.png'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { Link } from 'react-router-dom'
 
@@ -39,10 +40,6 @@ export const SideBar = (props: any) => {
                 <hr />
                 <div className="menu-bar">
                     <div className="menu">
-{/*                         <li className="search-box">
-                            <label htmlFor="input-search"><i className="bi bi-search"></i></label>
-                            <input type="search" id="input-search" placeholder="Search..."></input>
-                        </li> */}
                         <ul className="menu-link-list">
                             <li className="nav-link">
                                 <Link to="/newsalescreen">

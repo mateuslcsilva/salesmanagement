@@ -1,13 +1,10 @@
-import React, { ReactEventHandler, ReactPropTypes } from 'react'
+import React from 'react'
 import {
     Modal,
-    Button,
     Text,
     Input,
     Row,
-    Col,
     Checkbox,
-    Spacer,
   } from "@nextui-org/react";
 
 export const SignIn = (props :any) => {

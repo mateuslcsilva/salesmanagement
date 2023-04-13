@@ -3,12 +3,10 @@ import Tooltip from '@mui/material/Tooltip'
 import './styles.css'
 import Button from '../../components/Button/Button'
 import React, { useEffect, useReducer, useState } from 'react'
-import { ToastContainer } from 'react-toastify'
 import { OrdinaryInput } from '../OrdinaryInput/OrdinaryInput'
-import { arrayRemove, arrayUnion, doc, FieldValue, getDoc, updateDoc } from 'firebase/firestore'
+import { arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
-import { Alert } from '@mui/material'
 import { initialSignUp } from '../../types/Login/loginTypes'
 import { InputUserType } from '../InputUserType/InputUserType'
 
@@ -18,7 +16,6 @@ export const UsersManager = (props: any) => {
   const AuthContext = useAuthContext()
   const [userList, setUserList] = useState<Array<initialSignUp>>([])
   const [showedUserList, setShowedUserList] = useState<Array<initialSignUp>>([])
-  const [alert, setAlert] = useState(<p></p>)
   const [showPassword, setShowPassword] = useState<Array<string>>([])
   const [userInfo, setUserInfo] = useReducer(
     (currentValues: initialSignUp, newValues: initialSignUp) => {
@@ -91,23 +88,9 @@ export const UsersManager = (props: any) => {
     })
   }
 
-  /* useEffect(() => {
-      const clearAlert = setTimeout(() => {
-          setAlert(<p></p>)
-      }, 5000)
-
-      return () => clearTimeout(clearAlert)
-  }) */
-
   useEffect(() => {
     getUsers()
-  }, [AuthContext.currentUser.id])/* 
-
-  useEffect(() => {
-    console.log("user list: ", userList)
-    console.log("showed user list: ", showedUserList)
-    console.log("userInfo: ", userInfo)
-  }) */
+  }, [AuthContext.currentUser.id])
 
   return (
     <div>
@@ -169,7 +152,6 @@ export const UsersManager = (props: any) => {
               />
             </Row>
             <Spacer y={0.5} />
-            {alert}
             <hr />
             <Spacer y={0.5} />
             <Col className="users-container">

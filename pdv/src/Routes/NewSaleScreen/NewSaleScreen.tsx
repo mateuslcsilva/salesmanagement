@@ -5,11 +5,6 @@ import Button from '../../components/Button/Button'
 import ItemsListInput from '../../components/ItemsListInput/ItemsListInput'
 import { sale } from '../../types/sale/sale'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
-/* import { itemType } from '../../types/itemType/itemType'
-import { doc, getDoc } from 'firebase/firestore'
-import { db } from '../../utils/firebase/firebase'
-import { queryData } from '../../utils/requests/queryData' */
-import 'react-toastify/dist/ReactToastify.css';
 import { useOrderContext } from '../../utils/contexts/OrderContext'
 import { InputSearchSale } from '../../components/InputSeachSale/InputSearchSale'
 import { useSalesContext } from '../../utils/contexts/SalesProvider'
@@ -28,14 +23,6 @@ export const NewSaleScreen = () => {
     const orderContext = useOrderContext()
     const SalesContext = useSalesContext()
     const ItemListContext = useItemListContext()
-
-/*     const getItems = async () => {
-        if (AuthContext.currentUser.id == '') return false
-        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
-        let data = await getDoc(docRef)
-            .then(res => res.data()?.items)
-        setItemList(data)
-    } */
 
     const getItemText = (typeParam: string, value: number | undefined) => {
         if (AuthContext.currentUser.id == '') return
@@ -56,19 +43,6 @@ export const NewSaleScreen = () => {
 
     const setTable = async () => {
         if (saleNumber == 0) return false
-/*         let alert = <p></p>
-        await getDoc(doc(db, "empresas", `${AuthContext.currentUser.id}`))
-            .then(res => {
-                let sales = res.data()?.sales
-                if (sales) {
-                    sales.forEach((sale: sale) => {
-                        if (sale.numSale == saleNumber) {
-                            alert = <Alert severity="warning">Essa comanda já está em uso!</Alert>
-                        }
-                    })
-                }
-            })
-            .catch(err => console.log(err.message)) */
         if (SalesContext.sales.find(sale => sale.numSale == saleNumber)) {
             clear()
             return setAlert(<Alert severity="warning">Essa comanda já está em uso!</Alert>)
@@ -123,12 +97,6 @@ export const NewSaleScreen = () => {
     const updateSales = async () => {
         SalesContext.setSales(sales => [...sales, sale])
         clear()
-        /* const update = await queryData("saleUpdate", "null", { id: AuthContext.currentUser.id, sale: sale })
-            .then(res => {
-                clear()
-                return 
-            })
-            .catch(err => console.log(err.message)) */
     }
 
     useEffect(() => {
@@ -150,10 +118,6 @@ export const NewSaleScreen = () => {
     useEffect(() => {
         if(!sale.numSale) document.getElementById('inputComanda')?.focus()
     }, [sale])
-
-/*     useEffect(() => {
-        getItems()
-    }, [currentUserId]) */
 
     return (
         <>
@@ -208,11 +172,11 @@ export const NewSaleScreen = () => {
                 {saleNumber > 0 &&
                     <div className='saleInfo mb-3 primary-text'>
                         <p className='title is-5'>
-                            {sale.numTable ? 'Mesa: ' + sale.numTable + '  |  ' : ''} {/* MOSTRA O NÚMERO DA MESA, SE HOUVER */}
-                            {sale.costumerName ? 'Cliente: ' + sale.costumerName + '  |  ' : ''} {/* MOSTRA O NOME DO CLIENTE, SE HOUVER */}
-                            {sale.numSale ? 'Comanda ' + sale.numSale + '\n' : ''} {/* MOSTRA O NÚMERO DA COMANDA, E SÓ É EXIBIDO CASO O CAMPO COMANDA ESTEJA PREENCHIDO */}
+                            {'Mesa: ' + sale.numTable + '  |  '} 
+                            {'Cliente: ' + sale.costumerName + '  |  '} 
+                            {'Comanda ' + sale.numSale + '\n'} 
                         </p>
-                        {sale.orders && sale.orders.map((item: any, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
+                        {sale.orders && sale.orders.map((item: number, index: number) => <p key={index}>{getItemText("numItem", item)}</p>)}
                         {sale.orders?.length > 0 && <p className='mt-3 title is-5'> Total: {sale.totalValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</p>}
                     </div>
                 }

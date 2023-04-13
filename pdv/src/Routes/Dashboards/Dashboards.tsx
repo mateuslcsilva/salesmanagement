@@ -1,10 +1,5 @@
-import { doc, getDoc } from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
-import { itemType } from '../../types/itemType/itemType'
-import { sale } from '../../types/sale/sale'
+import React, { useState } from 'react'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
-import { useOrderContext } from '../../utils/contexts/OrderContext'
-import { db } from '../../utils/firebase/firebase'
 import {
     Chart as ChartJS,
     ArcElement,
@@ -17,7 +12,6 @@ import {
     Tooltip,
     LineController,
     BarController,
-    ChartOptions,
 } from 'chart.js';
 import { Pie, Chart } from 'react-chartjs-2';
 import './styles.css'
@@ -45,21 +39,7 @@ export const Dashboards = () => {
     const SalesContext = useSalesContext()
     const SalesHistoryContext = useSalesHistoryContext()
     const ItemListContext = useItemListContext()
-/*     const [itemList, setItemList] = useState<Array<itemType>>([])
-    const [sales, setSales] = useState<Array<sale>>([] as Array<sale>)
-    const [salesHistory, setSalesHistory] = useState<Array<sale>>() */
     const [hiddenInfo, setHiddenInfo] = useState<Array<string>>([])
-
-/*     const getItems = async () => {
-        if (AuthContext.currentUser.id == '') return false
-        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
-        let data = await getDoc(docRef)
-            .then(res => {
-                setItemList(res.data()?.items)
-                setSales(res.data()?.sales)
-                setSalesHistory(res.data()?.salesHistory)
-            })
-    } */
 
     const getItemText = (numItem: number) => {
         let currentItem = ItemListContext.itemList.filter(item => item.numItem == numItem)
@@ -131,7 +111,7 @@ export const Dashboards = () => {
     }
 
     const getDaysOfTheMonth = () => {
-        let daysOfTheMonth = []
+        let daysOfTheMonth :Array<number> = []
         let lastDayOfMonth = new Date((new Date().getFullYear()), (new Date().getMonth()) + 1, 0).getDate()
         for (let i = 1; i <= lastDayOfMonth; i++) {
             daysOfTheMonth.push(i)
@@ -282,10 +262,6 @@ export const Dashboards = () => {
         }
 
     }
-
-/*     useEffect(() => {
-        getItems()
-    }, [AuthContext.currentUser.id]) */
 
     return (
         <>
