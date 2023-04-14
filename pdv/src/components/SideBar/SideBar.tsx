@@ -14,6 +14,10 @@ export const SideBar = (props: any) => {
         props.setSideBar(!open)
     }
 
+    const logOut = () => {
+
+    }
+
     useEffect(() => {
         setOpen(props.sideBar)
     }, [props.sideBar])
@@ -85,7 +89,7 @@ export const SideBar = (props: any) => {
                                 <span className="switch"></span>
                             </div>
                         </li>
-                        <li className="">
+                        <li className="" onClick={() => AuthContext.setCurrentUser({} as typeof AuthContext.currentUser)}>
                             <Link to="/">
                                 <i className="bi bi-box-arrow-right"></i>
                                 <span className="text nav-text">Sair</span>
