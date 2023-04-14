@@ -50,6 +50,7 @@ export const ItemsManager = (props: any) => {
             numItem: itemInfo.numItem ? itemInfo.numItem : itemList.map(item => item.numItem).sort((a, b) => a - b).at(-1) + 1
         }
         const newItem = [{ ...itemInfo, ...convert }]
+        if (isNaN(newItem[0].numItem)) newItem[0].numItem = 1
         let newItemList: Array<itemType> = []
         if (itemList.find(item => item.numItem == newItem[0].numItem)) {
             newItemList = itemList.map(item => {
@@ -107,6 +108,8 @@ export const ItemsManager = (props: any) => {
 
         return () => clearTimeout(clearAlert)
     })
+
+    useEffect(() => console.log(ItemListContext.itemList))
 
     return (
         <div>
