@@ -12,4 +12,5 @@ export interface initialSignUp {
     userWorkplace: string;
     userEmail: string;
     userPassword: string;
+    rememberMe: boolean;
   }

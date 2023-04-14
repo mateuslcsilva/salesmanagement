@@ -51,8 +51,12 @@ export const SignIn = (props :any) => {
               css={{"color": "#FFF"}}
             />
             <Row justify="space-between">
-              <Checkbox>
-                <Text size={14}>Lembre minha senha</Text>
+              <Checkbox
+                id={"rememberMe"}
+                value={props.rememberMe}
+                onChange={(e) => props.handleSignInChange(e)}
+                >
+                <Text size={14}>Manter conectado</Text>
               </Checkbox>
               <Text size={14}>Esqueceu a senha?</Text>
             </Row>

@@ -21,7 +21,7 @@ import { useItemListContext } from "../../utils/contexts/ItemsProvider";
 export const LoginScreen = () => {
   const initialSignUpState = {} as initialSignUp;
 
-  const initialSignInState = {} as initialSignIn;
+  let initialSignInState = {rememberMe :false} as initialSignIn;
 
   const setAuthContext = useAuthContext()
   const SalesContext = useSalesContext()
@@ -54,29 +54,36 @@ export const LoginScreen = () => {
 
 
   const handleSignInChange = (event: {
-    target: { name: string; value: string };
-  }) => {
-    const { name, value } = event.target;
-    let newValues = { [name]: value };
-    setSignInValues({ ...signInValues, ...newValues });
+    target: { name: string; value: string; id: string };
+  } | boolean) => {
+    if(typeof event == "boolean") {
+      let newValues = { rememberMe : event}
+      return setSignInValues({ ...signInValues, ...newValues });
+    }
+      const { name, value } = event.target;
+      let newValues = { [name]: value }
+      setSignInValues({ ...signInValues, ...newValues });
   };
 
   const [visible, setVisible] = useState(true);
   const [hasAccount, setHasAccount] = useState(true);
 
-  const dataHandler = async () => {
+  const dataHandler = async (data = signInValues) => {
     if (hasAccount) { //signin shit
-      const accountInfo = await queryData('accountInfo', 'name', signInValues.userWorkplace)
+      const accountInfo = await queryData('accountInfo', 'name', data.userWorkplace)
       .then( res => {
         if (typeof (res) == "string") return alert(res)
-        let user = res?.userInfo.users?.find((user: any) => user.email.toLowerCase() == signInValues.userEmail.toLowerCase())
+        let user = res?.userInfo.users?.find((user: any) => user.email.toLowerCase() == data.userEmail.toLowerCase())
         if (!user) return alert("Conta não encontrada!")
-        if (user.password != signInValues.userPassword) return 
+        if (user.password != data.userPassword) return 
         if (res) {
           setAuthContext.setCurrentUser({ id: res.userInfo.id, userName: user.username, workplaceName: res.userInfo.workplaceName, userType: user.userType})
           SalesContext.setSales(res.sales)
           SalesHistoryContext.setSalesHistory(res.salesHistory)
           ItemListContext.setItemList(res.items)
+        }
+        if(data.rememberMe == true) {
+          localStorage.setItem("loginData", JSON.stringify(signInValues))
         }
         return setVisible(false);
       }) 
@@ -112,12 +119,16 @@ export const LoginScreen = () => {
 
   const localStorageManagement = () => {
     let storagedTheme = localStorage.getItem('darkTheme')
+    let storagedLoginData = localStorage.getItem('loginData')
     if(storagedTheme == "dark") setDarkTheme(true) 
+    if(storagedLoginData) dataHandler(JSON.parse(storagedLoginData))
   }
 
   useEffect(() => {
     localStorageManagement()
   }, [])
+
+  useEffect(() => console.log(signInValues))
 
 
   return (
@@ -159,7 +170,7 @@ export const LoginScreen = () => {
           >
             {hasAccount ? "Cadastrar" : "Entrar"}
           </Button>
-          <Button auto onClick={dataHandler}>
+          <Button auto onClick={() => dataHandler()}>
             {hasAccount ? "Entrar" : "Concluir Cadastro"}
           </Button>
         </Modal.Footer>

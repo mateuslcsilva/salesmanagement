@@ -109,8 +109,6 @@ export const ItemsManager = (props: any) => {
         return () => clearTimeout(clearAlert)
     })
 
-    useEffect(() => console.log(ItemListContext.itemList))
-
     return (
         <div>
             <AlertModal visible={alertVisible} closeHandler={closeAlertHandle} text={"Não é possível alterar itens com vendas em aberto!"} />
