@@ -59,32 +59,22 @@ export const Sales = () => {
 
     const getTotalSaleValue = () => {
         let totalSaleValue = 0
-        SalesContext.sales.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth() && Number(sale.date.substring(0, 2)) == (new Date()).getDate()) {
-                totalSaleValue += sale.totalValue
-            }
-        })
-        SalesHistoryContext.salesHistory?.forEach(sale => {
-            if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth() && Number(sale.date.substring(0, 2)) == (new Date()).getDate()) {
-                totalSaleValue += sale.totalValue
-            }
-        })
-        return totalSaleValue
-    }
-
-    const getNumberOfSales = () => {
         let numberOfSales = 0
+        let openSalesValue = 0
         SalesContext.sales.forEach(sale => {
+            openSalesValue += sale.totalValue
             if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth() && Number(sale.date.substring(0, 2)) == (new Date()).getDate()) {
+                totalSaleValue += sale.totalValue
                 numberOfSales++
             }
         })
         SalesHistoryContext.salesHistory?.forEach(sale => {
             if (Number(sale.date.substring(4, 5)) - 1 == (new Date()).getMonth() && Number(sale.date.substring(0, 2)) == (new Date()).getDate()) {
+                totalSaleValue += sale.totalValue
                 numberOfSales++
             }
         })
-        return numberOfSales
+        return { totalSaleValue, numberOfSales, openSalesValue }
     }
 
     const getMostSelledItem = () => {
@@ -107,12 +97,6 @@ export const Sales = () => {
         })
         console.log(mostSelledItems.sort((a, b) => b.appearences - a.appearences))
         return mostSelledItems.sort((a, b) => b.appearences - a.appearences)
-    }
-
-    const getTotalValue = () => {
-        let totalValue = 0
-        SalesContext.sales.forEach(sale => totalValue += sale.totalValue)
-        return totalValue
     }
 
     const toggleHiddenInfo = (info: string) => {
@@ -156,6 +140,8 @@ export const Sales = () => {
         ],
     };
 
+    useEffect(() => console.log(getMostSelledItem()))
+
     return (
         <>
             <h1 className='sales-title'>
@@ -167,11 +153,11 @@ export const Sales = () => {
             <div className={AuthContext.currentUser.userType == "Padrão" ? 'primary-sales-data hidden-info' : 'primary-sales-data'}>
                 <div>
                     <i className="bi bi-cash-stack"></i>
-                    <div className={getTotalSaleValue() > 9999 ? "primary-data-info small-font-size" : "primary-data-info"}>
+                    <div className={getTotalSaleValue().totalSaleValue > 9999 ? "primary-data-info small-font-size" : "primary-data-info"}>
                         <h1
                             className={hiddenInfo.includes("totalValue") ? 'info hidden-info' : 'info'}
                             onClick={() => toggleHiddenInfo("totalValue")}
-                        >{hiddenInfo.includes("totalValue") ? "R$****" : getTotalSaleValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
+                        >{hiddenInfo.includes("totalValue") ? "R$****" : getTotalSaleValue().totalSaleValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
                         <p>Valor total vendido</p>
                     </div>
                 </div>
@@ -182,7 +168,7 @@ export const Sales = () => {
                             className={hiddenInfo.includes("numberOfSales") ? 'info hidden-info' : 'info'}
                             onClick={() => toggleHiddenInfo("numberOfSales")}
                         >
-                            {hiddenInfo.includes("numberOfSales") ? "--" : getNumberOfSales()}
+                            {hiddenInfo.includes("numberOfSales") ? "--" : getTotalSaleValue().numberOfSales}
                         </h1>
                         <p>Número de pedidos</p>
                     </div>
@@ -194,7 +180,7 @@ export const Sales = () => {
                             className={hiddenInfo.includes("ticket") ? 'info hidden-info' : 'info'}
                             onClick={() => toggleHiddenInfo("ticket")}
                         >
-                            {hiddenInfo.includes("ticket") ? "R$****" : getTotalValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                            {hiddenInfo.includes("ticket") ? "R$****" : getTotalSaleValue().openSalesValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                         </h1>
                         <p>Valor em aberto</p>
                     </div>
@@ -204,25 +190,40 @@ export const Sales = () => {
             <p className='section-sub-title'>Análise detalhada das informações do mês</p>
             <div className={AuthContext.currentUser.userType == "Padrão" ? 'sales hidden-info' : 'sales'}>
                 <div className='open-sales'>
-                    <Extract />
+                    {SalesContext.sales.length > 0 && <Extract />}
+                    {SalesContext.sales.length == 0 &&
+                        <div className='no-open-sales'>
+                            <i className="bi bi-journal-text"></i>
+                            <p>Ops, parece que ainda não há vendas abertas.</p>
+                        </div>
+                    }
                 </div>
                 <div className='most-salled-item'>
-                    <Pie data={data} className='pie-chart' />
-                    <div className='pie-chart-legends'>
+                    {getMostSelledItem().length > 0 &&
+                        <div>
+                        <Pie data={data} className='pie-chart' />
+                        <div className='pie-chart-legends'>
 
-                        {getMostSelledItem().map(element => element.text).splice(0, 5).map((item, index) => {
-                            return (
-                                <div id='pie-chart-legend'>
-                                    <span
-                                        style={{ "backgroundColor": document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor[index] : backgroundColor[index], "border": `1px solid ${borderColor[index]}` }}
-                                    ></span>
-                                    <p className='pie-chart-legend-text'>
-                                        <abbr title={item}>{item}</abbr>
-                                    </p></div>
-                            )
-                        })}
-                    </div>
-                    <p>Itens mais vendidos</p>
+                            {getMostSelledItem().map(element => element.text).splice(0, 5).map((item, index) => {
+                                return (
+                                    <div id='pie-chart-legend'>
+                                        <span
+                                            style={{ "backgroundColor": document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor[index] : backgroundColor[index], "border": `1px solid ${borderColor[index]}` }}
+                                        ></span>
+                                        <p className='pie-chart-legend-text'>
+                                            <abbr title={item}>{item}</abbr>
+                                        </p></div>
+                                )
+                            })}
+                        </div>
+                        <p className='most-selled-items-footer'>Itens mais vendidos</p>
+                    </div>}
+                    {getMostSelledItem().length == 0 &&
+                        <div className='no-most-salled-item'>
+                            <i className="bi bi-pie-chart"></i>
+                            <p>Ops, parece que ainda não há vendas hoje.</p>
+                        </div>
+                    }
                 </div>
             </div>
         </>

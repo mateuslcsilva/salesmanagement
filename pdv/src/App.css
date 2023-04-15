@@ -67,7 +67,7 @@
   background-color: #30303070 !important;
   width: 10px;
   height: 600px !important;
-  border-radius: 15px;
+  border-radius: 15px !important;
   transform: translateX(5px);
 }
 

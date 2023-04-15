@@ -321,23 +321,31 @@ export const Dashboards = () => {
                     <Chart type='bar' data={dataSalesOfYear} className='bar-chart' options={document.querySelector('.main')?.classList.contains('darkThemed') ? charOptions : {}} />
                 </div>
                 <div className='div3'>
-                    <Pie data={data} className='pie-chart' />
-                    <div className='pie-chart-legends'>
+                {getMostSelledItem().length > 0 &&
+                        <div>
+                        <Pie data={data} className='pie-chart' />
+                        <div className='pie-chart-legends'>
 
-                        {getMostSelledItem().map(element => element.text).splice(0, 5).map((item, index) => {
-                            return (
-                                <div id='pie-chart-legend'>
-                                    <span
-                                        style={{ "backgroundColor": document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor[index] : backgroundColor[index], "border": `1px solid ${borderColor[index]}` }}
-                                    ></span>
-                                    <p className='pie-chart-legend-text'>
-                                        <abbr title={item}>{item}</abbr>
-                                    </p>
-                                </div>
-                            )
-                        })}
-                    </div>
-                    <p>Itens mais vendidos</p>
+                            {getMostSelledItem().map(element => element.text).splice(0, 5).map((item, index) => {
+                                return (
+                                    <div id='pie-chart-legend'>
+                                        <span
+                                            style={{ "backgroundColor": document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor[index] : backgroundColor[index], "border": `1px solid ${borderColor[index]}` }}
+                                        ></span>
+                                        <p className='pie-chart-legend-text'>
+                                            <abbr title={item}>{item}</abbr>
+                                        </p></div>
+                                )
+                            })}
+                        </div>
+                        <p className='most-selled-items-footer'>Itens mais vendidos</p>
+                    </div>}
+                    {getMostSelledItem().length == 0 &&
+                        <div className='no-most-salled-item'>
+                            <i className="bi bi-pie-chart"></i>
+                            <p>Ops, parece que ainda não há vendas hoje.</p>
+                        </div>
+                    }
                 </div>
 
             </div>

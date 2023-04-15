@@ -153,6 +153,30 @@
     width: 5px;
 }
 
+.open-sales:has(.no-open-sales)::-webkit-scrollbar {
+    width: 5px;
+    display: none;
+}
+
+.no-open-sales{
+    color: var(--dashboard-subtitle-color);
+    width: 100%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 20pt;
+}
+
+.no-open-sales p{
+    text-align: center;
+}
+
+.no-open-sales i{
+    font-size: 56pt;
+}
+
 .most-salled-item {
     position: relative;
     width: 33.333%;
@@ -162,7 +186,7 @@
     padding: 10px 15px;
 }
 
-.most-salled-item > p {
+.most-selled-items-footer {
     color: var(--dashboard-subtitle-color);
     width: 100%;
     text-align: end;
@@ -196,6 +220,25 @@
 abbr{
     text-decoration: none;
 } 
+
+.no-most-salled-item{
+    color: var(--primary-text-color);
+    width: 100%;
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 16pt;
+}
+
+.no-most-salled-item p{
+    text-align: center;
+}
+
+.no-most-salled-item i{
+    font-size: 60pt;
+}
 
 /* ====> hidden dashboard info <==== */
 .primary-sales-data.hidden-info>div::after,
