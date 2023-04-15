@@ -4,7 +4,8 @@ import { Modal, Button, Text } from "@nextui-org/react";
 interface propsType {
     closeHandler: () => void,
     visible: boolean,
-    text: string
+    text: string,
+    start: boolean
 }
 
 export const AlertModal = (props :propsType) =>  {
@@ -25,7 +26,7 @@ export const AlertModal = (props :propsType) =>  {
           </Text>
         </Modal.Header>
         <Modal.Body>
-            <p style={{"width": "100%", "textAlign" : "center"}}>{props.text}</p>
+            <p style={{"width": "100%", "textAlign" : props.start ? "start" : "center", "whiteSpace" : "pre-line"}}>{props.text}</p>
         </Modal.Body>
         <Modal.Footer css={{"width": "100%", "display" : "flex", "justifyContent": "center"}}>
           <Button auto  onPress={props.closeHandler}>

@@ -186,10 +186,20 @@
     padding: 10px 15px;
 }
 
-.charts>div p {
+.charts>div p:not(.pie-chart-legend-text) {
     color: var(--dashboard-subtitle-color);
     width: 100%;
     text-align: end;
+}
+
+.most-salled-item > p {
+    color: var(--dashboard-subtitle-color);
+    width: 100%;
+    text-align: end;
+    transition: 0.3s ease;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 #pie-chart-legend {
@@ -202,11 +212,20 @@
     padding: 1px 0;
 }
 
-#pie-chart-legend>span {
-    width: 15px;
-    height: 10px;
+#pie-chart-legend *:not(span){
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
+#pie-chart-legend>span {
+    width: 12px !important;
+    height: 10px !important;
+}
+
+abbr{
+    text-decoration: none;
+} 
 
 /* ====> hidden dashboard info <==== */
 .primary-data.hidden-info>div::after,

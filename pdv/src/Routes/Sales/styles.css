@@ -162,12 +162,40 @@
     padding: 10px 15px;
 }
 
-.most-salled-item p {
+.most-salled-item > p {
     color: var(--dashboard-subtitle-color);
     width: 100%;
     text-align: end;
     transition: 0.3s ease;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
+
+#pie-chart-legend {
+    color: var(--primary-text-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: fit-content;
+    padding: 1px 0;
+}
+
+#pie-chart-legend *:not(span){
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#pie-chart-legend>span {
+    width: 12px !important;
+    height: 10px !important;
+}
+
+abbr{
+    text-decoration: none;
+} 
 
 /* ====> hidden dashboard info <==== */
 .primary-sales-data.hidden-info>div::after,

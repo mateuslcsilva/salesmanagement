@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import './styles.css'
 import {
     Modal,
     Text,
@@ -9,8 +10,9 @@ import {
 
 
 export const SignUp = (props :any) => {
+
     return(
-        <Modal.Body>
+        <Modal.Body className="sign-up-container">
             <Input
               clearable
               bordered
@@ -41,7 +43,9 @@ export const SignUp = (props :any) => {
               clearable
               bordered
               fullWidth
-              color="primary"
+              color={props.invalidEmail ? 'error' : 'primary'}
+              helperText={props.invalidEmail ? 'Senha precisa ter 8 digitos' : ''}
+              helperColor="error"
               size="lg"
               placeholder="Digite seu email"
               contentLeft={<i className="bi bi-envelope is-size-5"></i>}
@@ -53,7 +57,9 @@ export const SignUp = (props :any) => {
             <Input.Password
               bordered
               fullWidth
-              color="primary"
+              color={props.invalidPassword ? 'error' : 'primary'}
+              helperText={props.invalidPassword ? 'Senha precisa ter 8 digitos' : ''}
+              helperColor="error"
               size="lg"
               placeholder="Digite sua senha"
               contentLeft={<i className="bi bi-key is-size-5"></i>}
@@ -65,7 +71,9 @@ export const SignUp = (props :any) => {
             <Input.Password
               bordered
               fullWidth
-              color="primary"
+              color={props.difPassword ? 'error' : 'primary'}
+              helperText={props.difPassword ? 'As senhas precisam ser iguais' : ''}
+              helperColor="error"
               size="lg"
               placeholder="Repita sua senha"
               contentLeft={<i className="bi bi-key is-size-5"></i>}

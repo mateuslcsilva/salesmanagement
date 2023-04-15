@@ -111,7 +111,7 @@ export const ItemsManager = (props: any) => {
 
     return (
         <div>
-            <AlertModal visible={alertVisible} closeHandler={closeAlertHandle} text={"Não é possível alterar itens com vendas em aberto!"} />
+            <AlertModal visible={alertVisible} closeHandler={closeAlertHandle} text={"Não é possível alterar itens com vendas em aberto!"} start={false}/>
             <Modal
                 aria-labelledby="modal-title"
                 open={props.visible}

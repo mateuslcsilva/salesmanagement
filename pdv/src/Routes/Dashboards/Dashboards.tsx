@@ -111,7 +111,7 @@ export const Dashboards = () => {
     }
 
     const getDaysOfTheMonth = () => {
-        let daysOfTheMonth :Array<number> = []
+        let daysOfTheMonth: Array<number> = []
         let lastDayOfMonth = new Date((new Date().getFullYear()), (new Date().getMonth()) + 1, 0).getDate()
         for (let i = 1; i <= lastDayOfMonth; i++) {
             daysOfTheMonth.push(i)
@@ -303,7 +303,7 @@ export const Dashboards = () => {
                             className={hiddenInfo.includes("ticket") ? 'info hidden-info' : 'info'}
                             onClick={() => toggleHiddenInfo("ticket")}
                         >
-                            {hiddenInfo.includes("ticket") ? "R$****" : (getTotalSaleValue() / getNumberOfSales()).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                            {hiddenInfo.includes("ticket") ? "R$****" : (!isNaN(getTotalSaleValue() / getNumberOfSales()) ? (getTotalSaleValue() / getNumberOfSales()) : 0).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                         </h1>
                         <p>Ticket Médio</p>
                     </div>
@@ -326,7 +326,14 @@ export const Dashboards = () => {
 
                         {getMostSelledItem().map(element => element.text).splice(0, 5).map((item, index) => {
                             return (
-                                <p id='pie-chart-legend'><span style={{ "backgroundColor": document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor[index] : backgroundColor[index], "border": `1px solid ${borderColor[index]}` }}></span>{item}</p>
+                                <div id='pie-chart-legend'>
+                                    <span
+                                        style={{ "backgroundColor": document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor[index] : backgroundColor[index], "border": `1px solid ${borderColor[index]}` }}
+                                    ></span>
+                                    <p className='pie-chart-legend-text'>
+                                        <abbr title={item}>{item}</abbr>
+                                    </p>
+                                </div>
                             )
                         })}
                     </div>

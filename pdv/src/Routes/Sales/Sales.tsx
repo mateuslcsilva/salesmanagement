@@ -3,8 +3,8 @@ import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { Extract } from '../../components/Extract/Extract'
 import './styles.css'
 import {
-    Chart as ChartJS, 
-    ArcElement, 
+    Chart as ChartJS,
+    ArcElement,
     LinearScale,
     CategoryScale,
     BarElement,
@@ -20,7 +20,7 @@ import { useItemListContext } from '../../utils/contexts/ItemsProvider'
 import { useSalesHistoryContext } from '../../utils/contexts/SalesHistoryProvider'
 import { useSalesContext } from '../../utils/contexts/SalesProvider'
 
-ChartJS.register(ArcElement,   
+ChartJS.register(ArcElement,
     LinearScale,
     CategoryScale,
     BarElement,
@@ -114,9 +114,9 @@ export const Sales = () => {
         SalesContext.sales.forEach(sale => totalValue += sale.totalValue)
         return totalValue
     }
-    
-    const toggleHiddenInfo = (info :string) => {
-        if(hiddenInfo.includes(info)){
+
+    const toggleHiddenInfo = (info: string) => {
+        if (hiddenInfo.includes(info)) {
             return setHiddenInfo((hiddenInfo) => hiddenInfo.filter(text => text != info))
         }
         setHiddenInfo(hiddenInfo => [...hiddenInfo, info])
@@ -164,23 +164,23 @@ export const Sales = () => {
             </h1>
             <h3 className='section-title'><i className="bi bi-wallet2"></i>Números do dia</h3>
             <p className='section-sub-title'>Seu dia até agora</p>
-            <div  className={AuthContext.currentUser.userType == "Padrão" ? 'primary-sales-data hidden-info' : 'primary-sales-data'}>
+            <div className={AuthContext.currentUser.userType == "Padrão" ? 'primary-sales-data hidden-info' : 'primary-sales-data'}>
                 <div>
-                <i className="bi bi-cash-stack"></i>
+                    <i className="bi bi-cash-stack"></i>
                     <div className={getTotalSaleValue() > 9999 ? "primary-data-info small-font-size" : "primary-data-info"}>
-                        <h1 
-                        className={hiddenInfo.includes("totalValue") ? 'info hidden-info' : 'info'}
-                        onClick={() => toggleHiddenInfo("totalValue")}
+                        <h1
+                            className={hiddenInfo.includes("totalValue") ? 'info hidden-info' : 'info'}
+                            onClick={() => toggleHiddenInfo("totalValue")}
                         >{hiddenInfo.includes("totalValue") ? "R$****" : getTotalSaleValue().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
                         <p>Valor total vendido</p>
                     </div>
                 </div>
-                <div> 
-                <i className="bi bi-cart-check"></i>
+                <div>
+                    <i className="bi bi-cart-check"></i>
                     <div className='primary-data-info'>
-                    <h1
-                        className={hiddenInfo.includes("numberOfSales") ? 'info hidden-info' : 'info'}
-                        onClick={() => toggleHiddenInfo("numberOfSales")}
+                        <h1
+                            className={hiddenInfo.includes("numberOfSales") ? 'info hidden-info' : 'info'}
+                            onClick={() => toggleHiddenInfo("numberOfSales")}
                         >
                             {hiddenInfo.includes("numberOfSales") ? "--" : getNumberOfSales()}
                         </h1>
@@ -188,7 +188,7 @@ export const Sales = () => {
                     </div>
                 </div>
                 <div>
-                <i className="bi bi-cash"></i>
+                    <i className="bi bi-cash"></i>
                     <div className='primary-data-info'>
                         <h1
                             className={hiddenInfo.includes("ticket") ? 'info hidden-info' : 'info'}
@@ -202,23 +202,29 @@ export const Sales = () => {
             </div>
             <h3 className='section-title'><i className="bi bi-receipt"></i>Extrato de Vendas</h3>
             <p className='section-sub-title'>Análise detalhada das informações do mês</p>
-            <div  className={AuthContext.currentUser.userType == "Padrão" ? 'sales hidden-info' : 'sales'}>
+            <div className={AuthContext.currentUser.userType == "Padrão" ? 'sales hidden-info' : 'sales'}>
                 <div className='open-sales'>
-                    <Extract /> 
+                    <Extract />
                 </div>
                 <div className='most-salled-item'>
-                <Pie data={data} className='pie-chart' />
+                    <Pie data={data} className='pie-chart' />
                     <div className='pie-chart-legends'>
 
                         {getMostSelledItem().map(element => element.text).splice(0, 5).map((item, index) => {
                             return (
-                                <p id='pie-chart-legend'><span style={{ "backgroundColor": document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor[index] : backgroundColor[index], "border": `1px solid ${borderColor[index]}` }}></span>{item}</p>
+                                <div id='pie-chart-legend'>
+                                    <span
+                                        style={{ "backgroundColor": document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor[index] : backgroundColor[index], "border": `1px solid ${borderColor[index]}` }}
+                                    ></span>
+                                    <p className='pie-chart-legend-text'>
+                                        <abbr title={item}>{item}</abbr>
+                                    </p></div>
                             )
                         })}
                     </div>
                     <p>Itens mais vendidos</p>
                 </div>
             </div>
-        </> 
+        </>
     )
 }

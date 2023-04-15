@@ -89,7 +89,10 @@ export const SideBar = (props: any) => {
                                 <span className="switch"></span>
                             </div>
                         </li>
-                        <li className="" onClick={() => AuthContext.setCurrentUser({} as typeof AuthContext.currentUser)}>
+                        <li className="" onClick={() => {
+                            AuthContext.setCurrentUser({} as typeof AuthContext.currentUser)
+                            localStorage.removeItem("loginData")
+                        }}>
                             <Link to="/">
                                 <i className="bi bi-box-arrow-right"></i>
                                 <span className="text nav-text">Sair</span>

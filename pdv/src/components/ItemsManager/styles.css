@@ -36,6 +36,12 @@ hr{
     text-align: start;
 }
 
+.items-div p:nth-of-type(2){
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .items-div p:nth-child(2n - 1) {
     width: 50px;
     text-align: center;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Modal,
     Text,
@@ -6,10 +6,12 @@ import {
     Row,
     Checkbox,
   } from "@nextui-org/react";
+  import './styles.css'
 
 export const SignIn = (props :any) => {
+
   return (
-    <Modal.Body>
+    <Modal.Body className='sign-in-container'>
             <Input
               clearable
               bordered
@@ -40,7 +42,7 @@ export const SignIn = (props :any) => {
             <Input.Password
               bordered
               fullWidth
-              color="primary"
+              color={'primary'}
               size="lg"
               placeholder="Digite sua senha"
               contentLeft={<i className="bi bi-key is-size-5"></i>}
