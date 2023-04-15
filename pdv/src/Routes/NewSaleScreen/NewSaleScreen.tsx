@@ -85,6 +85,14 @@ export const NewSaleScreen = () => {
         setSale(sale => ({ ...sale, ...obj }))
     }
 
+    let getNewNumSale = () => {
+        let newSaleInfo = SalesContext.sales.find(newSaleInfo => newSaleInfo.numSale == saleNumber)
+        if(!newSaleInfo || !SalesContext.sales) return 
+        //@ts-ignore
+        let newSaleNumber = { numSale : Number(SalesContext.sales.map(sale => sale.numSale).sort((a, b) => a - b).at(-1)) + 1 }
+        setSale({...sale, ...newSaleNumber})
+    }
+
     const clear = () => {
         setSale({} as sale)
         orderContext.setCurrentOrder(0)
@@ -116,8 +124,16 @@ export const NewSaleScreen = () => {
     }, [AuthContext.currentUser.id])
 
     useEffect(() => {
-        if(!sale.numSale) document.getElementById('inputComanda')?.focus()
+        if(!sale.numSale) {
+            document.getElementById('inputComanda')?.focus()
+            setSaleNumber(Number(SalesContext.sales.map(sale => sale.numSale).sort((a, b) => a - b).at(-1)) + 1 )
+        }
     }, [sale])
+
+    useEffect(() => {
+        if(SalesContext.sales && sale.numSale) return getNewNumSale()
+        setSaleNumber(Number(SalesContext.sales.map(sale => sale.numSale).sort((a, b) => a - b).at(-1)) + 1 )
+    }, [SalesContext.sales])
 
     return (
         <>
@@ -169,7 +185,7 @@ export const NewSaleScreen = () => {
                     text='Acrescentar item'
                     disabled={!sale.numSale || orderContext.currentOrder == 0 ? true : false}
                 />
-                {saleNumber > 0 &&
+                {sale.numSale > 0 &&
                     <div className='saleInfo mb-3 primary-text'>
                         <p className='title is-5'>
                             {'Mesa: ' + sale.numTable + '  |  '} 
@@ -186,7 +202,7 @@ export const NewSaleScreen = () => {
                 <div className='btn-limpar-centered mt-5'>
                     <Button
                         onClick={updateSales}
-                        disabled={sale.numSale == undefined || sale.orders.length < 1 ? true : false}
+                        disabled={sale.numSale == undefined || sale.orders?.length < 1 ? true : false}
                         text='Salvar'
                         className="is-success"
                         id="salvar-venda"

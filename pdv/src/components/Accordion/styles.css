@@ -23,6 +23,7 @@
 .accordion-title p{
     text-align: center;
     width: 161px;
+    white-space: nowrap;
 }
 
 .accordion-title :nth-child(2){

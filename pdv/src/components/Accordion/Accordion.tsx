@@ -25,7 +25,7 @@ export const Accordion = (props :any) => {
     return(
             <div className='accordion' style={open ? {"height": `${120 + props.sale.orders?.length * 24}px`}: {}}>
                 <div className='accordion-title' onClick={() => setOpen(open => !open)}>
-                    <p>Mesa: {props.sale.numTable}</p>
+                    <p>Mesa: {props.sale.numTable}</p> 
                     <p>Comanda: {props.sale.numSale}</p>
                     <p>Nome: {props.sale.costumerName}</p>
                     <i className={`bi bi-chevron-down ${open ? "turn-up" : ""}`}></i>

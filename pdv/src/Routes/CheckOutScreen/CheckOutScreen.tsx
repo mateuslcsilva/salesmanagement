@@ -133,6 +133,14 @@ export const CheckOutScreen = () => {
         if(!Array.isArray(sale) && !sale.numSale) document.getElementById('inputComanda')?.focus()
     }, [sale])
 
+    useEffect(() => {
+        if(!Array.isArray(sale)) {
+            let newSaleInfo = SalesContext.sales.find(newSaleInfo => newSaleInfo.numSale == saleNumber)
+            if(!newSaleInfo) return clear()
+            setSale(newSaleInfo)
+        }
+    }, [SalesContext.sales])
+
     return (
         <>
             <div className='div' id='div1'

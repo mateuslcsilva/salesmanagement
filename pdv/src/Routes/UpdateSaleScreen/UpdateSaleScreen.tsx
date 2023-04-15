@@ -29,11 +29,12 @@ export const UpdateSaleScreen = () => {
     const SalesContext = useSalesContext()
 
     const handler = () => setVisible(true);
-    const closeHandler = () => setVisible(false);
+    const closeHandler = () => setVisible(false); 
 
     const getItemText = (typeParam: string, value: number | undefined) => {
         if (AuthContext.currentUser.id == '') return
         const itemList = ItemListContext.itemList
+        if(!itemList) return
         if (!value) return
         if (typeParam == "numItem") {
             let index = itemList.findIndex(item => item.numItem == value)
@@ -68,6 +69,7 @@ export const UpdateSaleScreen = () => {
         }
 
         setSale(currentSale.length == 1 ? { ...sale, ...currentSale[0] } : currentSale)
+        setAlert(<p></p>)
     }
 
     const findSale = () => {
@@ -84,6 +86,7 @@ export const UpdateSaleScreen = () => {
         if (currentSale.length > 1) return window.alert("Ocorreu um erro, por favor contate o desenvolvedor!")
 
         setSale(currentSale[0])
+        setAlert(<p></p>)
     }
 
     const findCostumer = () => {
@@ -98,6 +101,7 @@ export const UpdateSaleScreen = () => {
             return setAlert(<Alert severity="warning">Nenhuma comanda encontrada!</Alert>)
         }
         setSale(currentSale.length == 1 ? currentSale[0] : currentSale)
+        setAlert(<p></p>)
     }
 
     const deleteItems = () => {
@@ -155,7 +159,7 @@ export const UpdateSaleScreen = () => {
             let currentMonth = current.getMonth().toString().length < 2 ? '0' + (current.getMonth() + 1) : (current.getMonth() + 1)
             let currentDate = currentDay + '/' + currentMonth + '/' + current.getFullYear()
             let currentTime = current.getHours() + ':' + (current.getMinutes() < 10 ? "0" + current.getMinutes() : current.getMinutes())
-            let newSale = {
+            newSale = {
                 numTable: "Não informado",
                 numSale: newSaleNumber,
                 orders: deletedItems,
@@ -171,13 +175,8 @@ export const UpdateSaleScreen = () => {
                 if (item) totalValue += Number(item.itemValue)
             })
             newSale.totalValue = totalValue
-            //@ts-ignore
         }
 
-        console.log("currentSale: ", currentSale)
-        console.log("newSale: ", newSale)
-        console.log("sales: ", sales)
-        console.log("contextsales: ", [...sales, currentSale, newSale])
         if (newSale) SalesContext.setSales([...sales, currentSale, newSale].filter(sale => sale.orders.length > 0))
         clear()
         setAlert(<Alert severity="success">Pronto, pedidos transferidos!</Alert>)
@@ -232,14 +231,18 @@ export const UpdateSaleScreen = () => {
     useEffect(() => {
         setCurrentUserId(AuthContext.currentUser.id)
     }, [AuthContext.currentUser.id])
-    
-    useEffect(() => {
-        console.log(sale)
-    }, [sale])
 
     useEffect(() => {
         if(!Array.isArray(sale) && !sale.numSale) document.getElementById('inputComanda')?.focus()
     }, [sale])
+
+    useEffect(() => {
+        if(!Array.isArray(sale)) {
+            let newSaleInfo = SalesContext.sales.find(newSaleInfo => newSaleInfo.numSale == saleNumber)
+            if(!newSaleInfo) return clear()
+            setSale(newSaleInfo)
+        }
+    }, [SalesContext.sales])
 
     useEffect(() => {
         if (!permission) return
@@ -260,6 +263,10 @@ export const UpdateSaleScreen = () => {
                 return
         }
     }, [permission])
+
+    useEffect(() => {
+        console.log("sale: ", sale)
+    }, [sale])
 
     return (
         <>
@@ -304,6 +311,7 @@ export const UpdateSaleScreen = () => {
                 {alert}
 
                 {
+                    
                     ((saleNumber > 0 || costumerName != '' || tableNumber > 0) && (!Array.isArray(sale) && sale.numSale > 0)) &&
                     <div className='saleInfo mb-3 mt-5 primary-text'>
                         <p className='title is-5'>
@@ -318,7 +326,7 @@ export const UpdateSaleScreen = () => {
 
                 {Array.isArray(sale) &&
                     <div>
-                        <SaleAccordion sale={sale} selectedSale={(selectedSale: sale) => setSale(selectedSale)} /* selectedIndex={getSelectedIndex} */ />
+                        <SaleAccordion sale={sale} selectedSale={(selectedSale: sale) => setSale(selectedSale)}/>
                     </div>
                 }
 
@@ -327,19 +335,19 @@ export const UpdateSaleScreen = () => {
                         onClick={() => setAction(1)}
                         className='is-info mt-5 mb-5'
                         text='Excluir Pedido'
-                        disabled={sale == undefined || Array.isArray(sale) ? true : false}
+                        disabled={Array.isArray(sale) || sale.numSale == undefined ? true : false}
                     />
                     <Button
                         onClick={() => setAction(2)}
                         className='is-info mt-5 mb-5'
                         text='Mudar Mesa'
-                        disabled={sale == undefined || Array.isArray(sale) ? true : false}
+                        disabled={Array.isArray(sale) || sale.numSale == undefined ? true : false}
                     />
                     <Button
                         onClick={() => setAction(3)}
                         className='is-info mt-5 mb-5'
                         text='Migrar Pedidos'
-                        disabled={sale == undefined || Array.isArray(sale) ? true : false}
+                        disabled={Array.isArray(sale) || sale.numSale == undefined ? true : false}
                     />
 
                     <Button
@@ -349,7 +357,7 @@ export const UpdateSaleScreen = () => {
                         }}
                         className='is-info mt-5 mb-5'
                         text='Excluir Comanda'
-                        disabled={sale == undefined || Array.isArray(sale) ? true : false}
+                        disabled={Array.isArray(sale) || sale.numSale == undefined ? true : false}
                     />
                 </div>
 
@@ -403,7 +411,7 @@ export const UpdateSaleScreen = () => {
                                 onChange={setSelected}
                             >
                                 {/* @ts-ignore */}
-                                {sale.orders.map((order: number, index: number) => <Checkbox value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
+                                {sale.orders?.map((order: number, index: number) => <Checkbox value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
                             </Checkbox.Group>
                             <div>
                                 <InputSearchSale

@@ -8,10 +8,16 @@ import { ItemsManager } from './components/ItemsManager/ItemsManager'
 import { UsersManager } from './components/UsersManager/UsersManager'
 import { useAuthContext } from './utils/contexts/AuthProvider'
 import { useItemListContext } from './utils/contexts/ItemsProvider'
+import { onSnapshot, doc } from 'firebase/firestore'
+import { db } from './utils/firebase/firebase'
+import { useSalesHistoryContext } from './utils/contexts/SalesHistoryProvider'
+import { useSalesContext } from './utils/contexts/SalesProvider'
 
 function App() {
   const AuthContext = useAuthContext()
   const ItemListContext = useItemListContext()
+  const SalesContext = useSalesContext()
+  const SalesHistoryContext = useSalesHistoryContext()
   const [darkTheme, setDarkTheme] = useState(false)
   const [sideBar, setSideBar] = useState(false)
   const [itemVisible, setItemVisible] = useState(false);
@@ -19,7 +25,7 @@ function App() {
   let location = useLocation()
 
   const itemHandler = () => {
-    if(AuthContext.currentUser.userType == "Padrão") return window.alert("Essa tela é reservada para usuários de nível Gerência e Master.")
+    if (AuthContext.currentUser.userType == "Padrão") return window.alert("Essa tela é reservada para usuários de nível Gerência e Master.")
     setItemVisible(true)
   };
   const closeItemHandler = () => setItemVisible(false);
@@ -30,25 +36,39 @@ function App() {
   const localStorageManagement = () => {
     let storagedTheme = localStorage.getItem('darkTheme')
     let storageSideBarState = localStorage.getItem('sideBar')
-    if(storageSideBarState == "open") setSideBar(true)
-    if(storagedTheme == "dark") setDarkTheme(true) 
+    if (storageSideBarState == "open") setSideBar(true)
+    if (storagedTheme == "dark") setDarkTheme(true)
   }
 
   const setTheme = () => {
     setDarkTheme(theme => !theme)
-    if(darkTheme && localStorage.getItem("darkTheme")) return localStorage.removeItem("darkTheme") 
+    if (darkTheme && localStorage.getItem("darkTheme")) return localStorage.removeItem("darkTheme")
     localStorage.setItem("darkTheme", "dark")
   }
 
   const setSideBarStorage = () => {
     setSideBar(sideBar => !sideBar)
-    if(sideBar && localStorage.getItem("sideBar")) return localStorage.removeItem("sideBar") 
+    if (sideBar && localStorage.getItem("sideBar")) return localStorage.removeItem("sideBar")
     localStorage.setItem("sideBar", "open")
+  }
+
+  const setSnapShot = () => {
+    if (!AuthContext.currentUser.id) return false
+    const unsub = onSnapshot(doc(db, "empresas", AuthContext.currentUser.id), (doc) => {
+      console.log("teste snap shot: ", doc.data()?.sales)
+      SalesContext.setSales(doc.data()?.sales)
+      SalesHistoryContext.setSalesHistory(doc.data()?.salesHistory)
+      ItemListContext.setItemList(doc.data()?.items)
+    });
   }
 
   useEffect(() => {
     localStorageManagement()
   }, [])
+
+  useEffect(() => {
+    setSnapShot()
+  }, [AuthContext.currentUser.id])
 
   return (
     <main className={`main ${darkTheme ? 'darkThemed' : 'lightThemed'}`}>
@@ -59,7 +79,7 @@ function App() {
 
       <div className='section'>
         <div className={sideBar == true ? "divContainer side-bar" : "divContainer"}>
-          {!["/sales", "/dashboards"].includes(location.pathname) && <NavBarButtons /> }
+          {!["/sales", "/dashboards"].includes(location.pathname) && <NavBarButtons />}
           <Outlet />
         </div>
       </div>

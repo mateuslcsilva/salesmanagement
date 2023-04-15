@@ -25,8 +25,7 @@ export const ItemListProvider = ({ children }: childrenType) => {
     const AuthContext = useAuthContext()
 
     useEffect(() => {
-        console.log("salesContext: ", itemList)
-        console.log(AuthContext.currentUser.id)
+        if(!AuthContext.currentUser.id) return
         updateSales()
     }, [itemList])
 

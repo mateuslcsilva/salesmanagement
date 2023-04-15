@@ -37,6 +37,7 @@ const ItemsListInput = (props: any) => {
 
     const filterItemList = (param :string) :Array<itemType> => {
         const itemList = ItemListContext.itemList
+        if(!itemList) return []
         const newItemList = itemList.filter(item => getItemText("numItem", item.numItem)?.toLowerCase().includes(currentOrder.toLowerCase()))
         return newItemList
     }

@@ -164,9 +164,6 @@ export const LoginScreen = () => {
     localStorageManagement()
   }, [])
 
-  useEffect(() => console.log(signUpValues))
-
-
   return (
     <div>
       

@@ -171,7 +171,7 @@ export const ItemsManager = (props: any) => {
                                 <Text b css={{ "transform": "translateX(-130px)" }}>Descrição</Text>
                                 <Text b css={{ "transform": "translateX(-110px)" }}>Valor</Text>
                             </Row>
-                            {ItemListContext.itemList.sort((a, b) => a.itemRef - b.itemRef).map((item, index: number) => {
+                            {ItemListContext.itemList?.sort((a, b) => a.itemRef - b.itemRef).map((item, index: number) => {
                                 if (item.active) return (
                                     <>
                                         <div key={index} className="items-div">
