@@ -28,12 +28,12 @@ export const SideBar = (props: any) => {
                 <header>
                     <div className="image-text">
                         <span className="image">
-                            <img src={logo} alt="logo" />
+                            <img src={logo} alt="logo" /> 
                         </span>
                         <div className="div text header-text">
                             <span className="name">Simpls Software</span>
-                            <span className="workplace">{AuthContext.currentUser.workplaceName}</span>
-                            <span className="user">{AuthContext.currentUser.userName}</span>
+                            <abbr title={AuthContext.currentUser.workplaceName}><span className="workplace">{AuthContext.currentUser.workplaceName}</span></abbr>
+                            <abbr title={AuthContext.currentUser.userName}><span className="user">{AuthContext.currentUser.userName}</span></abbr>
                             <span className="user">{AuthContext.currentUser.userType}</span>
                         </div>
                     </div>
@@ -84,7 +84,7 @@ export const SideBar = (props: any) => {
                                 <i className="bi bi-moon moon"></i>
                                 <i className="bi bi-brightness-high sun"></i>
                             </div>
-                            <span className="mode-text text">Dark Mode</span>
+                            <span className="mode-text text">Tema escuro</span>
                             <div className="toggle-switch">
                                 <span className="switch"></span>
                             </div>

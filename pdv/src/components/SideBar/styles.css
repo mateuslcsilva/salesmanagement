@@ -94,8 +94,12 @@
     font-weight: 600;
   }
   
-  .header-text .profission {
-    margin-top: -2px;
+  .header-text .workplace,
+  .header-text .user  {
+    width: 200px;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   
   .sidebar header .toggle {
@@ -125,33 +129,6 @@
   .sidebar header .toggle * {
     margin-left: 2px;
   }
-/*   
-  .sidebar .search-box {
-    background-color: var(--primary-color-light);
-    border-radius: 6px;
-    transition: var(--tran-03);
-  }
-  
-  .search-box label {
-    cursor: pointer;
-  }
-  
-  .sidebar .search-box input {
-    height: 100%;
-    width: 100%;
-    background-color: var(--primary-color-light);
-    color: var(--text-color);
-    border: none;
-    outline: none;
-    padding: 5px;
-    border-radius: 6px;
-    transition: var(--tran-03);
-  }
-  
-  .sidebar.close .search-box input {
-    transition: var(--tran-03);
-    opacity: 0;
-  } */
   
   .sidebar li a {
     height: 100%;
@@ -207,7 +184,7 @@
   }
   
   .mode .mode-text {
-    padding-right: 50px;
+    padding-right: 30px;
   }
   
   .menu-bar .mode .moon-sun {
