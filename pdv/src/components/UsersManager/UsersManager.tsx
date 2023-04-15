@@ -156,20 +156,20 @@ export const UsersManager = (props: any) => {
             <Spacer y={0.5} />
             <Col className="users-container">
               <Row justify='space-between'>
-                <Text b >Nome</Text>
-                <Text b css={{ "transform": "translateX(-60px)" }}>Email</Text>
-                <Text b css={{ "transform": "translateX(-80px)" }}>Tipo de Usuário</Text>
+                <Text b css={{ "transform": "translateX(5px)" }} >Nome</Text>
+                <Text b css={{ "transform": "translateX(-30px)" }}>Email</Text>
+                <Text b css={{ "transform": "translateX(-60px)" }}>Tipo de Usuário</Text>
                 <Text b css={{ "transform": "translateX(-130px)" }}>Senha</Text>
               </Row>
               {showedUserList.map((user, index: number) => {
                 return (
                   <>
                     <div key={index} className="users-div">
-                      <p>{user.username}</p>
-                      <p style={{ "transform": "translateX(-50px)" }}>{user.email}</p>
-                      <p style={{ "transform": "translateX(0px)" }}>{user.userType}</p>
+                      <p style={{ "transform": "translateX(-28px)", "width": "120px"  }}><abbr title={user.username}>{user.username}</abbr></p>
+                      <p style={{ "transform": "translateX(-70px)", "width": "200px"  }}><abbr title={user.email}>{user.email}</abbr></p>
+                      <p style={{ "transform": "translateX(-50px)", "width": "80px"  }}><abbr title={user.userType}>{user.userType}</abbr></p>
                       <p
-                        style={{ "transform": "translateX(60px)", "width": "120px" }}
+                        style={{ "transform": "translateX(-30px)", "minWidth": "120px", "maxWidth" : "140px" }}
                         className="is-flex is-justify-content-space-between"
                       >
                         {showPassword.includes(user.email) ? user.password : "************"}

@@ -36,28 +36,31 @@ hr{
     position: relative;
     transition: .1s ease;
     margin-bottom: 1px;
+    overflow-y: hidden;
 }
 
 .users-div::before{
     content: "";
     background-color: var(--aciton-color);
     position: absolute;
-    bottom: 0;
-    left: 50%;
+    bottom: -1px;
+    left: 0;
     height: 1px;
-    width: 0;
-    transition: 0.7s ease-in-out;
+    width: 100%;
+    transition: 0.2s ease-in-out;
 }
 
 .users-div:hover.users-div::before{
-    left: 0;
-    width: 100%;
-    transition: 0.7s ease-in-out;
+    bottom: 0;
+    transition: 0.2s ease-in-out;
 }
 
 .users-div p {
     width: 20px;
     text-align: center;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .users-div p span{
