@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { itemType } from '../../types/itemType/itemType'
 import { updateDoc, doc } from 'firebase/firestore'
-import { db } from '../firebase/firebase'
+import { db, DOC_PATH } from '../firebase/firebase'
 import { useAuthContext } from './AuthProvider'
 
 interface ItemListContextType {
@@ -30,7 +30,7 @@ export const ItemListProvider = ({ children }: childrenType) => {
     }, [itemList])
 
     const updateSales = async () => {
-          await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
+          await updateDoc(doc(db, DOC_PATH, AuthContext.currentUser.id), {
             items: itemList
         })
     }

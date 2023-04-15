@@ -1,10 +1,10 @@
-import { db } from "../../utils/firebase/firebase";
+import { db, DOC_PATH } from "../../utils/firebase/firebase";
 import { arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 
 export const queryData = async (queryType: string, whereParam: string, value: any) => {
   switch (queryType) {
     case 'accountInfo':
-      const accountInfo = await getDocs(query(collection(db, "empresas"), where(`${whereParam}`, "==", value.toLowerCase())))
+      const accountInfo = await getDocs(query(collection(db, DOC_PATH), where(`${whereParam}`, "==", value.toLowerCase())))
         .then(response => {
           if (response.size > 1) return 'Existe mais de uma empresa com esse nome, entre em contato com o suporte!!' //todo: testar
           if (response.size < 1) {
@@ -22,7 +22,7 @@ export const queryData = async (queryType: string, whereParam: string, value: an
       return accountInfo
       break
     case 'getById':
-      let docRef = doc(db, "empresas", `${value}`)
+      let docRef = doc(db, DOC_PATH, `${value}`)
       let data = await getDoc(docRef)
       .then(res => res.data())
       /* let docRef = doc(db, "empresas", value)
@@ -39,12 +39,12 @@ export const queryData = async (queryType: string, whereParam: string, value: an
       return data 
       break
       case 'itemsUpdate':
-        await updateDoc(doc(db, "empresas", value.id), {
+        await updateDoc(doc(db, DOC_PATH, value.id), {
             items: arrayUnion(value.item)
       })
       break
       case 'saleUpdate':
-        await updateDoc(doc(db, "empresas", value.id), {
+        await updateDoc(doc(db, DOC_PATH, value.id), {
             sales: arrayUnion(value.sale)
       })
       break

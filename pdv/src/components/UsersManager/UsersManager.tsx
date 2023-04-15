@@ -35,7 +35,7 @@ export const UsersManager = (props: any) => {
   };
 
   const getUsers = async () => {
-    if (AuthContext.currentUser.id == '') return false
+    if (AuthContext.currentUser.id == '' || !AuthContext.currentUser.id) return false
     let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
     let data = await getDoc(docRef)
       .then(res => {
@@ -164,7 +164,7 @@ export const UsersManager = (props: any) => {
               {showedUserList.map((user, index: number) => {
                 return (
                   <>
-                    <div key={index} className="users-div">
+                    <div key={index.toString()} className="users-div">
                       <p style={{ "transform": "translateX(-28px)", "width": "120px"  }}><abbr title={user.username}>{user.username}</abbr></p>
                       <p style={{ "transform": "translateX(-70px)", "width": "200px"  }}><abbr title={user.email}>{user.email}</abbr></p>
                       <p style={{ "transform": "translateX(-50px)", "width": "80px"  }}><abbr title={user.userType}>{user.userType}</abbr></p>

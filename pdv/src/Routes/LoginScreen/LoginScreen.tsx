@@ -10,7 +10,7 @@ import {
 import { initialSignUp, initialSignIn } from '../../types/Login/loginTypes'
 import { SignIn } from "../../components/SignIn/SignIn";
 import { SignUp } from "../../components/SignUp/SignUp";
-import { db } from "../../utils/firebase/firebase";
+import { db, DOC_PATH } from "../../utils/firebase/firebase";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { queryData } from "../../utils/requests/queryData";
 import { useAuthContext } from "../../utils/contexts/AuthProvider";
@@ -142,7 +142,7 @@ export const LoginScreen = () => {
         salesHistory: []
     }
  
-    const collectionRef = collection(db, "empresas")
+    const collectionRef = collection(db, DOC_PATH)
     const docRef = await setDoc(doc(collectionRef, signUpValues.workplace), newInfo)
       .then(response => {
         setVisible(false)

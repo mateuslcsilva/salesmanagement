@@ -44,7 +44,7 @@ export const SignUp = (props :any) => {
               bordered
               fullWidth
               color={props.invalidEmail ? 'error' : 'primary'}
-              helperText={props.invalidEmail ? 'Senha precisa ter 8 digitos' : ''}
+              helperText={props.invalidEmail ? 'Insira um email válido' : ''}
               helperColor="error"
               size="lg"
               placeholder="Digite seu email"

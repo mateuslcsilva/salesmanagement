@@ -88,8 +88,10 @@ export const NewSaleScreen = () => {
     let getNewNumSale = () => {
         let newSaleInfo = SalesContext.sales.find(newSaleInfo => newSaleInfo.numSale == saleNumber)
         if(!newSaleInfo || !SalesContext.sales) return 
+        console.log(SalesContext.sales.map(sale => sale.numSale).sort((a, b) => a - b).at(-1))
         //@ts-ignore
-        let newSaleNumber = { numSale : Number(SalesContext.sales.map(sale => sale.numSale).sort((a, b) => a - b).at(-1)) + 1 }
+        let lastNumSale = Number(SalesContext.sales.map(sale => sale.numSale).sort((a, b) => a - b).at(-1))
+        let newSaleNumber = { numSale : isNaN(lastNumSale) ? 1 : lastNumSale + 1}
         setSale({...sale, ...newSaleNumber})
     }
 
@@ -160,7 +162,6 @@ export const NewSaleScreen = () => {
                     sale={sale}
                     value={saleNumber}
                     set={setSaleNumber}
-                    autoFocus
                 />
                 <Button
                     className='is-info ml-2 mb-5'
