@@ -141,7 +141,7 @@ export const LoginScreen = () => {
         sales: [],
         salesHistory: []
     }
-
+ 
     const collectionRef = collection(db, "empresas")
     const docRef = await setDoc(doc(collectionRef, signUpValues.workplace), newInfo)
       .then(response => {
@@ -197,6 +197,7 @@ export const LoginScreen = () => {
         <SignIn 
         signInValues={signInValues} 
         handleSignInChange={handleSignInChange} 
+        dataHandler={dataHandler}
         />
         }
         {!hasAccount && 

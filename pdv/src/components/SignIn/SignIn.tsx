@@ -24,8 +24,9 @@ export const SignIn = (props :any) => {
               aria-label="userWorkplace"
               value={props.userWorkplace}
               onChange={props.handleSignInChange}
+              onKeyDown={(e) => e.key == "Enter" && props.dataHandler()}
                css={{"color": "#FFF"}}
-            />
+            /> 
             <Input
               clearable
               bordered
@@ -38,6 +39,7 @@ export const SignIn = (props :any) => {
               aria-label="userEmail"
               value={props.userEmail}
               onChange={props.handleSignInChange}
+              onKeyDown={(e) => e.key == "Enter" && props.dataHandler()}
             />
             <Input.Password
               bordered
@@ -50,6 +52,7 @@ export const SignIn = (props :any) => {
               aria-label="userPassword"
               value={props.userPassword}
               onChange={props.handleSignInChange}
+              onKeyDown={(e) => e.key == "Enter" && props.dataHandler()}
               css={{"color": "#FFF"}}
             />
             <Row justify="space-between">
@@ -60,7 +63,6 @@ export const SignIn = (props :any) => {
                 >
                 <Text size={14}>Manter conectado</Text>
               </Checkbox>
-              <Text size={14}>Esqueceu a senha?</Text>
             </Row>
           </Modal.Body>
   )
