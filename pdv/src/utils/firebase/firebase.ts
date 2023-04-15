@@ -1,13 +1,34 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+const API_KEY = import.meta.env.API_KEY
+const AUTH_DOMAIN = import.meta.env.AUTH_DOMAIN
+const PROJECT_ID = import.meta.env.PROJECT_ID
+const STORAGE_BUCKET = import.meta.env.STORAGE_BUCKET
+const MESSAGING_SENDER_ID = import.meta.env.MESSAGING_SENDER_ID
+const APP_ID = import.meta.env.APP_ID
+
 const firebaseConfig = {
-  apiKey: "AIzaSyDPbZig_N5J8c_6jI8XQmEINHluJPxGM7E",
-  authDomain: "simpls-6a1a3.firebaseapp.com",
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
   projectId: "simpls-6a1a3",
-  storageBucket: "simpls-6a1a3.appspot.com",
-  messagingSenderId: "1024509421193",
-  appId: "1:1024509421193:web:c6a679cc46ebbf498dc858"
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+export const DOC_PATH = import.meta.env.DEV ? "empresas_dev" : "empresas"
+
+/* const firebaseConfig = {
+  apiKey: import.meta.env.API_KEY,
+  authDomain: import.meta.env.AUTH_DOMAIN,
+  projectId: import.meta.env.PROJECT_ID,
+  storageBucket: import.meta.env.STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.MESSAGING_SENDER_ID,
+  appId: import.meta.env.APP_ID
+};
+
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const DOC_PATH = import.meta.env.DEV ? "empresas_dev" : "empresas" */
