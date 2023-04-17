@@ -9,9 +9,10 @@ import { UsersManager } from './components/UsersManager/UsersManager'
 import { useAuthContext } from './utils/contexts/AuthProvider'
 import { useItemListContext } from './utils/contexts/ItemsProvider'
 import { onSnapshot, doc } from 'firebase/firestore'
-import { db } from './utils/firebase/firebase'
+import { DOC_PATH, db } from './utils/firebase/firebase'
 import { useSalesHistoryContext } from './utils/contexts/SalesHistoryProvider'
 import { useSalesContext } from './utils/contexts/SalesProvider'
+import { ProblemReportModal } from './components/ProblemReportModal/ProblemReportModal'
 
 function App() {
   const AuthContext = useAuthContext()
@@ -22,6 +23,7 @@ function App() {
   const [sideBar, setSideBar] = useState(false)
   const [itemVisible, setItemVisible] = useState(false);
   const [usersVisible, setUsersVisible] = useState(false);
+  const [reportVisible, setReportVisible] = useState(false)
   let location = useLocation()
 
   const itemHandler = () => {
@@ -31,6 +33,8 @@ function App() {
   const closeItemHandler = () => setItemVisible(false);
   const usersHandler = () => setUsersVisible(true);
   const closeUsersHandler = () => setUsersVisible(false);
+  const reportHandler = () => setReportVisible(true);
+  const closeReportHandler = () => setReportVisible(false);
 
 
   const localStorageManagement = () => {
@@ -54,7 +58,7 @@ function App() {
 
   const setSnapShot = () => {
     if (!AuthContext.currentUser.id) return false
-    const unsub = onSnapshot(doc(db, "empresas", AuthContext.currentUser.id), (doc) => {
+    const unsub = onSnapshot(doc(db, DOC_PATH, AuthContext.currentUser.id), (doc) => {
       console.log("teste snap shot: ", doc.data()?.sales)
       SalesContext.setSales(doc.data()?.sales)
       SalesHistoryContext.setSalesHistory(doc.data()?.salesHistory)
@@ -83,6 +87,11 @@ function App() {
           <Outlet />
         </div>
       </div>
+      <button className="message-button" onClick={reportHandler}>
+      <i className="bi bi-envelope-exclamation"></i>
+      </button>
+        <span>Reportar um problema</span>
+        <ProblemReportModal visible={reportVisible} closeReportHandler={closeReportHandler} />
     </main>
   )
 }

@@ -32,6 +32,8 @@
 
   /* ====> BOX SHADOW <==== */
   --dashboard-div-shadow: 12px 12px 25px #efefefab;
+  --report-button-shadow: 0 0 15px #4a4a4a40;
+  --report-tooltip-shadow: 2px 2px 15px #4a4a4a40;
 }
 
 .main.darkThemed {
@@ -53,6 +55,8 @@
 
   /* ====> BOX SHADOW <==== */
   --dashboard-div-shadow: none;
+  --report-button-shadow: none;
+  --report-tooltip-shadow: none;
 }
 
 .main {
@@ -162,4 +166,40 @@ input:disabled::placeholder{
 .dark-theme-modal .switch-action-button{
   background-color: transparent !important;
   outline: 2px solid #f2f2f2 !important;
+}
+
+.message-button{
+  border: none;
+  outline: none;
+  box-shadow: none;
+  width: 60px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: var(--div-color);
+  color: #3488ce;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  font-size: 24pt;
+  cursor: pointer;
+  
+  box-shadow: var(--report-button-shadow);
+}
+
+.message-button ~ span{
+  position:fixed;
+  background-color: #FFF;
+  color: #000 !important;
+  bottom: 80px;
+  right: -300px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  transition: 0.3s ease;
+  z-index: 999;
+  box-shadow: var(--report-tooltip-shadow);
+}
+
+.message-button:hover ~ span{
+  right: 10px;
+  transition: 0.3s ease;
 }
