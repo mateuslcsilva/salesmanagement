@@ -9,6 +9,7 @@ const Button = (props :any) => {
         className= {props.className + ' button' }
         onClick={props.onClick}
         disabled={props.disabled? true : false}
+        style={props.style}
         >{props.text}</button>
     )
 }

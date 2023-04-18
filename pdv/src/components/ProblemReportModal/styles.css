@@ -1,0 +1,99 @@
+:root{
+    --primary-text-color: #000;
+    --outline-color: #4e4e4eaa;
+    --div-color: #FFF;
+}
+
+.dark-theme-modal{
+    --outline-color: #f2f2f2;
+    --div-color: #3c3c3c;
+    --primary-text-color: #f2f2f2;
+}
+  
+  .report-problem-input-div{
+    display: inline-flex;
+    flex-direction: column;
+    max-width: 105px;
+    margin-right: 25px;
+    position: relative;
+    margin-bottom: 0;
+  }
+  
+  .report-problem-input{
+    background-color: var(--div-color);
+    border: none;
+    outline: 1px solid var(--outline-color);
+    color: var(--primary-text-color);
+    height: 40px;
+    width:600px;
+    border-radius: 3px;
+    padding: 0 5px;
+    font-size: 12pt;
+    transition: 0.2s ease-out !important;
+    text-align: left;
+  }
+
+  .report-problem-button{
+    color: #4a4a4a !important;
+  }
+
+  .report-problem-input.large{
+    height: 300px;
+    padding: 5px;
+  }
+
+  .report-problem-input:disabled{
+    outline: 1px solid #c2c2c299;
+    color: #c2c2c299;
+  }
+
+  .report-problem-input:disabled ~ .report-problem-label{
+    color: #c2c2c299 !important;
+  }
+
+  .report-problem-input.input-large{
+    width: 250px;
+    text-align: left;
+  }
+
+  .report-problem-input.input-text{
+    text-align: left;
+  }
+  
+  .report-problem-label{
+    max-width: fit-content;
+    padding: 0 7px;
+    background-color: var(--div-color);
+    color: #3e8ed0;
+    cursor: text;
+    transition: 0.2s ease-out;
+    font-size: 14pt;
+    font-weight: 400;
+    width: 7vw;
+  }
+  
+  .report-problem-input:focus, .report-problem-input:valid{
+    outline: 2px solid #3e8ed0;
+  }
+  
+  .report-problem-input:empty ~ .report-problem-label{
+    transform: translate(0%, -115%);
+    color: var(--outline-color);
+  }
+  
+  .report-problem-input:focus ~ .report-problem-label,
+  .report-problem-input:valid ~ .report-problem-label,
+  .report-problem-input:disabled ~ .report-problem-label{
+    transform: translate(-2%, -200%) scale(0.8);
+    color: #3e8ed0 !important;
+  }
+  
+  .report-problem-input.invalid-input:focus, .report-problem-input.invalid-input:valid{
+    outline: 2px solid rgb(255, 68, 68);
+  }
+  
+  .report-problem-input.invalid-input:focus ~ .report-problem-label,
+  .report-problem-input.invalid-input:valid ~ .report-problem-label{
+    transform: translate(-2%, -200%) scale(0.8);
+    color: rgb(255, 68, 68)!important;
+  }

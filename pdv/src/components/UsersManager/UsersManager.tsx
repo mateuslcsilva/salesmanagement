@@ -5,7 +5,7 @@ import Button from '../../components/Button/Button'
 import React, { useEffect, useReducer, useState } from 'react'
 import { OrdinaryInput } from '../OrdinaryInput/OrdinaryInput'
 import { arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore'
-import { db } from '../../utils/firebase/firebase'
+import { DOC_PATH, db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { initialSignUp } from '../../types/Login/loginTypes'
 import { InputUserType } from '../InputUserType/InputUserType'
@@ -36,7 +36,7 @@ export const UsersManager = (props: any) => {
 
   const getUsers = async () => {
     if (AuthContext.currentUser.id == '' || !AuthContext.currentUser.id) return false
-    let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
+    let docRef = doc(db, DOC_PATH, `${AuthContext.currentUser.id}`)
     let data = await getDoc(docRef)
       .then(res => {
         let data = res.data()?.users
@@ -66,7 +66,7 @@ export const UsersManager = (props: any) => {
   }
 
   const deleteUser = async (email: string) => {
-      await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
+      await updateDoc(doc(db, DOC_PATH, AuthContext.currentUser.id), {
           users: userList.filter(user => user.email != email)
       })
           getUsers()

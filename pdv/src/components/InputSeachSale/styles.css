@@ -56,7 +56,8 @@
   }
   
   .search-sale-input:focus ~ .search-sale-label,
-  .search-sale-input:valid ~ .search-sale-label{
+  .search-sale-input:valid ~ .search-sale-label,
+  .search-sale-input:disabled ~ .search-sale-label{
     transform: translate(-2%, -200%) scale(0.8);
     color: #3e8ed0;
   }
