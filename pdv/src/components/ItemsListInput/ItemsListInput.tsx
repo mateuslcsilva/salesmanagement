@@ -18,7 +18,7 @@ const ItemsListInput = (props: any) => {
     }
 
     const getItemText = (typeParam :string, value :number | undefined) :string => {
-        if(AuthContext.currentUser.id == '') return ''
+        if(!AuthContext.currentUser?.id) return ''
         const itemList = ItemListContext.itemList
         if(value == undefined) return ''
         if (typeParam == "numItem"){

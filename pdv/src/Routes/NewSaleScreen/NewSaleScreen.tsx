@@ -122,19 +122,19 @@ export const NewSaleScreen = () => {
     }, [alert])
 
     useEffect(() => {
-        setCurrentUserId(AuthContext.currentUser.id)
-    }, [AuthContext.currentUser.id])
+        setCurrentUserId(AuthContext.currentUser?.id)
+    }, [AuthContext.currentUser?.id])
 
     useEffect(() => {
         if(!sale.numSale) {
             document.getElementById('inputComanda')?.focus()
-            setSaleNumber(Number(SalesContext.sales.map(sale => sale.numSale).sort((a, b) => a - b).at(-1)) + 1 )
+            setSaleNumber(Number(SalesContext.sales?.map(sale => sale.numSale).sort((a, b) => a - b).at(-1)) + 1 )
         }
     }, [sale])
 
     useEffect(() => {
         if(SalesContext.sales && sale.numSale) return getNewNumSale()
-        setSaleNumber(Number(SalesContext.sales.map(sale => sale.numSale).sort((a, b) => a - b).at(-1)) + 1 )
+        setSaleNumber(Number(SalesContext.sales?.map(sale => sale.numSale).sort((a, b) => a - b).at(-1)) + 1 )
     }, [SalesContext.sales])
 
     return (

@@ -9,6 +9,10 @@
     --div-color: #3c3c3c;
     --primary-text-color: #f2f2f2;
 }
+
+.report-list-title{
+  font-size: 16pt;
+}
   
   .report-problem-input-div{
     display: inline-flex;
@@ -97,3 +101,83 @@
     transform: translate(-2%, -200%) scale(0.8);
     color: rgb(255, 68, 68)!important;
   }
+
+
+  .report-list-helper,
+  .report-list-div{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 100px 400px 100px;
+    position: relative;
+  }
+
+  .report-list-div{
+    margin-top: -10px;
+  }
+
+  .report-list-div > p,
+  .report-list-helper > p{
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .report-list-div  i{
+    position: absolute;
+    right: -7px;
+    font-size: 14pt;
+    display: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .report-list-div:hover > i{
+    display: inline;
+  }
+
+  .report-list-div i:hover{
+    color: #3e8ed0 !important;
+    transition: 0.2s ease;
+  }
+
+  .messagens-container{
+    max-height: 200px;
+    width: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  .messagens-container::-webkit-scrollbar{
+    width: 3px;
+  }
+
+  .report-details .report-problem-input-div{
+    display: grid;
+    gap: 70px;
+    grid-template-columns: 460px 60px;
+    margin-top: 20px;
+    width: 550px;
+  }
+
+  .report-details .report-problem-input-div input{
+    width: 520px ;
+  }
+
+  .mensagem-div{
+    display: grid;
+    grid-template-columns: 470px 100px;
+    justify-content: center;
+  }
+
+  .mensagem-div span{
+    font-size: 10pt;
+    white-space: nowrap;
+  }
+
+  .mensagem-div hr{
+    width: 100%;
+    height: 1px;
+    text-align: center;
+  }
+

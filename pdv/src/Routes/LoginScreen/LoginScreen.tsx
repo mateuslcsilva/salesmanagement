@@ -18,6 +18,7 @@ import { useSalesContext } from "../../utils/contexts/SalesProvider";
 import { useSalesHistoryContext } from "../../utils/contexts/SalesHistoryProvider";
 import { useItemListContext } from "../../utils/contexts/ItemsProvider";
 import { AlertModal } from "../../components/AlertModal/AlertModal";
+import { reportType } from "../../types/reportProblemTypes";
 
 export const LoginScreen = () => {
   const initialSignUpState = { hasConsented: false} as initialSignUp;
@@ -150,7 +151,11 @@ export const LoginScreen = () => {
       .catch(err => {
         console.log(err.message)
       });
-      setAuthContext.setCurrentUser({ id: signUpValues.workplace, userName: signUpValues.username, workplaceName: signUpValues.workplace, userType: "Master"})
+      setAuthContext.setCurrentUser({ id: signUpValues.workplace
+        , userName: signUpValues.username,
+         workplaceName: signUpValues.workplace,
+          userType: "Master"
+        })
   };
 
   const localStorageManagement = () => {
@@ -165,7 +170,7 @@ export const LoginScreen = () => {
   }, [])
 
   return (
-    <div>
+    <div> 
       
       <AlertModal visible={alertVisible} closeHandler={closeAlertHandle} text={alertText} start/>
       <Modal

@@ -1,4 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { reportType, conversationType } from '../../types/reportProblemTypes'
+import { updateDoc, doc, arrayUnion } from 'firebase/firestore'
+import { db, DOC_PATH } from '../firebase/firebase'
 
 let initialUserObj = {
     id: '',
@@ -21,7 +24,7 @@ interface childrenType {
 const AuthContext = React.createContext({} as AuthContextData)
 
 export const useAuthContext = () => {
-    return useContext(AuthContext)
+    return useContext(AuthContext) 
 }
 
 export const AuthProvider = ({ children }: childrenType) => {

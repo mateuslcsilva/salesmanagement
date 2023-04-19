@@ -35,7 +35,7 @@ export const UsersManager = (props: any) => {
   };
 
   const getUsers = async () => {
-    if (AuthContext.currentUser.id == '' || !AuthContext.currentUser.id) return false
+    if (AuthContext.currentUser?.id == '' || !AuthContext.currentUser?.id) return false
     let docRef = doc(db, DOC_PATH, `${AuthContext.currentUser.id}`)
     let data = await getDoc(docRef)
       .then(res => {
@@ -90,7 +90,7 @@ export const UsersManager = (props: any) => {
 
   useEffect(() => {
     getUsers()
-  }, [AuthContext.currentUser.id])
+  }, [AuthContext.currentUser?.id])
 
   return (
     <div>

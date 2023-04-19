@@ -57,9 +57,8 @@ function App() {
   }
 
   const setSnapShot = () => {
-    if (!AuthContext.currentUser.id) return false
+    if (!AuthContext.currentUser?.id) return false
     const unsub = onSnapshot(doc(db, DOC_PATH, AuthContext.currentUser.id), (doc) => {
-      console.log("teste snap shot: ", doc.data()?.sales)
       SalesContext.setSales(doc.data()?.sales)
       SalesHistoryContext.setSalesHistory(doc.data()?.salesHistory)
       ItemListContext.setItemList(doc.data()?.items)
@@ -72,7 +71,7 @@ function App() {
 
   useEffect(() => {
     setSnapShot()
-  }, [AuthContext.currentUser.id])
+  }, [AuthContext.currentUser?.id])
 
   return (
     <main className={`main ${darkTheme ? 'darkThemed' : 'lightThemed'}`}>
