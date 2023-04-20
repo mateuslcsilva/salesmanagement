@@ -16,7 +16,7 @@ export const ReportList = (props :propsType) => {
             <p>Assunto</p>
             <p>Status</p>
         </div>
-        {props.reportList.filter(report => report.status != "Concluída").map(report => {
+        {props.reportList?.filter(report => report.status != "Concluída").map(report => {
             return (
                 <div className='report-list-div'>
                     <p>{report.numero}</p>

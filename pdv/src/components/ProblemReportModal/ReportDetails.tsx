@@ -10,15 +10,15 @@ export const ReportDetais = (props: any) => {
     const [newText, setNewText] = useState("")
 
     const setConversaTexto = async () => {
-        if(!newText) return
+        if (!newText) return
         const newTextObj = {
             texto: newText,
             usuario: AuthContext.currentUser.userName,
             data: currentDate,
             hora: currentTime
         }
-        let newConversa = {conversa: [...props.report.conversa, newTextObj]}
-        props.setReport({...props.report, ...newConversa})
+        let newConversa = { conversa: [...props.report.conversa, newTextObj] }
+        props.setReport({ ...props.report, ...newConversa })
         setNewText("")
     }
 
@@ -34,11 +34,12 @@ export const ReportDetais = (props: any) => {
                 {props.report.conversa.map((mensagem: any) => {
                     return (
                         <div className='mensagem-div'>
-                            <p>{`${mensagem.usuario}: ${mensagem.texto}`}</p>
+                            <p>{`${mensagem.usuario}:`}</p>
                             <span>{`${mensagem.hora}, ${mensagem.data}`}</span>
+                            <p>{mensagem.texto}</p>
                             <hr />
                         </div>
-                )
+                    )
                 })}
             </div>
             <div className="report-problem-input-div">
@@ -53,11 +54,11 @@ export const ReportDetais = (props: any) => {
                     placeholder='Acrescente algo à conversa.'
                     required
                 />
-                <Button 
-                text={<i className="bi bi-send"></i>} 
-                className="is-info" 
-                style={{ "color": "#4a4a4a !important" }}
-                onClick={setConversaTexto}
+                <Button
+                    text={<i className="bi bi-send"></i>}
+                    className="is-info"
+                    style={{ "color": "#4a4a4a !important" }}
+                    onClick={setConversaTexto}
                 />
             </div>
         </div>

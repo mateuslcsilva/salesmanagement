@@ -177,6 +177,10 @@
     justify-content: center;
   }
 
+  .mensagem-div p{
+    white-space: nowrap;
+  }
+
   .mensagem-div span{
     font-size: 10pt;
     white-space: nowrap;

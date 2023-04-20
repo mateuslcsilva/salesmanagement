@@ -140,7 +140,8 @@ export const LoginScreen = () => {
         }],
         items: [],
         sales: [],
-        salesHistory: []
+        salesHistory: [],
+        reports: []
     }
  
     const collectionRef = collection(db, DOC_PATH)
