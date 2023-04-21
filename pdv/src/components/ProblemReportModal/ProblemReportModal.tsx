@@ -21,7 +21,7 @@ export const ProblemReportModal = (props: any) => {
         hora: "",
         usuario: "",
         numero: 0,
-        status: "pendente",
+        status: "Pendente",
         reportId: ""
     }
 
@@ -29,23 +29,18 @@ export const ProblemReportModal = (props: any) => {
     const [newReport, setNewReport] = useState<reportType>(initialReportState)
     const [report, setReport] = useState<reportType>({} as reportType)
     const [reportList, setReportList] = useState<Array<reportType>>([])
-    const [allReports, setAllReports] = useState<Array<{ empresa: string, reports: Array<reportType> }>>([])
+    const [allReports, setAllReports] = useState<Array<{ empresa: string, reports: Array<reportType> }>>([] as Array<{ empresa: string, reports: Array<reportType> }>)
     const [modalState, setModalState] = useState<string>("reportList")
 
     useEffect(() => {
         console.log("new reprt: ", newReport)
-        console.log("report list: ", reportList)
-        console.log("all reports list: ", allReports)
         console.log("report: ", report)
-        console.log("modalState: ", modalState)
+        console.log("all reports: ", allReports)
+        console.log("report lst: ", reportList)
     }, [report, newReport, reportList])
 
     useEffect(() => {
-        if (AuthContext.currentUser.userType == "Desenvolvedor") {
-            getAllReportLists()
-        } else {
-            getReportList()
-        }
+        getData()
     }, [AuthContext.currentUser?.id])
 
     useEffect(() => {
@@ -55,19 +50,10 @@ export const ProblemReportModal = (props: any) => {
                 updateReport()
             }
         } else {
-            let sameReport
-            let empresa
-            allReports.forEach(reports => {
-                let currentReport = reports.reports.find(report2 => report2.reportId == report.reportId)
-                if (currentReport) {
-                    sameReport = currentReport
-                    empresa = reports
-                }
-            })
-            console.log(sameReport, empresa)
+            let empresa = allReports.find(report1 => report1.reports.find(a => a.reportId == report.reportId))?.empresa
+            let sameReport :reportType | undefined = allReports.find(reportObj => reportObj.reports.find((prevReport :reportType) => prevReport.reportId == report.reportId))?.reports.find((prevReport :reportType)  => prevReport.reportId == report.reportId)         
             if (report.conversa?.length != sameReport?.conversa.length) {
-                let empresa = allReports.find(report1 => report1.reports.find(report2 => report2.reportId == report.reportId))
-                //updateReport()
+                updateReport(report, empresa)  
             }
         }
 
@@ -95,7 +81,6 @@ export const ProblemReportModal = (props: any) => {
                         empresa: doc.data().name,
                         reports: doc.data().reports,
                     }
-                    console.log("essa é a res: ", report)
                     reports.push(report)
                 })
 
@@ -103,16 +88,24 @@ export const ProblemReportModal = (props: any) => {
             })
     }
 
+    const getData = () => {
+        if (AuthContext.currentUser.userType == "Desenvolvedor") {
+            getAllReportLists()
+        } else{
+            getReportList()
+        }
+    }
+
     const sendReport = async () => {
         if (!newReport.conversa || !newReport.assunto) return
         let reportData = {
             usuario: AuthContext.currentUser.userName,
             /* @ts-ignore */
-            numero: reportList.length > 1 ? reportList.map(report => report.numero).sort((a, b) => a - b).at(-1) + 1 : 1,
+            numero: reportList.length > 0 ? reportList.map(report => report.numero).sort((a, b) => a - b).at(-1) + 1 : 1,
             reportId: Date.now().toString()
         }
         if (reportList.filter(report => report.status != "Concluída").find(existentReport => existentReport.assunto.toLocaleLowerCase() == newReport.assunto.toLocaleLowerCase())) return window.alert("Esse assunto já está sendo tratado.")
-
+        console.log('here')
         await updateDoc(doc(db, DOC_PATH, AuthContext.currentUser.id), {
             reports: arrayUnion({ ...newReport, ...reportData })
         })
@@ -121,10 +114,12 @@ export const ProblemReportModal = (props: any) => {
     }
 
     const updateReport = async (newReport = report, id = AuthContext.currentUser.id) => {
-        await updateDoc(doc(db, DOC_PATH, AuthContext.currentUser.id), {
-            reports: [...reportList.filter(diferentReports => diferentReports.reportId != newReport.reportId), newReport]
+        const actualyReportList = AuthContext.currentUser.userType == "Desenvolvedor" ? allReports.find(reportObj => reportObj.empresa == id)?.reports : reportList
+        if(!actualyReportList) return window.alert("Ocorreu um erro, por favor, contate o desenvolvedor!")
+        await updateDoc(doc(db, DOC_PATH, id), {
+            reports: [...actualyReportList.filter(diferentReports => diferentReports.reportId != newReport.reportId), newReport]
         })
-        getReportList()
+        getData()
     }
 
     const setCurrentReport = (id: string) => {
@@ -137,8 +132,6 @@ export const ProblemReportModal = (props: any) => {
                 if (currentReport) report = currentReport
             })
         }
-        console.log("here", report)
-        console.log("id", id)
         if (!report) return
         setReport(report)
         setModalState("reportDetails")
@@ -146,7 +139,8 @@ export const ProblemReportModal = (props: any) => {
 
     const setDone = async () => {
         const newState = { status: "Concluída" }
-        updateReport({ ...report, ...newState })
+        let id = AuthContext.currentUser.userType == "Desenvolvedor" ? allReports.find(report1 => report1.reports.find(a => a.reportId == report.reportId))?.empresa : AuthContext.currentUser.id
+        updateReport({ ...report, ...newState }, id)
             .then(res =>
                 clear())
     }
@@ -205,7 +199,12 @@ export const ProblemReportModal = (props: any) => {
             <Modal.Footer>
                 {modalState != "reportList" && <Button text="Voltar" className="report-problem-button" onClick={() => setModalState("reportList")} />}
                 {modalState == "newReport" && <Button text="Enviar" className="is-info" style={{ "color": "#4a4a4a !important" }} onClick={sendReport} />}
-                {modalState == "reportList" && <Button text="+ Chamado" className="is-info" style={{ "color": "#4a4a4a !important" }} onClick={() => setModalState("newReport")} />}
+                {modalState == "reportList" && 
+                <>
+                <Button text="Atualizar" className="report-problem-button" onClick={getData} />
+                <Button text="+ Chamado" className="is-info" style={{ "color": "#4a4a4a !important" }} onClick={() => setModalState("newReport")} />
+                </>
+                }
                 {modalState == "reportDetails" && <Button text="Concluir" className="is-info" style={{ "color": "#4a4a4a !important" }} onClick={setDone} />}
             </Modal.Footer>
         </Modal>

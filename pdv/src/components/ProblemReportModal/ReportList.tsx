@@ -1,6 +1,7 @@
 import React from 'react'
 import { reportType, conversationType } from '../../types/reportProblemTypes'
 import { currentDate, currentTime } from '../../utils/consts'
+import { useAuthContext } from '../../utils/contexts/AuthProvider'
 
 interface propsType {
     reportList: Array<reportType>,
@@ -8,6 +9,7 @@ interface propsType {
 }
 
 export const ReportList = (props :propsType) => {
+    const AuthContext = useAuthContext()
 
     return(
         <>
@@ -16,9 +18,9 @@ export const ReportList = (props :propsType) => {
             <p>Assunto</p>
             <p>Status</p>
         </div>
-        {props.reportList?.filter(report => report.status != "Concluída").map(report => {
+        {props.reportList?.filter(report => report.status != "Concluída").sort((a, b) => a.numero - b.numero).map(report => {
             return (
-                <div className='report-list-div'>
+                <div className={`report-list-div ${report.status == "Respondido" && 'colored'} ${AuthContext.currentUser.userType == "Desenvolvedor" && report.status == "Pendente" && 'alert'}`}>
                     <p>{report.numero}</p>
                     <p><abbr title={report.assunto}>{report.assunto}</abbr></p>
                     <p>{report.status}</p>

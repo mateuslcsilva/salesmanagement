@@ -17,7 +17,12 @@ export const ReportDetais = (props: any) => {
             data: currentDate,
             hora: currentTime
         }
-        let newConversa = { conversa: [...props.report.conversa, newTextObj] }
+        let newConversa = AuthContext.currentUser.userType == "Desenvolvedor" 
+        ? 
+        { conversa: [...props.report.conversa, newTextObj], status : "Respondido" } 
+        : 
+        { conversa: [...props.report.conversa, newTextObj], status : "Pendente"  }
+        console.log("new conversa: ", newConversa)
         props.setReport({ ...props.report, ...newConversa })
         setNewText("")
     }

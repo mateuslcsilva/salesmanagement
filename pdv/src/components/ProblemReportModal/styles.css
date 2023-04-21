@@ -123,9 +123,26 @@
     text-overflow: ellipsis;
   }
 
+  .report-list-div.colored > p,
+  .report-list-div.colored  i{
+    color: #3e8ed0;
+    font-weight: bold;
+  }
+
+  .report-list-div.alert > p,
+  .report-list-div.alert  i{
+    color: red;
+    font-weight: bold;
+  }
+
+
+  .report-list-helper > p{
+    font-weight: bold;
+  }
+
   .report-list-div  i{
     position: absolute;
-    right: -7px;
+    right: -12px;
     font-size: 14pt;
     display: none;
     cursor: pointer;
@@ -136,7 +153,7 @@
     display: inline;
   }
 
-  .report-list-div i:hover{
+  .report-list-div:not(.alert) i:hover{
     color: #3e8ed0 !important;
     transition: 0.2s ease;
   }
