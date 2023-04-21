@@ -194,7 +194,7 @@
     justify-content: center;
   }
 
-  .mensagem-div p{
+  .mensagem-div p:not(.wrap){
     white-space: nowrap;
   }
 
@@ -203,8 +203,7 @@
     white-space: nowrap;
   }
 
-  .mensagem-div hr{
-    width: 100%;
+  .report-details hr{
     height: 1px;
     text-align: center;
   }

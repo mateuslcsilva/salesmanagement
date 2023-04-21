@@ -31,22 +31,26 @@ export const ReportDetais = (props: any) => {
         <div className="report-details">
             <strong><span>Assunto: </span></strong>
             <span>{props.report.assunto}</span>
-            <br /><br />
+            <br />
             <strong>
-                <p>Histórico:</p>
+                <p className='mb-5'>Histórico:</p>
             </strong>
             <div className='messagens-container'>
-                {props.report.conversa.map((mensagem: any) => {
+                {props.report.conversa.map((mensagem: any, index: number, array:any) => {
                     return (
                         <div className='mensagem-div'>
-                            <p>{`${mensagem.usuario}:`}</p>
-                            <span>{`${mensagem.hora}, ${mensagem.data}`}</span>
-                            <p>{mensagem.texto}</p>
-                            <hr />
+                            <strong>
+                                <p>{`${mensagem.usuario}:`}</p>
+                            </strong>
+                            <strong><span>{`${mensagem.hora}, ${mensagem.data}`}</span></strong>
+                            <p className='wrap'>{mensagem.texto}</p>
+                            <p></p>
+                            {index != array.length - 1 && <hr />}
                         </div>
                     )
                 })}
             </div>
+            <hr />
             <div className="report-problem-input-div">
                 <input
                     type="text"

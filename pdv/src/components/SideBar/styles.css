@@ -95,8 +95,9 @@
   }
   
   .header-text .workplace,
-  .header-text .user  {
-    width: 200px;
+  .header-text .user{
+    display: block;
+    width: 220px;
     overflow-x: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
