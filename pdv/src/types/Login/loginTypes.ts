@@ -6,6 +6,7 @@ export interface initialSignUp {
     repetedPassword?: string;
     userType: string;
     hasConsented?: boolean;
+    userId: string;
   }
 
   export  interface initialSignIn {

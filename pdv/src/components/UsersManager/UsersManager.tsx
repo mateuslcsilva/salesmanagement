@@ -9,6 +9,7 @@ import { DOC_PATH, db } from '../../utils/firebase/firebase'
 import { useAuthContext } from '../../utils/contexts/AuthProvider'
 import { initialSignUp } from '../../types/Login/loginTypes'
 import { InputUserType } from '../InputUserType/InputUserType'
+import { AlertModal } from '../AlertModal/AlertModal'
 
 export const UsersManager = (props: any) => {
   const initialuserInfo = {} as initialSignUp
@@ -17,12 +18,18 @@ export const UsersManager = (props: any) => {
   const [userList, setUserList] = useState<Array<initialSignUp>>([])
   const [showedUserList, setShowedUserList] = useState<Array<initialSignUp>>([])
   const [showPassword, setShowPassword] = useState<Array<string>>([])
+  const [alertVisible, setAlertVisible] = useState(false)
   const [userInfo, setUserInfo] = useReducer(
     (currentValues: initialSignUp, newValues: initialSignUp) => {
       return { ...currentValues, ...newValues }
     },
     initialuserInfo
   )
+
+  
+
+  const alertHandle = () => setAlertVisible(true);
+  const closeAlertHandle = () => setAlertVisible(false);
 
   const emailValidation = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
@@ -48,13 +55,15 @@ export const UsersManager = (props: any) => {
   }
 
   const addUser = async () => {
-    for (var key in userInfo) {
+    if(userInfo.userId.length > 0) deleteUser(userInfo.userId, true)
+    let userId = {userId : Date.now().toString()}
+    const userData = {...userInfo, ...userId}
+    for (var key in userData) {
       //@ts-ignore
-      if (userInfo[key].length < 1) return
+      if (userData[key].length < 1) return
     }
-    const newUser = [userInfo]
     await updateDoc(doc(db, DOC_PATH, AuthContext.currentUser.id), {
-      users: arrayUnion(userInfo)
+      users: arrayUnion(userData)
     })
     getUsers()
     clear()
@@ -65,9 +74,11 @@ export const UsersManager = (props: any) => {
       deleteUser(email)
   }
 
-  const deleteUser = async (email: string) => {
+  const deleteUser = async (id: string, forced = false) => {
+    console.log("here")
+    if(userList.find(user => user.userId == id)?.userType == "Master" && userList.filter(user => user.userType == "Master").length == 1 && !forced) return alertHandle()
       await updateDoc(doc(db, DOC_PATH, AuthContext.currentUser.id), {
-          users: userList.filter(user => user.email != email)
+          users: userList.filter(user => user.userId != id)
       })
           getUsers()
   }
@@ -84,7 +95,8 @@ export const UsersManager = (props: any) => {
       userType: "",
       email: "",
       username: "",
-      password: ""
+      password: "",
+      userId: ""
     })
   }
 
@@ -94,6 +106,7 @@ export const UsersManager = (props: any) => {
 
   return (
     <div>
+      <AlertModal text={"Uma empresa deve ter ao menos uma conta Master."} visible={alertVisible} closeHandler={closeAlertHandle}/> 
       <Modal
         aria-labelledby="modal-title"
         open={props.visible}
@@ -179,11 +192,11 @@ export const UsersManager = (props: any) => {
                       </p>
                       <div> 
                         <Tooltip color="primary" title="Alterar">
-                          <button onClick={() => editUser(user.email)}>
+                          <button onClick={() => setUserInfo(userList[userList.findIndex(user2 => user2.userId == user.userId)])}>
                             <i className="bi bi-pencil-square"></i>
                           </button>
                         </Tooltip>
-                        <button onClick={() => deleteUser(user.email)}>
+                        <button onClick={() => deleteUser(user.userId)}>
                           <Tooltip title="Deletar">
                             <i className="bi bi-trash3"></i>
                           </Tooltip>

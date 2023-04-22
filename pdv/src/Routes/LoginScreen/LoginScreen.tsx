@@ -137,7 +137,8 @@ export const LoginScreen = () => {
           username: signUpValues.username.toLowerCase(),
           email: signUpValues.email.toLowerCase(),
           password: signUpValues.password,
-          userType: "Master"
+          userType: "Master",
+          userId: Date.now.toString()
         }],
         items: [],
         sales: [],
@@ -159,6 +160,23 @@ export const LoginScreen = () => {
           userType: "Master"
         })
   };
+
+  const visitorByPass = async () => {
+    const accountInfo = await queryData('accountInfo', 'name', "b")
+    .then(res => {
+      if(typeof res == "string") return
+      console.log(res?.userInfo)
+      const user = res?.userInfo.users.find((user: any) => user.userType == "Master")
+      console.log(user)
+      const signInData :initialSignIn = {
+        userWorkplace: res?.userInfo.id,
+        userEmail: user.email,
+        userPassword: user.password,
+        rememberMe: false
+      }
+      dataHandler(signInData)
+    })
+  }
 
   const localStorageManagement = () => {
     let storagedTheme = localStorage.getItem('darkTheme')
@@ -222,7 +240,7 @@ export const LoginScreen = () => {
             flat
             color="primary"
             className="switch-action-button"
-            onClick={() => dataHandler({userWorkplace : "teste simpls", userEmail: "master@master.com", userPassword: "123456789", rememberMe: false})}
+            onClick={visitorByPass}
           >
             Visitante
           </Button>
