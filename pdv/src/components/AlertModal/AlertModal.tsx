@@ -1,11 +1,14 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Modal, Button, Text } from "@nextui-org/react";
 
 interface propsType {
     closeHandler: () => void,
-    visible: boolean,
-    text: string,
-    start: boolean
+    visible: boolean;
+    text: string;
+    title?: string;
+    subtitle?: string | ReactNode;
+    start?: boolean;
+    large?: boolean;
 }
 
 export const AlertModal = (props :propsType) =>  {
@@ -19,13 +22,15 @@ export const AlertModal = (props :propsType) =>  {
         preventClose
         onClose={props.closeHandler}
         className={document.querySelector('.main')?.classList.contains('darkThemed') ? "dark-theme-modal" : ""}
+        width={props.large ? "1000px" : "400px"}
       >
         <Modal.Header>
           <Text id="modal-title" size={24}>
-            Aviso!
+            {props.title || "Aviso!"}
           </Text>
         </Modal.Header>
         <Modal.Body>
+          {props.subtitle}
             <p style={{"width": "100%", "textAlign" : props.start ? "start" : "center", "whiteSpace" : "pre-line"}}>{props.text}</p>
         </Modal.Body>
         <Modal.Footer css={{"width": "100%", "display" : "flex", "justifyContent": "center"}}>

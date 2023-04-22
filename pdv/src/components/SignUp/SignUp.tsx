@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import './styles.css'
 import {
     Modal,
@@ -7,11 +7,28 @@ import {
     Checkbox,
     Spacer,
   } from "@nextui-org/react";
+import { AlertModal } from "../AlertModal/AlertModal";
+import { serviceTerms } from "../../utils/consts";
 
 
 export const SignUp = (props :any) => {
+  const [alertVisible, setAlertVisible] = useState(false)
+  
+
+  const alertHandle = () => setAlertVisible(true);
+  const closeAlertHandle = () => setAlertVisible(false);
 
     return(
+      <>
+      <AlertModal 
+      visible={alertVisible} 
+      closeHandler={closeAlertHandle} 
+      title="Termos e Condições de Uso"
+      subtitle={<span style={{"textAlign" : "center", "fontSize" : "16pt"}}>Simpls Gestão de Comandas Versão Beta</span>} 
+      text={serviceTerms} 
+      large 
+      start 
+      />
         <Modal.Body className="sign-up-container">
             <Input
               clearable
@@ -91,9 +108,10 @@ export const SignUp = (props :any) => {
                 })
               }
             >
-              <Text size={14}>Concordo com os Termos de Uso</Text>
+              <Text size={14}>Concordo com os <label htmlFor="" style={{"textDecoration" : "underline", "cursor" : "pointer"}} onClick={alertHandle}>Termos de Uso</label>.</Text>
             </Checkbox>
             <Spacer y={0.5}></Spacer>
           </Modal.Body>
+      </>
     )
 }
