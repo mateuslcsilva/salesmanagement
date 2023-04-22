@@ -186,7 +186,7 @@ export const LoginScreen = () => {
           <Col>
             <Text id="modal-title" size={18} transform="full-width">
               Bem vindo ao
-              <Text b size={18} className="ml-1">
+              <Text b size={18} className="ml-1 login-title">
                 Simpls
               </Text>
               !

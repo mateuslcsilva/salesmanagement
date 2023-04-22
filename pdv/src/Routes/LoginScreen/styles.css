@@ -1,0 +1,13 @@
+.login-title{
+    position: relative;
+}
+
+.login-title::before{
+    content: "Beta";
+    position: absolute;
+    color: #3e8ed0;
+    background-color: transparent;
+    font-size: 8pt;
+    right: -10px;
+    bottom: -8px;
+}
