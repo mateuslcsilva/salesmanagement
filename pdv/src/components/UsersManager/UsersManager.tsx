@@ -53,7 +53,7 @@ export const UsersManager = (props: any) => {
       if (userInfo[key].length < 1) return
     }
     const newUser = [userInfo]
-    await updateDoc(doc(db, "empresas", AuthContext.currentUser.id), {
+    await updateDoc(doc(db, DOC_PATH, AuthContext.currentUser.id), {
       users: arrayUnion(userInfo)
     })
     getUsers()
@@ -156,20 +156,20 @@ export const UsersManager = (props: any) => {
             <Spacer y={0.5} />
             <Col className="users-container">
               <Row justify='space-between'>
-                <Text b css={{ "transform": "translateX(5px)" }} >Nome</Text>
-                <Text b css={{ "transform": "translateX(-30px)" }}>Email</Text>
-                <Text b css={{ "transform": "translateX(-60px)" }}>Tipo de Usuário</Text>
-                <Text b css={{ "transform": "translateX(-130px)" }}>Senha</Text>
+                <Text b css={{ "transform": "translateX(30px)" }} >Nome</Text>
+                <Text b css={{ "transform": "translateX(40px)" }}>Email</Text>
+                <Text b css={{ "transform": "translateX(-10px)" }}>Tipo de Usuário</Text>
+                <Text b css={{ "transform": "translateX(-100px)" }}>Senha</Text>
               </Row>
               {showedUserList.map((user, index: number) => {
                 return (
                   <div  key={Math.floor(Math.random() * 1_000_000_000).toString()} >
                     <div className="users-div" >
-                      <p style={{ "transform": "translateX(-28px)", "width": "120px"  }}><abbr title={user.username}>{user.username}</abbr></p>
-                      <p style={{ "transform": "translateX(-70px)", "width": "200px"  }}><abbr title={user.email}>{user.email}</abbr></p>
-                      <p style={{ "transform": "translateX(-50px)", "width": "80px"  }}><abbr title={user.userType}>{user.userType}</abbr></p>
+                      <p style={{"width": "120px"  }}><abbr title={user.username}>{user.username}</abbr></p>
+                      <p style={{"width": "200px"  }}><abbr title={user.email}>{user.email}</abbr></p>
+                      <p style={{"width": "80px"  }}><abbr title={user.userType}>{user.userType}</abbr></p>
                       <p
-                        style={{ "transform": "translateX(-30px)", "minWidth": "120px", "maxWidth" : "140px" }}
+                        style={{"width": "120px", "fontSize" : `${user.password.length > 12  && showPassword.includes(user.email)? "8pt" : "1em"}`}}
                         className="is-flex is-justify-content-space-between"
                       >
                         {showPassword.includes(user.email) ? user.password : "************"}
@@ -177,7 +177,7 @@ export const UsersManager = (props: any) => {
                           {showPassword.includes(user.email) ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
                         </span>
                       </p>
-                      <div>
+                      <div> 
                         <Tooltip color="primary" title="Alterar">
                           <button onClick={() => editUser(user.email)}>
                             <i className="bi bi-pencil-square"></i>

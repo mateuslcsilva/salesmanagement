@@ -12,6 +12,7 @@ hr{
     margin-left: 30px !important;
     max-height: 300px !important;
     overflow-y: scroll !important;
+    overflow-x: visible;
 }
 
 .users-container::-webkit-scrollbar{
@@ -37,6 +38,7 @@ hr{
     transition: .1s ease;
     margin-bottom: 1px;
     overflow-y: hidden;
+    margin-top: 5px !important;
 }
 
 .users-div::before{
@@ -56,16 +58,18 @@ hr{
 }
 
 .users-div p {
-    width: 20px;
-    text-align: center;
-    overflow-x: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    position: relative;
+    text-align: center !important;
+    overflow-x: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
 }
 
 .users-div p span{
     cursor: pointer;
     transition: 0.2s ease;
+    position: absolute;
+    right: 0;
 }
 
 .users-div p span:hover{
