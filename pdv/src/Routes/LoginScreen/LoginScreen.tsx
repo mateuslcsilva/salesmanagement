@@ -86,6 +86,7 @@ export const LoginScreen = () => {
   };
 
   const dataHandler = async (data = signInValues) => {
+    console.log(data)
     if (hasAccount) { //signin shit
       const accountInfo = await queryData('accountInfo', 'name', data.userWorkplace)
       .then( res => {
@@ -221,7 +222,7 @@ export const LoginScreen = () => {
             flat
             color="primary"
             className="switch-action-button"
-            onClick={() => dataHandler({userWorkplace : "teste simpls", userEmail: "leitemcs@hotmail.com", userPassword: "123456789", rememberMe: false})}
+            onClick={() => dataHandler({userWorkplace : "teste simpls", userEmail: "master@master.com", userPassword: "123456789", rememberMe: false})}
           >
             Visitante
           </Button>
