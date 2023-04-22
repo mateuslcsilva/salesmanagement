@@ -162,7 +162,7 @@ export const LoginScreen = () => {
   };
 
   const visitorByPass = async () => {
-    const accountInfo = await queryData('accountInfo', 'name', "b")
+    const accountInfo = await queryData('accountInfo', 'name', DOC_PATH == "empresas" ? "teste simpls" : "b")
     .then(res => {
       if(typeof res == "string") return
       console.log(res?.userInfo)
