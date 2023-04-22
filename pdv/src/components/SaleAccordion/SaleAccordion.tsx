@@ -5,40 +5,27 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '../Button/Button';
-import { doc, getDoc } from 'firebase/firestore';
 import { useAuthContext } from '../../utils/contexts/AuthProvider';
 import { useOrderContext } from '../../utils/contexts/OrderContext';
-import { db } from '../../utils/firebase/firebase';
+import { useItemListContext } from '../../utils/contexts/ItemsProvider';
+import { itemType } from '../../types/itemType/itemType';
 
 export default function SaleAccordion(props :any) {
 
   const [expanded, setExpanded] = useState<string | false>(false);
-  const [itemList, setItemList] = useState<itemType[]>([])
   const AuthContext = useAuthContext()
   const orderContext = useOrderContext()
-
-  interface itemType {
-      numItem: number;
-      item: string;
-      itemValue: string
-  }
+  const ItemListContext = useItemListContext()
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
 
-     const getItems = async () => {
-        if (AuthContext.currentUser.id == '') return false
-        let docRef = doc(db, "empresas", `${AuthContext.currentUser.id}`)
-        let data = await getDoc(docRef)
-            .then(res => res.data()?.items)
-        setItemList(data)
-    }
-
     const getItemText = (typeParam: string, value: number | undefined) => {
         if (AuthContext.currentUser.id == '') return
         if (!value) return
+        const itemList = ItemListContext.itemList
         if (typeParam == "numItem") {
             let index = itemList.findIndex((item :itemType) => item.numItem == value)
             //@ts-ignore
@@ -53,18 +40,14 @@ export default function SaleAccordion(props :any) {
         }
     }
 
-    useEffect(() => {
-      getItems()
-    }, [])
-
 
 
   return (
-    <div>
+    <div  key={Math.floor(Math.random() * 1_000_000_000).toString()} >
       {props.sale.map((sale: any, index: number) => {
         const indexof = index++
         return(
-          <Accordion expanded={expanded === ('panel' + ((indexof).toString()))} onChange={handleChange('panel' + ((indexof).toString()))} key={indexof}>
+          <Accordion expanded={expanded === ('panel' + ((indexof).toString()))} onChange={handleChange('panel' + ((indexof).toString()))} key={indexof + Math.floor(Math.random() * 1_000_000_000).toString()}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls={"panel" + ((indexof).toString()) + "bh-content"}
@@ -79,7 +62,7 @@ export default function SaleAccordion(props :any) {
           <AccordionDetails>
             <Typography>
               {sale.orders.map((item :number) => <p>{getItemText("numItem", item)}</p>)}
-              <p className='mt-3 title is-5' style={{'textAlign' : 'end'}}> Total: {sale.totalValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</p>
+              <span className='mt-3 title is-5' style={{'textAlign' : 'end', "display" : "block"}}> Total: {sale.totalValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</span>
             </Typography>
             <div className='is-flex is-justify-content-flex-end'>
             <Typography>

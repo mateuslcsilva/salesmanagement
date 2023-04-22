@@ -35,7 +35,7 @@ export const Extract = () => {
                         <div>
                             {SalesContext.sales.sort((a, b) => a.numSale - b.numSale).map(sale => {
                                 return(
-                                    <Accordion sale={sale} itemList={ItemListContext.itemList} AuthContext={AuthContext} />
+                                    <Accordion sale={sale} itemList={ItemListContext.itemList} AuthContext={AuthContext} key={Math.floor(Math.random() * 1_000_000_000).toString()} />
                                 )
                             })}
                         </div>

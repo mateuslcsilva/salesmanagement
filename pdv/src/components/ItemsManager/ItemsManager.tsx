@@ -67,7 +67,6 @@ export const ItemsManager = (props: any) => {
             setAlert(<Alert severity="error">Por favor, insira os dados novamente!</Alert>)
             return clear()
         }
-        console.log(newItemList)
         ItemListContext.setItemList(newItemList)
         clear()
     }
@@ -87,7 +86,6 @@ export const ItemsManager = (props: any) => {
             }
             return item
         })
-        console.log("newItemList", newItemList)
         ItemListContext.setItemList(newItemList)
     }
 
@@ -173,8 +171,8 @@ export const ItemsManager = (props: any) => {
                             </Row>
                             {ItemListContext.itemList?.sort((a, b) => a.itemRef - b.itemRef).map((item, index: number) => {
                                 if (item.active) return (
-                                    <>
-                                        <div key={index} className="items-div">
+                                    <div  key={Math.floor(Math.random() * 1_000_000_000).toString()} >
+                                        <div className="items-div">
                                             <p>{item.itemRef}</p>
                                             <p>{item.item}</p>
                                             {/* @ts-ignore */}
@@ -192,7 +190,7 @@ export const ItemsManager = (props: any) => {
                                                 </button>
                                             </div>
                                         </div>
-                                    </>
+                                    </div >
                                 )
                             })}
                         </Col>

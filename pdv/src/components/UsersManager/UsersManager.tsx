@@ -163,8 +163,8 @@ export const UsersManager = (props: any) => {
               </Row>
               {showedUserList.map((user, index: number) => {
                 return (
-                  <>
-                    <div key={index.toString()} className="users-div">
+                  <div  key={Math.floor(Math.random() * 1_000_000_000).toString()} >
+                    <div className="users-div" >
                       <p style={{ "transform": "translateX(-28px)", "width": "120px"  }}><abbr title={user.username}>{user.username}</abbr></p>
                       <p style={{ "transform": "translateX(-70px)", "width": "200px"  }}><abbr title={user.email}>{user.email}</abbr></p>
                       <p style={{ "transform": "translateX(-50px)", "width": "80px"  }}><abbr title={user.userType}>{user.userType}</abbr></p>
@@ -190,7 +190,7 @@ export const UsersManager = (props: any) => {
                         </button>
                       </div>
                     </div>
-                  </>
+                  </div >
                 )
               })}
             </Col>

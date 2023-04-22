@@ -177,7 +177,7 @@
     font-size: 56pt;
 }
 
-.most-salled-item {
+.sales .most-salled-item {
     position: relative;
     width: 33.333%;
     display: flex;
@@ -186,7 +186,10 @@
     padding: 10px 15px;
 }
 
-.most-selled-items-footer {
+.sales .most-selled-items-footer {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
     color: var(--dashboard-subtitle-color);
     width: 100%;
     text-align: end;
@@ -196,7 +199,12 @@
     text-overflow: ellipsis;
 }
 
-#pie-chart-legend {
+.sales .pie-chart-legends{
+    margin-top: 20px;
+    position: relative;
+}
+
+.sales #pie-chart-legend {
     color: var(--primary-text-color);
     display: flex;
     align-items: center;
@@ -206,13 +214,13 @@
     padding: 1px 0;
 }
 
-#pie-chart-legend *:not(span){
+.sales #pie-chart-legend *:not(span){
     overflow-x: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-#pie-chart-legend>span {
+.sales #pie-chart-legend>span {
     width: 12px !important;
     height: 10px !important;
 }

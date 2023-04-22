@@ -33,13 +33,6 @@ export const ProblemReportModal = (props: any) => {
     const [modalState, setModalState] = useState<string>("reportList")
 
     useEffect(() => {
-        console.log("new reprt: ", newReport)
-        console.log("report: ", report)
-        console.log("all reports: ", allReports)
-        console.log("report lst: ", reportList)
-    }, [report, newReport, reportList])
-
-    useEffect(() => {
         getData()
     }, [AuthContext.currentUser?.id])
 
@@ -105,7 +98,6 @@ export const ProblemReportModal = (props: any) => {
             reportId: Date.now().toString()
         }
         if (reportList.filter(report => report.status != "Concluída").find(existentReport => existentReport.assunto.toLocaleLowerCase() == newReport.assunto.toLocaleLowerCase())) return window.alert("Esse assunto já está sendo tratado.")
-        console.log('here')
         await updateDoc(doc(db, DOC_PATH, AuthContext.currentUser.id), {
             reports: arrayUnion({ ...newReport, ...reportData })
         })

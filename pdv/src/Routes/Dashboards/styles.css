@@ -179,6 +179,7 @@
 }
 
 .div3 {
+    position: relative;
     grid-area: 1 / 5 / 7 / 7;
     display: flex;
     flex-direction: column; 
@@ -196,10 +197,12 @@
 }
 
 .div3 .most-selled-items-footer{
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
     color: var(--dashboard-subtitle-color);
     width: 100%;
     text-align: end;
-    transform: translateY(15px);
     transition: 0.3s ease;
     overflow: hidden;
     white-space: nowrap;

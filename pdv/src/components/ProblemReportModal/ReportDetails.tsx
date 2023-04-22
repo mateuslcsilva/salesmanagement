@@ -22,7 +22,6 @@ export const ReportDetais = (props: any) => {
         { conversa: [...props.report.conversa, newTextObj], status : "Respondido" } 
         : 
         { conversa: [...props.report.conversa, newTextObj], status : "Pendente"  }
-        console.log("new conversa: ", newConversa)
         props.setReport({ ...props.report, ...newConversa })
         setNewText("")
     }

@@ -106,7 +106,6 @@ export const Dashboards = () => {
             if (mostSelledItems && mostSelledItems.find(element1 => element1.element == item)) return false
             if (count(allSelledItems, item)) mostSelledItems.push(count(allSelledItems, item))
         })
-        console.log(mostSelledItems.sort((a, b) => b.appearences - a.appearences))
         return mostSelledItems.sort((a, b) => b.appearences - a.appearences)
     }
 
@@ -182,7 +181,6 @@ export const Dashboards = () => {
         datasets: [
             {
                 label: 'Vendidos: ',
-                fill: 1,
                 rotation: 25,
                 data: getMostSelledItem().map(element => element.appearences).splice(0, 5),
                 backgroundColor: document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor : backgroundColor,
@@ -203,7 +201,6 @@ export const Dashboards = () => {
                 borderColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f2" : "#191919",
                 backgroundColor: document.querySelector('.main')?.classList.contains('darkThemed') ? "#f2f2f290" : "#191919",
                 borderWidth: 1,
-                fill: false,
                 data: getNumberOfSalesPerDay(),
             },
             {

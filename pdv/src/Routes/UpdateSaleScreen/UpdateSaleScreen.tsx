@@ -264,10 +264,6 @@ export const UpdateSaleScreen = () => {
         }
     }, [permission])
 
-    useEffect(() => {
-        console.log("sale: ", sale)
-    }, [sale])
-
     return (
         <>
             <div className='div' id='div1'>
@@ -325,8 +321,8 @@ export const UpdateSaleScreen = () => {
                 }
 
                 {Array.isArray(sale) &&
-                    <div>
-                        <SaleAccordion sale={sale} selectedSale={(selectedSale: sale) => setSale(selectedSale)}/>
+                    <div >
+                        <SaleAccordion sale={sale} selectedSale={(selectedSale: sale) => setSale(selectedSale)} />
                     </div>
                 }
 
@@ -372,7 +368,7 @@ export const UpdateSaleScreen = () => {
                                 onChange={setSelected}
                             >
                                 {/* @ts-ignore */}
-                                {sale.orders.map((order: number, index: number) => <Checkbox value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
+                                {sale.orders.map((order: number, index: number) => <Checkbox  key={Math.floor(Math.random() * 1_000_000_000).toString()}  value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
                             </Checkbox.Group>
                             <div className='is-flex is-justify-content-flex-end mt-5 mb-5'>
                                 <Button
@@ -411,7 +407,7 @@ export const UpdateSaleScreen = () => {
                                 onChange={setSelected}
                             >
                                 {/* @ts-ignore */}
-                                {sale.orders?.map((order: number, index: number) => <Checkbox value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
+                                {sale.orders?.map((order: number, index: number) => <Checkbox key={Math.floor(Math.random() * 1_000_000_000).toString()} value={index.toString()} className={selected?.includes(index.toString()) ? 'strike' : ''}>{getItemText("numItem", order)}</Checkbox>)}
                             </Checkbox.Group>
                             <div>
                                 <InputSearchSale

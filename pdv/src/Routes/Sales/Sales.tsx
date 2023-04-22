@@ -95,7 +95,6 @@ export const Sales = () => {
             if (mostSelledItems && mostSelledItems.find(element1 => element1.element == item)) return false
             if (count(allSelledItems, item)) mostSelledItems.push(count(allSelledItems, item))
         })
-        console.log(mostSelledItems.sort((a, b) => b.appearences - a.appearences))
         return mostSelledItems.sort((a, b) => b.appearences - a.appearences)
     }
 
@@ -128,7 +127,6 @@ export const Sales = () => {
         datasets: [
             {
                 label: 'Vendidos: ',
-                fill: 1,
                 rotation: 25,
                 data: getMostSelledItem().map(element => element.appearences).splice(0, 5),
                 backgroundColor: document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor : backgroundColor,
@@ -139,8 +137,6 @@ export const Sales = () => {
             },
         ],
     };
-
-    useEffect(() => console.log(getMostSelledItem()))
 
     return (
         <>
@@ -201,23 +197,22 @@ export const Sales = () => {
                 <div className='most-salled-item'>
                     {getMostSelledItem().length > 0 &&
                         <div>
-                        <Pie data={data} className='pie-chart' />
-                        <div className='pie-chart-legends'>
-
-                            {getMostSelledItem().map(element => element.text).splice(0, 5).map((item, index) => {
-                                return (
-                                    <div id='pie-chart-legend'>
-                                        <span
-                                            style={{ "backgroundColor": document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor[index] : backgroundColor[index], "border": `1px solid ${borderColor[index]}` }}
-                                        ></span>
-                                        <p className='pie-chart-legend-text'>
-                                            <abbr title={item}>{item}</abbr>
-                                        </p></div>
-                                )
-                            })}
-                        </div>
-                        <p className='most-selled-items-footer'>Itens mais vendidos</p>
-                    </div>}
+                            <Pie data={data} className='pie-chart' />
+                            <div className='pie-chart-legends'>
+                                {getMostSelledItem().map(element => element.text).splice(0, 5).map((item, index) => {
+                                    return (
+                                        <div id='pie-chart-legend'>
+                                            <span
+                                                style={{ "backgroundColor": document.querySelector('.main')?.classList.contains('darkThemed') ? borderColor[index] : backgroundColor[index], "border": `1px solid ${borderColor[index]}` }}
+                                            ></span>
+                                            <p className='pie-chart-legend-text'>
+                                                <abbr title={item}>{item}</abbr>
+                                            </p></div>
+                                    )
+                                })}
+                            </div>
+                            <p className='most-selled-items-footer'>Itens mais vendidos</p>
+                        </div>}
                     {getMostSelledItem().length == 0 &&
                         <div className='no-most-salled-item'>
                             <i className="bi bi-pie-chart"></i>

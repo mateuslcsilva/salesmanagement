@@ -159,10 +159,6 @@ export const AddSaleScreen = () => {
     }, [AuthContext.currentUser.id])
 
     useEffect(() => {
-        console.log(sale)
-    }, [sale])
-
-    useEffect(() => {
         if(!Array.isArray(sale) && !sale.numSale) document.getElementById('inputComanda')?.focus()
     }, [sale])
 
