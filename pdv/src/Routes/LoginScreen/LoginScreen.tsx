@@ -11,7 +11,7 @@ import { initialSignUp, initialSignIn } from '../../types/Login/loginTypes'
 import { SignIn } from "../../components/SignIn/SignIn";
 import { SignUp } from "../../components/SignUp/SignUp";
 import { db, DOC_PATH } from "../../utils/firebase/firebase";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { queryData } from "../../utils/requests/queryData";
 import { useAuthContext } from "../../utils/contexts/AuthProvider";
 import { useSalesContext } from "../../utils/contexts/SalesProvider";

@@ -4,7 +4,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate,
+  Navigate
 } from "react-router-dom";
 import { NewSaleScreen } from './Routes/NewSaleScreen/NewSaleScreen'
 import { AddSaleScreen } from './Routes/AddSaleScreen/AddSaleScreen';
@@ -40,6 +40,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     <Route path='/checkoutscreen' element={<CheckOutScreen />}></Route>
                     <Route path='/dashboards' element={<Dashboards />}></Route>
                     <Route path='/sales' element={<Sales />}></Route>
+                  <Route path='/*' element={<NewSaleScreen />}></Route>
                   </Route>
                 </Routes>
               </BrowserRouter>
