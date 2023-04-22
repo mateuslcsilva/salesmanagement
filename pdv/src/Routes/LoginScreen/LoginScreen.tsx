@@ -221,6 +221,15 @@ export const LoginScreen = () => {
             flat
             color="primary"
             className="switch-action-button"
+            onClick={() => dataHandler({userWorkplace : "teste simpls", userEmail: "leitemcs@hotmail.com", userPassword: "123456789", rememberMe: false})}
+          >
+            Visitante
+          </Button>
+          <Button
+            auto
+            flat
+            color="primary"
+            className="switch-action-button"
             onClick={() => setHasAccount(!hasAccount)}
           >
             {hasAccount ? "Cadastrar" : "Já tenho conta"}
